@@ -3,8 +3,13 @@
 // 토큰이 가짜이거나 남의 것이면 Realtime Database 가 읽기를 거부하므로, 별도의 관리자 키가 필요 없습니다.
 import { firebaseConfig } from '../src/lib/firebase-config.js';
 
+/** 요청에 담긴 로그인 토큰 (없으면 빈 문자열) */
+export function bearerToken(request) {
+  return /^Bearer\s+(.+)$/i.exec(request.headers.get('authorization') || '')?.[1] || '';
+}
+
 export async function isApprovedMember(request) {
-  const token = /^Bearer\s+(.+)$/i.exec(request.headers.get('authorization') || '')?.[1];
+  const token = bearerToken(request);
   if (!token) return false;
   let uid = '';
   try {

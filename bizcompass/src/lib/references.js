@@ -1,31 +1,10 @@
-// 레퍼런스 — Firebase Realtime Database 연결
-import { parseReferences } from './references-model.js';
-import { REFERENCES_PATH } from './firebase-config.js';
+// 레퍼런스 — 전체 목록은 서버 함수(/api/references)가 승인된 회원에게만 내려 줍니다.
 
-/**
- * Realtime Database 의 레퍼런스 목록을 구독합니다. 시트가 바뀌면 콜백이 다시 호출됩니다.
- * @param {(list: Array) => void} onData   목록을 받았을 때 (비어 있으면 호출하지 않음)
- * @param {(error: Error) => void} onError 연결·권한 오류 또는 빈 데이터
- * @returns {Promise<() => void>} 구독 해제 함수
- */
-export async function subscribeReferences(onData, onError = () => {}) {
-  try {
-    const [{ getFirebaseApp }, { getDatabase, ref, onValue }] = await Promise.all([
-      import('./firebase.js'),
-      import('firebase/database'),
-    ]);
-    const database = getDatabase(getFirebaseApp());
-    return onValue(
-      ref(database, REFERENCES_PATH),
-      (snapshot) => {
-        const list = parseReferences(snapshot.val());
-        if (list.length) onData(list);
-        else onError(new Error('레퍼런스 데이터가 비어 있습니다.'));
-      },
-      (error) => onError(error),
-    );
-  } catch (error) {
-    onError(error);
-    return () => {};
-  }
+/** @returns {Promise<{ items: Array, source: 'database' | 'seed' }>} */
+export async function fetchReferences(base = '/', token = '') {
+  const response = await fetch(`${base}api/references/`, { headers: { accept: 'application/json', authorization: `Bearer ${token}` } });
+  if (!response.ok) throw new Error(`레퍼런스를 불러오지 못했습니다. (${response.status})`);
+  const data = await response.json();
+  if (!Array.isArray(data?.items)) throw new Error('레퍼런스 응답 형식이 올바르지 않습니다.');
+  return data;
 }

@@ -1,6 +1,7 @@
 // 레퍼런스 기본 목록.
-// 실제 데이터는 Firebase Realtime Database(sheetsData/sheetsData)에서 실시간으로 읽어 오고,
-// 이 파일은 첫 화면 렌더링과 연결 실패 시의 대체 목록, 그리고 사이트 소개 문구의 출처로 쓰입니다.
+// 실제 데이터는 Firebase Realtime Database(sheetsData/sheetsData)에서 읽어 오고,
+// 이 파일은 빌드할 때의 미리보기(상위 4곳 · 개수)와 사이트 소개 문구의 출처로 쓰입니다.
+// 서버와 빌드에서만 읽습니다. 브라우저로 가는 코드(src/pages, src/lib)에서 import 하지 마세요.
 export const REFERENCE_SEED = [
   {
     "name": "혁신의숲",

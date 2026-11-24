@@ -2,9 +2,9 @@
 import { head, header, footer, programsHero } from './layout.js';
 import { roadmap } from './roadmap.js';
 import { commonDocs, applicantDocs, docsPreview } from './documents.js';
-import { referenceGridSeed, referenceTabsSeed, referenceCount, referencePreview, referenceGridGuest, referencePlaceholders, GUEST_REFERENCE_LIMIT } from './references.js';
+import { referencePlaceholders, GUEST_REFERENCE_LIMIT } from './references.js';
+import { referenceCount, referenceCategoryCount, referencePreview, referenceGridGuest } from './references.build.js';
 import { formGridSeed, formCount } from './forms.js';
-import { REFERENCE_SEED, categoryCounts } from '../lib/references-model.js';
 import { ROADMAP_PROGRAM_COUNT } from '../data/roadmap.js';
 import { COMMON_DOCS } from '../data/documents.js';
 import { FORM_CATALOG } from '../data/forms.catalog.js';
@@ -14,7 +14,7 @@ import { esc, icon, compassMark } from './util.js';
 function stats() {
   const items = [
     { value: ROADMAP_PROGRAM_COUNT, unit: '개', label: '단계별 지원사업' },
-    { value: `<span data-ref-count>${REFERENCE_SEED.length}</span>`, unit: '곳', label: '실무 레퍼런스' },
+    { value: referenceCount(), unit: '곳', label: '실무 레퍼런스' },
     { value: COMMON_DOCS.length, unit: '종', label: '공통 준비서류' },
     { value: FORM_CATALOG.length, unit: '종', label: '계약 서식' },
   ];
@@ -32,13 +32,11 @@ export const renderers = {
   'common-docs': commonDocs,
   'applicant-docs': applicantDocs,
   'docs-preview': docsPreview,
-  'reference-grid': referenceGridSeed,
   'reference-grid-guest': referenceGridGuest,
   'reference-placeholders': () => referencePlaceholders(8),
   'reference-guest-limit': () => String(GUEST_REFERENCE_LIMIT),
-  'reference-tabs': referenceTabsSeed,
   'reference-count': referenceCount,
-  'reference-category-count': () => String(categoryCounts(REFERENCE_SEED).length),
+  'reference-category-count': referenceCategoryCount,
   'reference-preview': referencePreview,
   'form-grid': formGridSeed,
   'form-count': formCount,
