@@ -54,7 +54,6 @@ export function showSession(session) {
       <span class="auth-avatar" aria-hidden="true">${escapeHtml([...name][0])}</span>
       <span class="auth-name">${escapeHtml(name)}님</span>
     </a>
-    ${session.isAdmin ? `<a class="auth-link auth-admin" href="${BASE}admin/"><span>회원 관리</span></a>` : ''}
     <button type="button" class="auth-link auth-logout" data-auth-logout><span>로그아웃</span></button>`;
 }
 

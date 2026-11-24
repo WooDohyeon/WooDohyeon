@@ -27,7 +27,6 @@ function showAccount(session) {
   const tag = document.getElementById('account-status');
   tag.textContent = status.label;
   tag.className = `tag ${session.status === 'approved' ? 'tag--second' : 'tag--accent'}`;
-  document.getElementById('account-admin').hidden = !session.isAdmin;
   loginView.hidden = true;
   accountView.hidden = false;
 }

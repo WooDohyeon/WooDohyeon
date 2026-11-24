@@ -1,11 +1,14 @@
-import { BASE, showSession } from './common.js';
-import { watchSession, listMembers, setMemberStatus, authMessage } from '../lib/auth.js';
+// 관리자 페이지 — 사이트의 회원 로그인과 별개로, 관리자 계정으로 따로 로그인해야 열립니다.
+import { watchAdmin, adminSignIn, adminSignOut, listMembers, setMemberStatus } from '../lib/admin.js';
+import { authMessage } from '../lib/auth.js';
 import { MEMBER_TYPES } from '../data/membership.js';
 import { esc } from '../render/util.js';
 
 const $ = (id) => document.getElementById(id);
-const gate = $('admin-gate');
-const panel = $('admin-panel');
+const views = { loading: $('admin-loading'), login: $('admin-login'), panel: $('admin-panel') };
+const loginForm = $('admin-login-form');
+const loginMessage = $('admin-login-message');
+const loginSubmit = $('admin-login-submit');
 const list = $('admin-list');
 const message = $('admin-message');
 
@@ -17,18 +20,15 @@ const STATUS_TABS = [
 
 const state = { members: [], status: 'pending', camp: '', type: '', query: '', busy: new Set() };
 
-function showGate(title, text, action) {
-  panel.hidden = true;
-  $('admin-badge').hidden = true;
-  gate.hidden = false;
-  $('admin-gate-title').textContent = title;
-  $('admin-gate-text').textContent = text;
-  const button = $('admin-gate-action');
-  button.hidden = !action;
-  if (action) {
-    button.textContent = action.label;
-    button.href = action.href;
-  }
+function show(name) {
+  Object.entries(views).forEach(([key, element]) => { element.hidden = key !== name; });
+  $('admin-session').hidden = name !== 'panel';
+}
+
+function loginError(text, field) {
+  loginMessage.textContent = text;
+  loginMessage.hidden = !text;
+  field?.focus();
 }
 
 function say(text) {
@@ -95,25 +95,66 @@ function render() {
   list.innerHTML = result.map(memberCard).join('');
   list.hidden = result.length === 0;
   $('admin-empty').hidden = result.length !== 0;
+  if (!result.length) {
+    const none = state.members.length === 0;
+    $('admin-empty-title').textContent = none ? '아직 가입한 회원이 없어요' : state.status === 'pending' && !state.query && !state.camp && !state.type ? '승인을 기다리는 회원이 없어요' : '조건에 맞는 회원이 없어요';
+    $('admin-empty-text').textContent = none ? '가입 신청이 들어오면 이곳에 표시됩니다.' : '상태 탭이나 필터를 바꿔 다른 회원을 확인해 보세요.';
+  }
   $('admin-summary').textContent = `회원 ${state.members.length}명 중 ${result.length}명 표시`;
 }
 
+/** 회원 목록을 불러옵니다. 관리자 계정이 아니면 로그아웃시키고 로그인 화면으로 돌려보냅니다. */
 async function load() {
   say('');
   try {
     const members = await listMembers();
     // 승인 대기를 먼저, 그 안에서는 최근 가입 순
     state.members = members.sort((a, b) => (statusOf(a) === statusOf(b) ? (b.createdAt || 0) - (a.createdAt || 0) : statusOf(a) === 'pending' ? -1 : 1));
-    gate.hidden = true;
-    panel.hidden = false;
-    $('admin-badge').hidden = false;
+    show('panel');
     render();
+    return true;
   } catch (error) {
-    if (error?.code === 'not-admin') showGate('운영진만 볼 수 있는 페이지예요', '이 계정에는 회원 관리 권한이 없습니다.', { label: '홈으로 가기', href: BASE });
-    else if (panel.hidden) showGate('회원 목록을 불러오지 못했어요', authMessage(error), null);
-    else say(authMessage(error));
+    if (error?.code === 'not-admin') {
+      await adminSignOut().catch(() => {});
+      show('login');
+      loginError(authMessage(error));
+    } else if (views.panel.hidden) {
+      show('login');
+      loginError(authMessage(error));
+    } else {
+      say(authMessage(error));
+    }
+    return false;
   }
 }
+
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  loginError('');
+  const email = loginForm.elements.email.value.trim();
+  const password = loginForm.elements.password.value;
+  if (!email) return loginError('이메일을 입력해 주세요.', loginForm.elements.email);
+  if (!password) return loginError('비밀번호를 입력해 주세요.', loginForm.elements.password);
+
+  loginSubmit.disabled = true;
+  loginSubmit.querySelector('span').textContent = '로그인 중…';
+  try {
+    await adminSignIn(email, password); // 로그인되면 watchAdmin 이 목록을 엽니다.
+    loginForm.reset();
+  } catch (error) {
+    loginError(authMessage(error));
+  } finally {
+    loginSubmit.disabled = false;
+    loginSubmit.querySelector('span').textContent = '로그인';
+  }
+  return undefined;
+});
+
+$('admin-logout').addEventListener('click', async () => {
+  await adminSignOut();
+  state.members = [];
+  list.innerHTML = '';
+});
 
 list.addEventListener('click', async (event) => {
   const button = event.target.closest('[data-uid]');
@@ -147,10 +188,14 @@ $('admin-type').addEventListener('change', (event) => { state.type = event.targe
 $('admin-search').addEventListener('input', (event) => { state.query = event.target.value; render(); });
 $('admin-refresh').addEventListener('click', load);
 
-// 로그인 상태와 운영진 여부를 확인한 뒤 목록을 엽니다. (실제 접근 제한은 데이터베이스 규칙이 합니다.)
-watchSession((session) => {
-  showSession(session);
-  if (!session) showGate('로그인이 필요해요', '운영진 계정으로 로그인해 주세요.', { label: '로그인', href: `${BASE}login/` });
-  else if (!session.isAdmin) showGate('운영진만 볼 수 있는 페이지예요', '이 계정에는 회원 관리 권한이 없습니다.', { label: '홈으로 가기', href: BASE });
-  else load();
+watchAdmin((admin) => {
+  if (!admin) {
+    show('login');
+    return;
+  }
+  $('admin-who').textContent = admin.name;
+  load();
+}).catch(() => {
+  show('login');
+  loginError('로그인 기능을 불러오지 못했습니다. 새로고침해 주세요.');
 });
