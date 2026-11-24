@@ -1,0 +1,779 @@
+/* ────────────────────────────────────────────────────────────
+   관리자 페이지 전용 스타일
+   구조: 왼쪽 메뉴 · 상단 바 · 현황 띠 · 카드
+   색은 비즈컴퍼스 토큰(main / second / accent)을 그대로 씁니다.
+   ──────────────────────────────────────────────────────────── */
+.adm {
+  --adm-bg: var(--main);
+  --adm-card: #fbfaf8;
+  --adm-line: rgba(21, 23, 28, 0.12);
+  --adm-soft: rgba(21, 23, 28, 0.05);
+  --adm-tint: color-mix(in srgb, var(--accent) 10%, var(--adm-card));
+  --adm-tint-ink: color-mix(in srgb, var(--accent) 82%, var(--ink));
+  --adm-radius: 12px;
+  --adm-side: 248px;
+  background: var(--adm-bg);
+  font-size: 0.9375rem;
+}
+
+.adm h1,
+.adm h2,
+.adm h3 {
+  letter-spacing: -0.025em;
+}
+
+/* ── 공통 부품 ── */
+.adm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--adm-line);
+  border-radius: 10px;
+  background: var(--adm-card);
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.adm-btn:hover:not(:disabled) {
+  background: var(--adm-soft);
+}
+
+.adm-btn--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.adm-btn--primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 88%, var(--ink));
+}
+
+.adm-btn--block {
+  width: 100%;
+  min-height: 54px;
+  justify-content: space-between;
+  padding-inline: 20px;
+  font-size: 1rem;
+}
+
+.adm-btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.adm-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--adm-line);
+  border-radius: 10px;
+  background: var(--adm-card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.adm-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 50%;
+  background: var(--adm-tint);
+  color: var(--adm-tint-ink);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.adm-alert {
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 10px;
+  background: var(--adm-tint);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.adm-kicker {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--adm-tint-ink);
+}
+
+.adm-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.adm-brand > div {
+  display: grid;
+  line-height: 1.25;
+}
+
+.adm-brand strong {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.adm-brand span {
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+}
+
+/* ── 확인 중 ── */
+.adm-loading {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  min-height: 100vh;
+  color: var(--ink-soft);
+}
+
+/* ── 로그인 ── */
+.adm-login {
+  display: grid;
+  min-height: 100vh;
+  padding: clamp(12px, 1.6vw, 20px);
+  gap: clamp(12px, 1.6vw, 20px);
+  background: var(--adm-card);
+}
+
+.adm-login-side {
+  display: none;
+}
+
+.adm-login-main {
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 6vw, 64px) clamp(8px, 4vw, 48px);
+}
+
+.adm-login-box {
+  width: min(100%, 400px);
+}
+
+.adm-login-box h1 {
+  margin-top: 14px;
+  font-size: clamp(1.75rem, 4vw, 2.125rem);
+  font-weight: 700;
+}
+
+.adm-login-lead {
+  margin-top: 12px;
+  color: var(--ink-soft);
+}
+
+.adm-form {
+  display: grid;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.adm-field {
+  display: grid;
+  gap: 8px;
+}
+
+.adm-field label {
+  font-weight: 700;
+}
+
+.adm-field input {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 14px;
+  border: 1px solid rgba(21, 23, 28, 0.55);
+  border-radius: 10px;
+  background: var(--adm-card);
+  font-size: 1rem;
+}
+
+.adm-field input:focus,
+.adm-filters select:focus,
+.adm-search input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.adm-login-foot {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--adm-line);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.adm-login-foot a {
+  color: var(--adm-tint-ink);
+  font-weight: 700;
+}
+
+.adm-login-foot a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── 관리자 화면 틀 ── */
+.adm-app {
+  min-height: 100vh;
+}
+
+.adm-side {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  width: min(86vw, 300px);
+  border-right: 1px solid var(--adm-line);
+  background: var(--adm-card);
+  transform: translateX(-100%);
+  transition: transform 0.22s ease;
+}
+
+.adm-side.is-open {
+  transform: none;
+}
+
+.adm-side > .adm-brand {
+  min-height: 64px;
+  padding: 0 16px 0 20px;
+}
+
+.adm-side-close {
+  margin-left: auto;
+  border: 0;
+  background: none;
+}
+
+.adm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(21, 23, 28, 0.4);
+}
+
+.adm-nav {
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding: 8px 12px 16px;
+  overflow-y: auto;
+}
+
+.adm-nav-label {
+  margin: 16px 10px 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.adm-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--ink-soft);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.adm-nav-item:hover {
+  background: var(--adm-soft);
+  color: var(--ink);
+}
+
+.adm-nav-item[aria-current='page'] {
+  background: var(--adm-tint);
+  color: var(--adm-tint-ink);
+  font-weight: 600;
+}
+
+.adm-badge {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding-inline: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, var(--adm-card));
+  color: var(--adm-tint-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.adm-me {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-top: 1px solid var(--adm-line);
+}
+
+.adm-me-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.adm-me-text strong {
+  font-weight: 700;
+}
+
+.adm-me-text span {
+  overflow: hidden;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 8px clamp(12px, 2.2vw, 28px);
+  border-bottom: 1px solid var(--adm-line);
+  background: var(--adm-card);
+}
+
+.adm-top h1 {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-content {
+  display: grid;
+  gap: 24px;
+  padding: clamp(16px, 2.6vw, 32px);
+  padding-top: clamp(20px, 3.6vw, 48px);
+}
+
+.adm-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.adm-heading-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--adm-tint);
+  color: var(--adm-tint-ink);
+}
+
+.adm-heading h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.adm-card {
+  min-width: 0;
+  padding: clamp(16px, 2vw, 24px);
+  border: 1px solid var(--adm-line);
+  border-radius: var(--adm-radius);
+  background: var(--adm-card);
+}
+
+/* 현황 띠 */
+.adm-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px;
+}
+
+.adm-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.adm-stat strong {
+  font-size: 1.125rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+button.adm-stat {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+button.adm-stat:hover {
+  background: var(--adm-soft);
+}
+
+button.adm-stat[aria-pressed='true'] {
+  background: var(--adm-tint);
+  color: var(--adm-tint-ink);
+}
+
+.adm-card-head h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.adm-card-head p {
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+
+.adm-filters {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.adm-filters select,
+.adm-search input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--adm-line);
+  border-radius: 10px;
+  background: var(--adm-card);
+  font-size: 0.9375rem;
+}
+
+.adm-search {
+  position: relative;
+  display: block;
+}
+
+.adm-search .icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  translate: 0 -50%;
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+
+.adm-search input {
+  padding-left: 38px;
+}
+
+.adm-filters + .adm-alert {
+  margin-top: 16px;
+}
+
+.adm-count {
+  margin-top: 18px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.adm-empty {
+  margin-top: 12px;
+  padding: 22px 16px;
+  border-radius: 10px;
+  background: var(--adm-soft);
+  color: var(--ink-soft);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 회원 표: 좁은 화면에서는 한 명씩 카드로 */
+.adm-table-wrap {
+  margin-top: 12px;
+}
+
+.adm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.adm-table thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.adm-table tbody {
+  display: grid;
+  gap: 12px;
+}
+
+.adm-table tr {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--adm-line);
+  border-radius: var(--adm-radius);
+}
+
+.adm-table td {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr);
+  gap: 12px;
+  padding: 0;
+}
+
+.adm-table td::before {
+  content: attr(data-label);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.adm-table td.adm-cell-action {
+  grid-template-columns: 1fr;
+}
+
+.adm-table td.adm-cell-action::before {
+  content: none;
+}
+
+.adm-cell-action .adm-btn {
+  width: 100%;
+  min-height: 44px;
+}
+
+.adm-person {
+  display: grid;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.adm-person strong {
+  font-weight: 600;
+}
+
+.adm-person span {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.adm-pill {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.adm-pill--pending {
+  background: var(--adm-tint);
+  color: var(--adm-tint-ink);
+}
+
+.adm-pill--approved {
+  background: var(--second);
+  color: var(--on-second);
+}
+
+.adm-refresh span {
+  display: none;
+}
+
+.adm-refresh {
+  width: 42px;
+  padding: 0;
+}
+
+/* ── 넓은 화면 ── */
+@media (min-width: 700px) {
+  .adm-filters {
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .adm-refresh {
+    width: auto;
+    padding: 8px 14px;
+  }
+
+  .adm-refresh span {
+    display: inline;
+  }
+}
+
+@media (min-width: 960px) {
+  .adm-login {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr);
+  }
+
+  .adm-login-side {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(32px, 4vw, 52px);
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+    border-radius: 24px;
+    background: var(--adm-tint);
+    color: var(--adm-tint-ink);
+    overflow: hidden;
+  }
+
+  .adm-login-side .adm-brand strong {
+    color: var(--ink);
+  }
+
+  .adm-login-side .adm-kicker {
+    margin-top: clamp(40px, 7vh, 72px);
+  }
+
+  .adm-login-title {
+    margin-top: 18px;
+    font-size: clamp(1.875rem, 3.2vw, 2.625rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .adm-login-title em {
+    font-style: normal;
+    color: var(--adm-tint-ink);
+  }
+
+  .adm-login-text {
+    margin-top: 22px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--ink-soft);
+  }
+
+  .adm-login-art {
+    width: min(72%, 360px);
+    margin: auto auto 4vh;
+  }
+
+  .adm-side {
+    width: var(--adm-side);
+    transform: none;
+  }
+
+  .adm-side-close,
+  .adm-menu,
+  .adm-backdrop {
+    display: none !important;
+  }
+
+  .adm-main {
+    margin-left: var(--adm-side);
+  }
+
+  /* 표 형태 */
+  .adm-table thead {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+  }
+
+  .adm-table thead,
+  .adm-table tbody {
+    display: table-row-group;
+  }
+
+  .adm-table thead {
+    display: table-header-group;
+  }
+
+  .adm-table tr {
+    display: table-row;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .adm-table th {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--adm-line);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .adm-table td {
+    display: table-cell;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--adm-line);
+    vertical-align: middle;
+  }
+
+  .adm-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .adm-table td::before {
+    content: none;
+  }
+
+  .adm-table tbody tr:hover td {
+    background: var(--adm-soft);
+  }
+
+  .adm-table td.adm-cell-action {
+    display: table-cell;
+    width: 1%;
+    text-align: right;
+  }
+
+  .adm-cell-action .adm-btn {
+    width: auto;
+    min-width: 88px;
+    min-height: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-side {
+    transition: none;
+  }
+}

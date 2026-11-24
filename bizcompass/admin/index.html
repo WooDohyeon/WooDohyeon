@@ -2,95 +2,143 @@
 <html lang="ko">
   <head>
     <!--@head title="관리자" description="비즈컴퍼스 관리자 페이지" robots="noindex, nofollow"-->
+    <link rel="stylesheet" href="/src/styles/admin.css" />
   </head>
-  <body data-page="admin" class="admin-body">
-    <!--@admin-header-->
-    <main id="main">
-      <!-- 확인 중 -->
-      <section class="section section--flush" id="admin-loading">
-        <div class="wrap">
-          <div class="viewer-state">
-            <span class="spinner" aria-hidden="true"></span>
-            <p>로그인 상태를 확인하고 있어요</p>
-          </div>
+  <body data-page="admin" class="adm">
+    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+    <!-- 확인 중 -->
+    <div class="adm-loading" id="admin-loading">
+      <span class="spinner" aria-hidden="true"></span>
+      <p>로그인 상태를 확인하고 있어요</p>
+    </div>
+
+    <!-- 관리자 로그인 -->
+    <div class="adm-login" id="admin-login" hidden>
+      <aside class="adm-login-side" aria-hidden="true">
+        <div class="adm-brand">
+          <!--@brand-mark size="44"-->
+          <div><strong>비즈컴퍼스</strong><span>관리자</span></div>
         </div>
-      </section>
+        <p class="adm-kicker">FIND YOUR DIRECTION</p>
+        <p class="adm-login-title">창업의 방향을 찾는<br /><em>가장 쉬운 방법.</em></p>
+        <p class="adm-login-text">가입 신청을 확인하고<br />이용 권한을 부여하세요.</p>
+        <svg class="adm-login-art" viewBox="0 0 400 400">
+          <ellipse cx="200" cy="215" rx="178" ry="118" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 8" opacity=".45" />
+          <circle cx="200" cy="200" r="124" fill="var(--adm-card)" stroke="currentColor" stroke-width="2" />
+          <circle cx="200" cy="200" r="96" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 8" opacity=".5" />
+          <path d="M200 86v18M200 296v18M86 200h18M296 200h18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M240 160 214 214 160 240 186 186z" fill="var(--adm-card)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+          <path d="M240 160 214 214 186 186z" fill="currentColor" />
+          <circle cx="200" cy="200" r="7" fill="var(--adm-card)" stroke="currentColor" stroke-width="2" />
+          <circle cx="52" cy="230" r="5" fill="currentColor" opacity=".5" />
+          <path d="M330 92v20M320 102h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </aside>
 
-      <!-- 관리자 로그인 -->
-      <section class="section section--flush auth-page" id="admin-login" hidden>
-        <div class="wrap">
-          <div class="auth-card auth-card--narrow">
-            <div class="auth-head">
-              <p class="eyebrow">관리자 전용</p>
-              <h1>관리자 로그인</h1>
-              <p>관리자 계정으로 로그인해 주세요.</p>
+      <main class="adm-login-main" id="main">
+        <div class="adm-login-box">
+          <p class="adm-kicker">BIZCOMPASS ADMIN</p>
+          <h1>관리자 로그인</h1>
+          <p class="adm-login-lead">관리자 계정으로 로그인해 주세요.</p>
+          <form id="admin-login-form" class="adm-form" novalidate>
+            <div class="adm-field">
+              <label for="admin-email">이메일</label>
+              <input type="email" id="admin-email" name="email" autocomplete="username" inputmode="email" required />
             </div>
-            <form id="admin-login-form" class="auth-form" novalidate>
-              <div class="field">
-                <label for="admin-email">이메일</label>
-                <input class="input" type="email" id="admin-email" name="email" autocomplete="username" inputmode="email" required />
-              </div>
-              <div class="field">
-                <label for="admin-password">비밀번호</label>
-                <input class="input" type="password" id="admin-password" name="password" autocomplete="current-password" required />
-              </div>
-              <p class="form-message" id="admin-login-message" role="alert" hidden></p>
-              <button type="submit" class="btn btn--accent btn--block" id="admin-login-submit">
-                <span>로그인</span>
-                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </button>
-            </form>
-          </div>
+            <div class="adm-field">
+              <label for="admin-password">비밀번호</label>
+              <input type="password" id="admin-password" name="password" autocomplete="current-password" required />
+            </div>
+            <p class="adm-alert" id="admin-login-message" role="alert" hidden></p>
+            <button type="submit" class="adm-btn adm-btn--primary adm-btn--block" id="admin-login-submit">
+              <span>로그인</span>
+              <!--@icon name="arrow" size="18"-->
+            </button>
+          </form>
+          <p class="adm-login-foot">관리자 전용 페이지입니다. <a href="{{base}}">사이트로 이동</a></p>
         </div>
-      </section>
+      </main>
+    </div>
 
-      <!-- 회원 승인 관리 -->
-      <div id="admin-panel" hidden>
-        <section class="page-hero">
-          <div class="wrap page-hero-split">
-            <div>
-              <p class="eyebrow">회원 관리</p>
-              <h1>회원 <span class="hl">승인</span> 관리</h1>
-              <p class="page-hero-lead">가입 신청을 확인하고 이용 권한을 부여합니다.</p>
-            </div>
-            <div class="count-badge" aria-live="polite">
-              <strong id="admin-pending">0</strong>
-              <span>명 승인 대기</span>
-            </div>
+    <!-- 관리자 화면 -->
+    <div class="adm-app" id="admin-panel" hidden>
+      <div class="adm-backdrop" id="admin-backdrop" hidden></div>
+
+      <aside class="adm-side" id="admin-side" aria-label="관리자 메뉴">
+        <div class="adm-brand">
+          <!--@brand-mark size="34"-->
+          <div><strong>비즈컴퍼스</strong><span>관리자</span></div>
+          <button type="button" class="adm-icon-btn adm-side-close" id="admin-side-close" aria-label="메뉴 닫기"><!--@icon name="close" size="18"--></button>
+        </div>
+
+        <nav class="adm-nav">
+          <p class="adm-nav-label">회원</p>
+          <button type="button" class="adm-nav-item" data-tab="pending"><!--@icon name="clock" size="18"--><span>가입 대기</span><b class="adm-badge" id="admin-nav-pending" hidden>0</b></button>
+          <button type="button" class="adm-nav-item" data-tab="approved"><!--@icon name="userCheck" size="18"--><span>승인된 회원</span></button>
+          <button type="button" class="adm-nav-item" data-tab="all"><!--@icon name="users" size="18"--><span>전체 회원</span></button>
+
+          <p class="adm-nav-label">바로가기</p>
+          <a class="adm-nav-item" href="{{base}}" target="_blank" rel="noopener noreferrer"><!--@icon name="external" size="18"--><span>사이트 열기</span></a>
+        </nav>
+
+        <div class="adm-me">
+          <span class="adm-avatar" aria-hidden="true">관</span>
+          <div class="adm-me-text"><strong id="admin-who">관리자</strong><span id="admin-who-email"></span></div>
+          <button type="button" class="adm-btn" id="admin-logout">로그아웃</button>
+        </div>
+      </aside>
+
+      <div class="adm-main">
+        <header class="adm-top">
+          <button type="button" class="adm-icon-btn adm-menu" id="admin-menu" aria-label="메뉴 열기" aria-controls="admin-side" aria-expanded="false"><!--@icon name="menu" size="20"--></button>
+          <h1 id="admin-title">가입 대기</h1>
+          <button type="button" class="adm-btn adm-refresh" id="admin-refresh"><!--@icon name="refresh" size="16"--><span>새로고침</span></button>
+          <span class="adm-avatar" aria-hidden="true">관</span>
+        </header>
+
+        <main class="adm-content" id="main-panel">
+          <div class="adm-heading">
+            <span class="adm-heading-icon" id="admin-heading-icon"><!--@icon name="clock" size="18"--></span>
+            <h2 id="admin-heading">가입 대기</h2>
           </div>
-        </section>
 
-        <section class="section section--flush">
-          <div class="wrap">
-            <div class="toolbar">
-              <label class="search">
-                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+          <div class="adm-card adm-stats" id="admin-stats" role="group" aria-label="회원 현황"></div>
+
+          <section class="adm-card">
+            <div class="adm-card-head">
+              <h3 id="admin-card-title">가입 대기 처리</h3>
+              <p id="admin-card-text">회원가입이 끝난 계정을 확인하고 이용 권한을 부여합니다.</p>
+            </div>
+
+            <div class="adm-filters">
+              <label class="adm-search">
+                <!--@icon name="search" size="18"-->
                 <span class="sr-only">회원 검색</span>
-                <input type="search" id="admin-search" placeholder="이름, 이메일로 검색" autocomplete="off" />
+                <input type="search" id="admin-search" placeholder="이름, 이메일, 캠프 검색" autocomplete="off" />
               </label>
-              <div class="selects">
-                <label class="select"><span class="sr-only">캠프</span><select id="admin-camp"><option value="">전체 캠프</option></select></label>
-                <label class="select"><span class="sr-only">가입 유형</span><select id="admin-type"><option value="">전체 유형</option></select></label>
-              </div>
-              <button type="button" class="btn" id="admin-refresh">새로고침</button>
-            </div>
-            <div class="chips" id="admin-status" role="group" aria-label="승인 상태"></div>
-            <p class="form-message" id="admin-message" role="alert" hidden></p>
-
-            <div class="notice-summary">
-              <p id="admin-summary" aria-live="polite"></p>
+              <label><span class="sr-only">캠프</span><select id="admin-camp"><option value="">전체 캠프</option></select></label>
+              <label><span class="sr-only">기수</span><select id="admin-cohort"><option value="">전체 기수</option></select></label>
+              <label><span class="sr-only">가입 유형</span><select id="admin-type"><option value="">전체 유형</option></select></label>
             </div>
 
-            <ol class="member-list" id="admin-list" aria-label="회원 목록"></ol>
-            <div class="empty" id="admin-empty" hidden>
-              <h3 id="admin-empty-title">조건에 맞는 회원이 없어요</h3>
-              <p id="admin-empty-text">검색어나 필터를 바꿔 다시 찾아보세요.</p>
+            <p class="adm-alert" id="admin-message" role="alert" hidden></p>
+            <p class="adm-count" id="admin-summary" aria-live="polite"></p>
+
+            <div class="adm-table-wrap" id="admin-table-wrap">
+              <table class="adm-table">
+                <thead>
+                  <tr><th scope="col">회원</th><th scope="col">가입 유형</th><th scope="col">캠프 / 기수</th><th scope="col">가입일</th><th scope="col">상태</th><th scope="col"><span class="sr-only">처리</span></th></tr>
+                </thead>
+                <tbody id="admin-list"></tbody>
+              </table>
             </div>
-          </div>
-        </section>
+            <p class="adm-empty" id="admin-empty" hidden>가입 대기 중인 계정이 없습니다.</p>
+          </section>
+        </main>
       </div>
-    </main>
-    <!--@admin-footer-->
+    </div>
+
     <script type="module" src="/src/pages/admin.js"></script>
   </body>
 </html>
