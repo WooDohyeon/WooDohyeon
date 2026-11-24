@@ -50,11 +50,8 @@ function showViewer(form) {
     </div>`;
     return;
   }
-  viewer.innerHTML = `<div class="viewer-bar">
-      <span>${icon('file', 18)} ${esc(form.title)} · PDF${form.pages ? ` · ${form.pages}페이지` : ''}</span>
-      <a href="${esc(pdf)}" target="_blank" rel="noopener noreferrer">새 탭에서 크게 보기 ${icon('external', 16)}</a>
-    </div>
-    <iframe class="viewer-frame" src="${esc(pdf)}#view=FitH" title="${esc(form.title)} 미리보기" loading="lazy"></iframe>`;
+  // toolbar=0 · navpanes=0: 브라우저 PDF 뷰어의 도구 모음(확대·인쇄·저장 등)과 옆 패널을 숨깁니다.
+  viewer.innerHTML = `<iframe class="viewer-frame" src="${esc(pdf)}#toolbar=0&navpanes=0&view=FitH" title="${esc(form.title)} 미리보기" loading="lazy"></iframe>`;
 }
 
 async function init() {
