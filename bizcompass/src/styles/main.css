@@ -1758,37 +1758,6 @@ a.download-btn:hover {
   overflow: hidden;
 }
 
-.viewer-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 16px;
-  padding: 12px 18px;
-  border-bottom: var(--border);
-  background: var(--second);
-  color: var(--on-second);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.viewer-bar span,
-.viewer-bar a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.viewer-bar a {
-  color: var(--accent-soft);
-  font-weight: 700;
-}
-
-.viewer-bar a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
 .viewer-frame {
   display: block;
   width: 100%;
