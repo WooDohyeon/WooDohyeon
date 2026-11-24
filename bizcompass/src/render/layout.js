@@ -78,7 +78,7 @@ export function programsHero({ active = 'roadmap', base }) {
     <div class="wrap">
       <p class="eyebrow">정부지원사업</p>
       <h1>내 단계에 맞는 <span class="hl">지원사업</span>을 찾아보세요</h1>
-      <p class="page-hero-lead">창업 단계별 로드맵과 신청 전에 챙겨야 할 준비서류를 한곳에 정리했습니다.</p>
+      <p class="page-hero-lead">창업 단계별 로드맵과 최신 지원사업 공고, 신청 전에 챙길 준비서류를 한곳에 정리했습니다.</p>
       <nav class="subnav" aria-label="정부지원사업 하위 메뉴">${tabs}</nav>
     </div>
   </section>`;

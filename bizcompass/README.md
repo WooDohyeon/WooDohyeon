@@ -26,7 +26,7 @@ Vercel 프로젝트는 Root Directory 를 `bizcompass` 로 지정해 연결하�
 | --- | --- | --- |
 | `/` | 메인 | 아래 페이지 내용을 요약 |
 | `/programs/` | 정부지원사업 로드맵 | `src/data/roadmap.js` |
-| `/programs/notices/` | 지원사업 공고 | **API 연동 예정** (현재 안내 화면) |
+| `/programs/notices/` | 지원사업 공고 | **공공데이터포털 API** (기업마당 · K-Startup) |
 | `/programs/documents/` | 준비서류 | `src/data/documents.js` |
 | `/references/` | 레퍼런스 | **Firebase Realtime Database** |
 | `/forms/`, `/forms/view/?id=…` | 서식 | **Firebase Storage** |
@@ -67,15 +67,27 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 
 ### 정부지원사업 공고 — 예정
 
-`programs/notices/index.html` 의 `#program-list` 자리에 공공데이터포털(기업마당 · K-Startup) API 연동 결과를 넣을 예정입니다.
-API 키는 브라우저에 노출되지 않도록 서버(서버리스 함수 등)를 거쳐 호출해야 합니다.
+공공데이터포털의 두 API 를 서버에서 불러와 하나의 목록으로 합쳐 보여 줍니다.
+
+| 출처 | API |
+| --- | --- |
+| 기업마당 (중소벤처기업부) | `apis.data.go.kr/1421000/bizinfo/pblancBsnsService` |
+| K-Startup (창업진흥원) | `apis.data.go.kr/B552735/kisedKstartupService01/getAnnouncementInformation01` (모집 중인 공고만) |
+
+- 인증키는 **브라우저에 전달되지 않습니다.** Vercel 함수 `api/programs.js` 가 환경변수 `DATA_GO_KR_SERVICE_KEY` 로 호출하고, 정리된 목록만 `/api/programs` 로 내려 줍니다.
+- 인증키 설정: Vercel 프로젝트 → Settings → Environment Variables 에 `DATA_GO_KR_SERVICE_KEY` (Production · Preview). 바꾼 뒤에는 다시 배포해야 반영됩니다.
+- 로컬에서 볼 때는 `.env.local` 에 `DATA_GO_KR_SERVICE_KEY=…` 를 넣고 `npm run dev` 를 실행합니다.
+- 응답은 CDN 이 30분 동안 보관합니다. 한쪽 API 가 실패하면 나머지 공고만 보여 주고 안내 문구를 띄웁니다.
+- 같은 공고가 두 곳에 모두 있으면 하나로 묶어 출처를 함께 표시합니다. 상태(접수중 · 마감임박 · 접수예정 · 상시·수시)는 신청 기간을 기준으로 브라우저에서 계산합니다.
 
 ## 구조
 
 ```
 index.html, programs/, references/, forms/   페이지 (HTML)
 src/data/      로드맵 · 준비서류 · 서식 카탈로그 · 레퍼런스 기본 목록
-src/lib/       Firebase 연결 (Realtime Database, Storage)
+src/lib/       Firebase 연결 (Realtime Database, Storage), 공고 필터 계산
+server/        공고 API 호출·정리 (서버 전용)
+api/           Vercel 함수 (/api/programs)
 src/render/    공통 머리글/바닥글과 카드 렌더링 (빌드 시 HTML 에 채워짐)
 src/pages/     페이지별 동작
 src/styles/    스타일
