@@ -20,7 +20,7 @@ export function formCard(form, base) {
     </div>
     <div class="form-body">
       <div class="form-meta">
-        <span class="tag tag--green">${esc(form.category)}</span>
+        <span class="tag tag--second">${esc(form.category)}</span>
         ${form.updated ? `<small>업데이트 ${esc(form.updated)}</small>` : ''}
       </div>
       <h3>${esc(form.title)}</h3>

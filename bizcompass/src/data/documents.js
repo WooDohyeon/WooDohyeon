@@ -160,7 +160,7 @@ const BONUS_PROOF = new Set([
 
 /** 서류 분류: 자주 요구 / 가점·역량 증빙 / 공고별 제출 */
 export function classifyDoc(name) {
-  if (OFTEN_REQUIRED.has(name)) return { label: '자주 요구', tone: 'green' };
+  if (OFTEN_REQUIRED.has(name)) return { label: '자주 요구', tone: 'second' };
   if (BONUS_PROOF.has(name)) return { label: '가점·역량 증빙', tone: 'accent' };
   return { label: '공고별 제출', tone: 'plain' };
 }

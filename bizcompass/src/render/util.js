@@ -25,8 +25,8 @@ export function icon(name, size = 18) {
 export function compassMark(size = 30) {
   return `<svg class="brand-mark" width="${size}" height="${size}" viewBox="0 0 40 40" aria-hidden="true">
     <circle cx="20" cy="20" r="18.25" fill="var(--second)" stroke="var(--ink)" stroke-width="2.5"/>
-    <path d="M26.5 13.5 22.6 22.6 13.5 26.5 17.4 17.4z" fill="var(--ink)"/>
-    <path d="M26.5 13.5 22.6 22.6 17.4 17.4z" fill="var(--accent)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
-    <circle cx="20" cy="20" r="1.6" fill="var(--main)"/>
+    <path d="M26.5 13.5 22.6 22.6 13.5 26.5 17.4 17.4z" fill="var(--main)"/>
+    <path d="M26.5 13.5 22.6 22.6 17.4 17.4z" fill="var(--accent-soft)"/>
+    <circle cx="20" cy="20" r="1.6" fill="var(--second)"/>
   </svg>`;
 }

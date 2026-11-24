@@ -4,20 +4,22 @@
    디자인 토큰
    색상 비율 60 · 30 · 10
    - main   #ECEBE6 : 페이지 바탕 (60%)
-   - second #2AED34 : 큰 면·강조 영역 (30%)
+   - second #2A2D34 : 큰 면·강조 영역 (30%)
    - accent #2F5BFF : 버튼·표시·포인트 (10%)
    ──────────────────────────────────────────────────────────── */
 :root {
   --main: #ecebe6;
-  --second: #2aed34;
+  --second: #2a2d34;
+  --on-second: #ecebe6; /* 세컨드 위에 올라가는 글자·아이콘 */
   --accent: #2f5bff;
   --on-accent: #ffffff; /* 어센트 위에 올라가는 글자·아이콘 */
+  --accent-soft: #8fa6ff; /* 어두운 면 위에서 쓰는 밝은 어센트 */
 
-  --ink: #11130f;
-  --ink-soft: #454840;
-  --ink-faint: #74776d;
+  --ink: #15171c;
+  --ink-soft: #474a52;
+  --ink-faint: #6b6e76;
   --surface: #f6f5f1;
-  --line: rgba(17, 19, 15, 0.16);
+  --line: rgba(21, 23, 28, 0.16);
 
   --radius-lg: 32px;
   --radius: 22px;
@@ -147,7 +149,7 @@ h1, h2, h3 {
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: var(--ink);
+  color: inherit;
 }
 
 .eyebrow::before {
@@ -156,13 +158,12 @@ h1, h2, h3 {
   height: 10px;
   border-radius: 50%;
   background: var(--accent);
-  border: var(--border);
+  border: 1.5px solid currentColor;
 }
 
-/* 형광펜 강조 */
+/* 강조 단어 */
 .hl {
-  background: linear-gradient(transparent 58%, var(--second) 58%, var(--second) 94%, transparent 94%);
-  padding-inline: 0.06em;
+  color: var(--accent);
 }
 
 /* ── 버튼 · 태그 · 칩 ─────────────────────────────────────── */
@@ -194,7 +195,7 @@ h1, h2, h3 {
 }
 
 .btn--accent { background: var(--accent); color: var(--on-accent); }
-.btn--green { background: var(--second); }
+.btn--second { background: var(--second); color: var(--on-second); }
 .btn--main { background: var(--main); }
 .btn--ink { background: var(--ink); color: var(--main); }
 .btn--ink:hover { box-shadow: 5px 5px 0 var(--accent); }
@@ -212,7 +213,7 @@ h1, h2, h3 {
   white-space: nowrap;
 }
 
-.tag--green { background: var(--second); }
+.tag--second { background: var(--second); color: var(--on-second); }
 .tag--accent { background: var(--accent); color: var(--on-accent); }
 .tag--plain { border-color: var(--line); color: var(--ink-soft); }
 
@@ -245,7 +246,7 @@ h1, h2, h3 {
 }
 
 .chip:hover {
-  background: var(--second);
+  background: color-mix(in srgb, var(--second) 12%, var(--surface));
 }
 
 .chip:hover span {
@@ -253,12 +254,12 @@ h1, h2, h3 {
 }
 
 .chip[aria-pressed='true'] {
-  background: var(--ink);
-  color: var(--main);
+  background: var(--second);
+  color: var(--on-second);
 }
 
 .chip[aria-pressed='true'] span {
-  color: var(--second);
+  color: color-mix(in srgb, var(--on-second) 70%, transparent);
 }
 
 /* ── 헤더 ─────────────────────────────────────────────────── */
@@ -323,7 +324,8 @@ h1, h2, h3 {
 
 .site-nav a[aria-current='page'] {
   background: var(--second);
-  border-color: var(--ink);
+  border-color: var(--second);
+  color: var(--on-second);
 }
 
 /* ── 섹션 공통 ────────────────────────────────────────────── */
@@ -339,18 +341,19 @@ h1, h2, h3 {
   border-block: var(--border);
 }
 
-.section--green {
+.section--second {
   background: var(--second);
+  color: var(--on-second);
   border-block: var(--border);
 }
 
-.page-hero + .section--green {
+.page-hero + .section--second {
   margin-top: clamp(32px, 5vw, 56px);
   padding-top: clamp(48px, 7vw, 88px);
 }
 
-.section--green .hl {
-  background: linear-gradient(transparent 58%, var(--main) 58%, var(--main) 94%, transparent 94%);
+.section--second .hl {
+  color: var(--accent-soft);
 }
 
 .section-head {
@@ -373,14 +376,28 @@ h1, h2, h3 {
   color: var(--ink-soft);
 }
 
-.section--green .section-head > p {
-  color: var(--ink);
+.section--second .section-head > p {
+  color: color-mix(in srgb, var(--on-second) 78%, transparent);
 }
 
 .section-foot {
   display: flex;
   justify-content: center;
   margin-top: clamp(28px, 4vw, 44px);
+}
+
+/* 어두운(세컨드) 면 위에서는 그림자·초점 표시를 밝은 어센트로 */
+.section--second .btn:hover,
+.cta-band .btn:hover {
+  box-shadow: 5px 5px 0 var(--accent-soft);
+}
+
+.section--second :focus-visible,
+.cta-band :focus-visible,
+.notice-panel :focus-visible,
+.hero-visual :focus-visible,
+.site-footer :focus-visible {
+  outline-color: var(--accent-soft);
 }
 
 /* 나타나기 효과 */
@@ -473,7 +490,7 @@ h1, h2, h3 {
   border: var(--border);
   border-radius: var(--radius-lg);
   background: var(--second);
-  box-shadow: 8px 8px 0 var(--ink);
+  box-shadow: 8px 8px 0 var(--accent);
 }
 
 .compass {
@@ -545,8 +562,8 @@ h1, h2, h3 {
 /* ── 흐르는 띠 ────────────────────────────────────────────── */
 .marquee {
   overflow: hidden;
-  background: var(--ink);
-  color: var(--main);
+  background: var(--second);
+  color: var(--on-second);
   border-block: var(--border);
 }
 
@@ -564,11 +581,11 @@ h1, h2, h3 {
 
 .marquee-track i {
   font-style: normal;
-  color: var(--second);
+  color: var(--accent-soft);
 }
 
 .marquee-track i:nth-of-type(even) {
-  color: var(--accent);
+  color: color-mix(in srgb, var(--on-second) 45%, transparent);
 }
 
 @keyframes marquee {
@@ -599,8 +616,9 @@ h1, h2, h3 {
   box-shadow: 7px 7px 0 var(--ink);
 }
 
-.dest-card--green {
+.dest-card--second {
   background: var(--second);
+  color: var(--on-second);
 }
 
 .dest-index {
@@ -611,6 +629,7 @@ h1, h2, h3 {
   border: var(--border);
   border-radius: 50%;
   background: var(--main);
+  color: var(--ink);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -630,8 +649,8 @@ h1, h2, h3 {
   color: var(--ink-soft);
 }
 
-.dest-card--green > p {
-  color: var(--ink);
+.dest-card--second > p {
+  color: color-mix(in srgb, var(--on-second) 78%, transparent);
 }
 
 .dest-card ul {
@@ -639,7 +658,7 @@ h1, h2, h3 {
   gap: 8px;
   margin-top: 22px;
   padding-top: 22px;
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid currentColor;
   font-weight: 600;
   font-size: 0.9375rem;
 }
@@ -657,7 +676,7 @@ h1, h2, h3 {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--ink);
+  background: currentColor;
 }
 
 .dest-more {
@@ -695,6 +714,7 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: var(--radius);
   background: var(--main);
+  color: var(--ink);
 }
 
 .stage-head {
@@ -779,8 +799,8 @@ a:hover > .dest-more .icon {
   padding: 22px;
   border: var(--border);
   border-radius: var(--radius);
-  background: var(--ink);
-  color: var(--main);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .tips-head h3 {
@@ -791,7 +811,7 @@ a:hover > .dest-more .icon {
   margin-top: 2px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--second);
+  color: color-mix(in srgb, var(--on-accent) 82%, transparent);
 }
 
 .tips .program {
@@ -871,8 +891,9 @@ a:hover > .dest-more .icon {
 
 .type-tile:hover {
   background: var(--second);
+  color: var(--on-second);
   transform: translate(-2px, -2px);
-  box-shadow: var(--shadow);
+  box-shadow: 5px 5px 0 var(--accent);
 }
 
 .type-count {
@@ -903,7 +924,7 @@ a:hover > .dest-more .icon {
 }
 
 .type-tile:hover .type-desc {
-  color: var(--ink);
+  color: color-mix(in srgb, var(--on-second) 78%, transparent);
 }
 
 .type-tile > .icon {
@@ -943,7 +964,7 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: 50%;
   background: var(--second);
-  color: var(--ink);
+  color: var(--on-second);
 }
 
 .doc-card h3 {
@@ -1038,6 +1059,7 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: 999px;
   background: var(--main);
+  color: var(--ink);
   font-size: 1.0625rem;
   font-weight: 800;
   cursor: pointer;
@@ -1052,16 +1074,16 @@ a:hover > .dest-more .icon {
 
 .applicant-tab:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--accent-soft);
 }
 
 .applicant-tab[aria-selected='true'] {
-  background: var(--ink);
-  color: var(--main);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .applicant-tab[aria-selected='true'] span {
-  color: var(--second);
+  color: color-mix(in srgb, var(--on-accent) 82%, transparent);
 }
 
 .applicant-panel {
@@ -1070,6 +1092,7 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: var(--radius-lg);
   background: var(--main);
+  color: var(--ink);
 }
 
 .applicant-panel-head {
@@ -1179,6 +1202,7 @@ a:hover > .dest-more .icon {
 .ref-logo.is-fallback,
 .ref-logo:empty {
   background: var(--second);
+  color: var(--on-second);
 }
 
 .ref-logo.is-fallback::before,
@@ -1273,7 +1297,7 @@ a:hover > .dest-more .icon {
 }
 
 .form-card:nth-child(3n) .form-preview {
-  background: var(--ink);
+  background: var(--accent);
 }
 
 .form-sheet {
@@ -1317,8 +1341,8 @@ a:hover > .dest-more .icon {
   padding: 3px 10px;
   border: var(--border);
   border-radius: 999px;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--surface);
+  color: var(--ink);
   font-size: 0.75rem;
   font-weight: 800;
 }
@@ -1383,11 +1407,6 @@ a:hover > .dest-more .icon {
   font-weight: 800;
 }
 
-.form-card.is-pending .form-file {
-  background: var(--main);
-  color: var(--ink);
-}
-
 /* ── 하위 페이지 머리 ─────────────────────────────────────── */
 .page-hero {
   padding-block: clamp(40px, 6vw, 72px) 0;
@@ -1423,7 +1442,8 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: 999px;
   background: var(--second);
-  box-shadow: 4px 4px 0 var(--ink);
+  color: var(--on-second);
+  box-shadow: 4px 4px 0 var(--accent);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1463,12 +1483,12 @@ a:hover > .dest-more .icon {
 }
 
 .subnav a:hover {
-  background: var(--second);
+  background: color-mix(in srgb, var(--second) 12%, var(--surface));
 }
 
 .subnav a[aria-current='page'] {
-  background: var(--ink);
-  color: var(--main);
+  background: var(--second);
+  color: var(--on-second);
 }
 
 /* 도구 모음 (검색) */
@@ -1571,10 +1591,11 @@ a:hover > .dest-more .icon {
 
 .next-card:hover {
   background: var(--second);
+  color: var(--on-second);
 }
 
 .next-card:hover > p:not(.eyebrow) {
-  color: var(--ink);
+  color: color-mix(in srgb, var(--on-second) 78%, transparent);
 }
 
 .notice-panel {
@@ -1582,7 +1603,8 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: var(--radius-lg);
   background: var(--second);
-  box-shadow: 8px 8px 0 var(--ink);
+  color: var(--on-second);
+  box-shadow: 8px 8px 0 var(--accent);
 }
 
 .notice-panel h3 {
@@ -1609,12 +1631,13 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: var(--radius);
   background: var(--main);
+  color: var(--ink);
   transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
 
 .source-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: var(--shadow);
+  box-shadow: 5px 5px 0 var(--accent-soft);
 }
 
 .source-card strong {
@@ -1700,7 +1723,7 @@ a:hover > .dest-more .icon {
 
 .download-btn + .download-btn {
   background: var(--second);
-  color: var(--ink);
+  color: var(--on-second);
 }
 
 .download-btn span {
@@ -1743,8 +1766,8 @@ a.download-btn:hover {
   gap: 8px 16px;
   padding: 12px 18px;
   border-bottom: var(--border);
-  background: var(--ink);
-  color: var(--main);
+  background: var(--second);
+  color: var(--on-second);
   font-size: 0.9375rem;
   font-weight: 600;
 }
@@ -1757,7 +1780,7 @@ a.download-btn:hover {
 }
 
 .viewer-bar a {
-  color: var(--second);
+  color: var(--accent-soft);
   font-weight: 700;
 }
 
@@ -1823,7 +1846,8 @@ a.download-btn:hover {
   border: var(--border);
   border-radius: var(--radius-lg);
   background: var(--second);
-  box-shadow: 8px 8px 0 var(--ink);
+  color: var(--on-second);
+  box-shadow: 8px 8px 0 var(--accent);
 }
 
 .cta-band h2 {
@@ -1841,8 +1865,9 @@ a.download-btn:hover {
 
 .site-footer {
   padding-block: clamp(40px, 6vw, 64px) 32px;
-  background: var(--ink);
-  color: var(--main);
+  border-top: 1px solid color-mix(in srgb, var(--on-second) 22%, transparent);
+  background: var(--second);
+  color: var(--on-second);
 }
 
 .footer-top {
@@ -1883,8 +1908,8 @@ a.download-btn:hover {
 }
 
 .footer-nav a:hover {
-  background: var(--second);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 .footer-bottom {
@@ -1905,7 +1930,7 @@ a.download-btn:hover {
 }
 
 .footer-bottom a:hover {
-  color: var(--second);
+  color: var(--accent-soft);
 }
 
 /* ── 반응형 ───────────────────────────────────────────────── */
@@ -1997,7 +2022,7 @@ a.download-btn:hover {
     left: -22px;
     top: 50%;
     translate: 0 -50%;
-    color: var(--second);
+    color: var(--on-accent);
     font-weight: 800;
   }
 
@@ -2106,7 +2131,7 @@ a.download-btn:hover {
     content: '';
     flex: 1;
     height: 0;
-    border-top: 1.5px dashed var(--ink);
+    border-top: 1.5px dashed currentColor;
   }
 
   .ref-grid {
