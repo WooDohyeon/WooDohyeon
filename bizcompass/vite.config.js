@@ -38,14 +38,15 @@ function bizHtml(base) {
 }
 
 // 로컬 개발·미리보기 서버에서 /api/* 를 Vercel 함수와 같은 코드(api/*.js)로 응답합니다.
-// 공고 인증키는 .env.local 의 DATA_GO_KR_SERVICE_KEY 에서 읽습니다.
-function localApi(serviceKey) {
-  const routes = { programs: 'api/programs.js', 'form-preview': 'api/form-preview.js' };
+// 공고 인증키 · 서버 전용 계정 정보는 .env.local 에서 읽습니다.
+const SERVER_ENV = ['DATA_GO_KR_SERVICE_KEY', 'FIREBASE_SERVICE_EMAIL', 'FIREBASE_SERVICE_PASSWORD'];
+function localApi(env) {
+  const routes = Object.fromEntries(['programs', 'references', 'forms', 'form-file', 'form-preview'].map((name) => [name, `api/${name}.js`]));
   const handler = async (request, response, next) => {
     const match = /^\/api\/([\w-]+)\/?(\?.*)?$/.exec(request.url || '');
     if (!match || !routes[match[1]]) return next();
     try {
-      if (serviceKey) process.env.DATA_GO_KR_SERVICE_KEY ??= serviceKey;
+      SERVER_ENV.forEach((name) => { if (env[name]) process.env[name] ??= env[name]; });
       const { GET } = await import(pathToFileURL(resolve(root, routes[match[1]])).href);
       const headers = new Headers(Object.entries(request.headers).filter(([, value]) => typeof value === 'string'));
       const result = await GET(new Request(`http://localhost${request.url}`, { headers }));
@@ -73,7 +74,7 @@ export default defineConfig(({ mode }) => {
   return {
     base,
     appType: 'mpa',
-    plugins: [bizHtml(base), localApi(env.DATA_GO_KR_SERVICE_KEY)],
+    plugins: [bizHtml(base), localApi(env)],
     build: {
       rollupOptions: {
         input: Object.fromEntries(findPages().map((path) => [relative(root, path).replace(/[\\/]/g, '_').replace(/\.html$/, ''), resolve(path)])),

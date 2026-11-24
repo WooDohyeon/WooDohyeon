@@ -1,5 +1,5 @@
-// 레퍼런스 데이터 가공 (브라우저·빌드 양쪽에서 쓰는 순수 함수)
-import { REFERENCE_SEED } from '../data/references.seed.js';
+// 레퍼런스 데이터 가공 (브라우저·서버·빌드에서 함께 쓰는 순수 함수)
+// 목록 자체는 여기에 두지 않습니다. 전체 목록은 승인된 회원에게만 서버가 내려 줍니다.
 
 // 탭에 보이는 카테고리 순서. 목록에 없는 새 카테고리는 뒤에 자동으로 붙습니다.
 export const CATEGORY_ORDER = [
@@ -16,9 +16,7 @@ const HEADER_ALIASES = {
   description: ['설명', '소개', 'description'],
 };
 
-const seedDescriptions = new Map(REFERENCE_SEED.map((item) => [normalizeUrl(item.url), item.description]));
-
-function normalizeUrl(url) {
+export function normalizeUrl(url) {
   return String(url || '').trim().replace(/\/+$/, '').toLowerCase();
 }
 
@@ -36,7 +34,7 @@ function splitCategories(value) {
   return [...new Set(list.map((item) => String(item).trim()).filter(Boolean).map((name) => CATEGORY_ALIASES[name] || name))];
 }
 
-function toReference({ name, categories, url, description }) {
+function toReference({ name, categories, url, description }, descriptions) {
   const href = safeUrl(url);
   const title = String(name || '').trim();
   if (!href || !title) return null;
@@ -44,7 +42,7 @@ function toReference({ name, categories, url, description }) {
     name: title,
     categories: splitCategories(categories),
     url: href,
-    description: String(description || '').trim() || seedDescriptions.get(normalizeUrl(href)) || '',
+    description: String(description || '').trim() || descriptions.get(normalizeUrl(href)) || '',
   };
 }
 
@@ -52,8 +50,9 @@ function toReference({ name, categories, url, description }) {
  * Realtime Database 값 → 레퍼런스 목록.
  * - 구글 시트 형태(2차원 배열, 첫 줄이 머리글)와
  * - 객체 목록 형태({ name, categories, url, description }) 를 모두 받습니다.
+ * descriptions: 시트에 소개 문구가 비어 있을 때 채워 넣을 문구 (주소 → 문구)
  */
-export function parseReferences(value) {
+export function parseReferences(value, descriptions = new Map()) {
   if (!value) return [];
   const rows = Array.isArray(value) ? value.filter(Boolean) : Object.values(value);
   if (!rows.length) return [];
@@ -74,7 +73,7 @@ export function parseReferences(value) {
         categories: col.categories >= 0 ? row[col.categories] : '',
         url: row[col.url],
         description: col.description >= 0 ? row[col.description] : '',
-      }))
+      }, descriptions))
       .filter(Boolean);
   }
 
@@ -85,7 +84,7 @@ export function parseReferences(value) {
         categories: row.categories ?? row.category,
         url: row.url ?? row.href ?? row.link,
         description: row.description,
-      })
+      }, descriptions)
       : null))
     .filter(Boolean);
 }
@@ -123,5 +122,3 @@ export function filterReferences(list, { category = '', query = '' } = {}) {
     return [item.name, item.description, item.url, item.categories.join(' ')].join(' ').toLowerCase().includes(keyword);
   });
 }
-
-export { REFERENCE_SEED };

@@ -58,8 +58,8 @@ search.addEventListener('input', () => {
   render();
 });
 
-// Firebase Storage 의 forms/ 폴더에서 실제 파일 목록을 읽어 옵니다.
-loadForms().then(({ forms, source }) => {
+// 서버에서 실제 파일 목록을 읽어 옵니다.
+loadForms(BASE).then(({ forms, source }) => {
   state.forms = forms;
   state.loaded = true;
   grid.setAttribute('aria-busy', 'false');

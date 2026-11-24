@@ -1,5 +1,5 @@
 import { esc, icon } from './util.js';
-import { REFERENCE_SEED, categoryCounts, faviconUrl, hostOf } from '../lib/references-model.js';
+import { categoryCounts, faviconUrl, hostOf } from '../lib/references-model.js';
 
 export function referenceCard(item) {
   const badges = item.categories.map((name) => `<span class="tag">${esc(name)}</span>`).join('');
@@ -31,32 +31,10 @@ export function categoryLinks(list, base) {
   return categoryCounts(list).map((item) => `<a class="chip" href="${base}references/?category=${encodeURIComponent(item.name)}">${esc(item.name)} <span>${item.count}</span></a>`).join('');
 }
 
-// ── 빌드 시 미리 렌더링 (기본 목록 기준) ─────────────────────────
-export function referenceGridSeed() {
-  return referenceCards(REFERENCE_SEED);
-}
-
-export function referenceTabsSeed() {
-  return categoryTabs(REFERENCE_SEED);
-}
-
-export function referenceCount() {
-  return String(REFERENCE_SEED.length);
-}
-
 /** 비회원에게 보여 주는 개수 */
 export const GUEST_REFERENCE_LIMIT = 4;
-
-export function referenceGridGuest() {
-  return referenceCards(REFERENCE_SEED.slice(0, GUEST_REFERENCE_LIMIT));
-}
 
 /** 가려진 자리에 놓는 빈 카드 (실제 정보는 들어 있지 않습니다) */
 export function referencePlaceholders(count = 8) {
   return Array.from({ length: count }, () => `<div class="ref-card ref-card--blank" aria-hidden="true"><span></span><span></span><span></span><span></span></div>`).join('');
-}
-
-export function referencePreview({ base }) {
-  return `<div class="chips" data-ref-categories>${categoryLinks(REFERENCE_SEED, base)}</div>
-    <div class="ref-grid ref-grid--preview" data-ref-preview>${referenceCards(REFERENCE_SEED.slice(0, GUEST_REFERENCE_LIMIT))}</div>`;
 }

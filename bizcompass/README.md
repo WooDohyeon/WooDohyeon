@@ -44,15 +44,17 @@ Vercel 프로젝트는 Root Directory 를 `bizcompass` 로 지정해 연결하�
 
 ### 레퍼런스 — Realtime Database
 
-`sheetsData/sheetsData` 경로의 구글 시트 데이터를 실시간으로 읽습니다. 시트를 고치면 사이트에 바로 반영됩니다.
+`sheetsData/sheetsData` 경로의 구글 시트 데이터를 읽습니다. 시트를 고치면 1분 안에 사이트에 반영됩니다.
+
+전체 목록은 **승인된 회원만** 받을 수 있습니다. 데이터베이스 규칙이 승인된 회원에게만 읽기를 허용하고, 사이트는 서버 함수(`/api/references/`)가 로그인한 회원의 토큰으로 읽어 내려 줍니다. 페이지에는 상위 4곳과 개수만 들어 있습니다. (빌드할 때 `server/references.seed.js` 에서 가져옵니다.)
 
 | 서비스 명 | 카테고리 | 링크 | 설명 (선택) |
 | --- | --- | --- | --- |
 | 혁신의숲 | 창업/스타트업, 투자 | https://www.innoforest.co.kr/ | 국내 스타트업의 … |
 
 - 카테고리는 쉼표로 여러 개를 적을 수 있습니다. 시트의 `지원사업` 은 사이트에서 `정부지원사업` 으로 표시됩니다.
-- `설명` 열을 추가하면 그 문구를 쓰고, 없으면 `src/data/references.seed.js` 에 있는 소개 문구를 씁니다.
-- 연결이 안 될 때는 `src/data/references.seed.js` 의 기본 목록을 보여 줍니다.
+- `설명` 열을 추가하면 그 문구를 쓰고, 없으면 `server/references.seed.js` 에 있는 소개 문구를 씁니다.
+- 연결이 안 될 때는 `server/references.seed.js` 의 기본 목록을 보여 줍니다. 이 파일은 서버와 빌드에서만 읽고, 브라우저로 가는 코드에서는 불러오지 않습니다.
 
 ### 서식 — Storage
 
@@ -60,6 +62,22 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 
 1. Firebase 콘솔 → Storage → `forms` 폴더를 만들고 `firebase/storage-seed/forms/` 안의 파일 6개를 올립니다.
 2. Storage 규칙을 `firebase/storage.rules` 내용으로 바꿉니다. (콘솔의 규칙 탭에 붙여 넣거나 `firebase deploy --only storage`)
+
+서식 파일은 **사이트 서버만** 읽을 수 있습니다. 방문자는 서버 함수를 거쳐서만 파일을 받습니다.
+
+| 주소 | 누구에게 | 내용 |
+| --- | --- | --- |
+| `/api/forms/` | 누구나 | 서식 목록 (제목 · 분류 · 형식) |
+| `/api/form-preview/?path=…` | 누구나 | PDF 앞 2쪽 |
+| `/api/form-file/?path=…` | 승인된 회원 | 원본 파일 (전체 미리보기 · 다운로드) |
+
+서버는 **서버 전용 Firebase 계정**으로 로그인해 Storage 를 읽습니다.
+
+1. Firebase 콘솔 → Authentication → 사용자 추가로 서버 전용 계정을 만듭니다. (긴 무작위 비밀번호. 이 계정으로는 사이트에 가입 정보를 만들지 않습니다.)
+2. 그 계정의 이메일 · 비밀번호를 Vercel 환경변수 `FIREBASE_SERVICE_EMAIL`, `FIREBASE_SERVICE_PASSWORD` 에 넣고 다시 배포합니다.
+3. `firebase/storage.rules` 에 적힌 UID 를 그 계정의 UID 로 맞춰 게시합니다. (현재 서버 전용 계정: `9HaSwE0Koba95HElj4ALshctfQm2`)
+
+환경변수가 없으면 서버는 로그인 없이 Storage 를 읽으므로, 규칙을 잠그기 전까지만 동작합니다.
 
 파일 이름 규칙:
 
@@ -102,7 +120,10 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 
 - **지원사업 공고**: 서버가 막습니다. `/api/programs/` 는 로그인 토큰으로 승인 여부를 확인한 뒤에만 목록을 내려 줍니다. (`server/member.js`)
 - **서식 미리보기**: 비회원 화면은 서버(`/api/form-preview/`)가 앞 2쪽만 잘라 만든 PDF 를 보여 줍니다.
-- **레퍼런스 목록 · 서식 원본 파일**: 화면에서만 가립니다. 레퍼런스 데이터(`sheetsData`)와 Storage 의 서식 파일은 규칙상 공개 읽기라서, 주소를 직접 아는 사람은 로그인 없이도 받을 수 있습니다. 완전히 막으려면 Firebase 규칙을 바꿔야 합니다.
+- **레퍼런스 목록**: 데이터베이스 규칙이 막습니다. `sheetsData` 는 승인된 회원만 읽을 수 있고, 페이지 코드에는 상위 4곳만 들어 있습니다.
+- **서식 원본 파일**: Storage 규칙이 막습니다. 서버 전용 계정만 읽을 수 있고, `/api/form-file/` 은 승인된 회원에게만 파일을 내려 줍니다.
+- 위 두 가지는 **Firebase 규칙을 `firebase/` 폴더의 내용으로 게시해야** 적용됩니다. 규칙이 공개 읽기로 남아 있으면 주소를 아는 사람은 여전히 직접 받을 수 있습니다.
+- 이 저장소가 공개 상태라면 `server/references.seed.js` 와 `firebase/storage-seed/` 의 파일은 저장소에서 그대로 볼 수 있습니다.
 - 비회원에게 보여 주는 레퍼런스 개수는 `src/render/references.js` 의 `GUEST_REFERENCE_LIMIT`, 미리보기 쪽수는 `api/form-preview.js` 의 `PREVIEW_PAGES` 에서 바꿉니다.
 
 ### 관리자 페이지 — `/admin/`
@@ -136,10 +157,10 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 
 ```
 index.html, programs/, references/, forms/   페이지 (HTML)
-src/data/      로드맵 · 준비서류 · 서식 카탈로그 · 레퍼런스 기본 목록
-src/lib/       Firebase 연결 (Realtime Database, Storage, 회원), 공고 필터 계산
-server/        공고 API 호출·정리 (서버 전용)
-api/           Vercel 함수 (/api/programs)
+src/data/      로드맵 · 준비서류 · 서식 카탈로그
+src/lib/       회원(Firebase) 연결, 서버 함수 호출, 공고 필터 계산
+server/        공고 API · 회원 확인 · Storage 읽기 · 레퍼런스 기본 목록 (서버 전용)
+api/           Vercel 함수 (/api/programs, references, forms, form-file, form-preview)
 src/render/    공통 머리글/바닥글과 카드 렌더링 (빌드 시 HTML 에 채워짐)
 src/pages/     페이지별 동작
 src/styles/    스타일

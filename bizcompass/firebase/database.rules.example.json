@@ -1,7 +1,8 @@
 {
   "rules": {
     "sheetsData": {
-      ".read": true
+      ".read": "auth != null && (auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2' || root.child('users').child(auth.uid).child('status').val() === 'approved')",
+      ".write": true
     },
     "users": {
       ".read": "auth != null && auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2'",
@@ -9,14 +10,30 @@
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && ((auth.uid === $uid && !data.exists()) || auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2')",
         ".validate": "newData.hasChildren(['email', 'name', 'memberType', 'camp', 'cohort', 'status', 'createdAt'])",
-        "email": { ".validate": "newData.isString() && (newData.val() === data.val() || newData.val() === auth.token.email)" },
-        "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40" },
-        "memberType": { ".validate": "newData.val() === '수강생' || newData.val() === '수료생'" },
-        "camp": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40" },
-        "cohort": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 20" },
-        "status": { ".validate": "newData.val() === 'pending' || (newData.val() === 'approved' && auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2')" },
-        "createdAt": { ".validate": "newData.val() === data.val() || newData.val() === now" },
-        "$other": { ".validate": false }
+        "email": {
+          ".validate": "newData.isString() && (newData.val() === data.val() || newData.val() === auth.token.email)"
+        },
+        "name": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+        },
+        "memberType": {
+          ".validate": "newData.val() === '수강생' || newData.val() === '수료생'"
+        },
+        "camp": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+        },
+        "cohort": {
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 20"
+        },
+        "status": {
+          ".validate": "newData.val() === 'pending' || (newData.val() === 'approved' && auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2')"
+        },
+        "createdAt": {
+          ".validate": "newData.val() === data.val() || newData.val() === now"
+        },
+        "$other": {
+          ".validate": false
+        }
       }
     }
   }

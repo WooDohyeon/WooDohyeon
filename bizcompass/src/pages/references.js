@@ -1,7 +1,8 @@
-import { watchLogos, watchAccess, gateBox } from './common.js';
-import { subscribeReferences } from '../lib/references.js';
-import { REFERENCE_SEED, filterReferences, categoryCounts } from '../lib/references-model.js';
-import { referenceCards, categoryTabs, GUEST_REFERENCE_LIMIT } from '../render/references.js';
+import { BASE, watchLogos, watchAccess, gateBox } from './common.js';
+import { getIdToken } from '../lib/auth.js';
+import { fetchReferences } from '../lib/references.js';
+import { filterReferences, categoryCounts } from '../lib/references-model.js';
+import { referenceCards, categoryTabs } from '../render/references.js';
 
 const grid = document.getElementById('ref-grid');
 const tabs = document.getElementById('ref-tabs');
@@ -15,8 +16,13 @@ const gate = document.getElementById('ref-gate');
 const gateCta = document.getElementById('ref-gate-cta');
 
 const params = new URLSearchParams(location.search);
+// 페이지에는 상위 4곳과 전체 개수만 들어 있습니다. 전체 목록은 승인된 회원에게만 서버가 내려 줍니다.
+const guestMarkup = grid.innerHTML;
+const guestShown = shown.textContent;
+const totalCount = Number(total.textContent) || 0;
+
 const state = {
-  list: REFERENCE_SEED,
+  list: null, // 회원이 받아 온 전체 목록
   category: params.get('category') || '',
   query: params.get('q') || '',
   member: false,
@@ -31,7 +37,7 @@ function syncUrl() {
 
 /** 회원: 전체 목록과 검색·카테고리 */
 function render() {
-  if (!state.member) return;
+  if (!state.member || !state.list) return;
   // 목록이 바뀌어 선택한 카테고리가 사라졌다면 전체로 되돌립니다.
   if (state.category && !categoryCounts(state.list).some((item) => item.name === state.category)) state.category = '';
 
@@ -47,16 +53,18 @@ function render() {
 
 /** 비회원 · 승인 대기: 상위 4곳만 보여 주고 나머지는 가립니다. */
 function renderGuest(level) {
-  const rest = Math.max(0, state.list.length - GUEST_REFERENCE_LIMIT);
+  state.list = null;
   controls.hidden = true;
   empty.hidden = true;
+  status.hidden = true;
   grid.hidden = false;
-  grid.innerHTML = referenceCards(state.list.slice(0, GUEST_REFERENCE_LIMIT));
-  shown.textContent = String(Math.min(GUEST_REFERENCE_LIMIT, state.list.length));
-  total.textContent = String(state.list.length);
+  grid.removeAttribute('aria-busy');
+  grid.innerHTML = guestMarkup;
+  shown.textContent = guestShown;
+  total.textContent = String(totalCount);
   gate.hidden = false;
   gateCta.innerHTML = gateBox(level, {
-    title: `나머지 ${rest}곳은 로그인 후 볼 수 있어요`,
+    title: `나머지 ${Math.max(0, totalCount - Number(guestShown))}곳은 로그인 후 볼 수 있어요`,
     text: '로그인하면 전체 레퍼런스를 카테고리별로 찾아보고 검색할 수 있습니다.',
   });
   watchLogos(grid);
@@ -84,29 +92,37 @@ document.getElementById('ref-reset').addEventListener('click', () => {
   render();
 });
 
-let subscribed = false;
+let run = 0;
+async function load() {
+  const current = ++run;
+  grid.setAttribute('aria-busy', 'true');
+  try {
+    const data = await fetchReferences(BASE, await getIdToken());
+    if (current !== run || !state.member) return; // 그 사이 로그아웃했으면 버립니다.
+    state.list = data.items;
+    status.textContent = '최신 목록 연결이 지연되고 있어 기본 목록을 보여 드립니다.';
+    status.hidden = data.source !== 'seed';
+    render();
+  } catch (error) {
+    console.error(error);
+    if (current !== run || !state.member) return;
+    status.textContent = '전체 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
+    status.hidden = false;
+  } finally {
+    if (current === run) grid.removeAttribute('aria-busy');
+  }
+}
+
 watchAccess(({ level }) => {
+  const wasMember = state.member;
   state.member = level === 'member';
   if (!state.member) {
+    run += 1;
     renderGuest(level);
     return;
   }
   gate.hidden = true;
   controls.hidden = false;
   search.value = state.query;
-  render();
-  if (subscribed) return;
-  subscribed = true;
-  // Realtime Database 연결: 시트가 바뀌면 목록이 바로 갱신됩니다.
-  subscribeReferences(
-    (list) => {
-      state.list = list;
-      status.hidden = true;
-      render();
-    },
-    () => {
-      status.textContent = '최신 목록 연결이 지연되고 있어 기본 목록을 보여 드립니다.';
-      status.hidden = false;
-    },
-  );
+  if (!wasMember || !state.list) load();
 });

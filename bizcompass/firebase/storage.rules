@@ -1,10 +1,14 @@
 rules_version = '2';
 
-// 서식 파일(forms/ 폴더)은 누구나 읽을 수 있고, 올리기·지우기는 Firebase 콘솔에서만 합니다.
+// 서식 파일(forms/ 폴더)은 사이트 서버만 읽을 수 있습니다.
+// 방문자는 사이트의 서버 함수(/api/form-preview, /api/form-file)를 거쳐서만 파일을 받으므로,
+// 파일 주소를 알아도 로그인 없이 직접 내려받을 수 없습니다.
+// 아래 UID 는 서버 전용 Firebase 계정의 UID 입니다. (Authentication → 사용자 목록에서 확인)
+// 올리기·지우기는 Firebase 콘솔에서만 합니다.
 service firebase.storage {
   match /b/{bucket}/o {
     match /forms/{allPaths=**} {
-      allow read: if true;
+      allow read: if request.auth != null && request.auth.uid == '9HaSwE0Koba95HElj4ALshctfQm2';
       allow write: if false;
     }
   }
