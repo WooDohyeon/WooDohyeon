@@ -75,7 +75,7 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 
 1. Firebase 콘솔 → Authentication → 사용자 추가로 서버 전용 계정을 만듭니다. (긴 무작위 비밀번호. 이 계정으로는 사이트에 가입 정보를 만들지 않습니다.)
 2. 그 계정의 이메일 · 비밀번호를 Vercel 환경변수 `FIREBASE_SERVICE_EMAIL`, `FIREBASE_SERVICE_PASSWORD` 에 넣고 다시 배포합니다.
-3. `firebase/storage.rules` 의 `서버_전용_계정_UID` 를 그 계정의 UID 로 바꿔 게시합니다.
+3. `firebase/storage.rules` 의 `9HaSwE0Koba95HElj4ALshctfQm2` 를 그 계정의 UID 로 바꿔 게시합니다.
 
 환경변수가 없으면 서버는 로그인 없이 Storage 를 읽으므로, 규칙을 잠그기 전까지만 동작합니다.
 
