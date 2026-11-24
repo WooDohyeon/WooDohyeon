@@ -2,7 +2,7 @@
 import { watchAdmin, adminSignIn, adminSignOut, listMembers, setMemberStatus } from '../lib/admin.js';
 import { authMessage } from '../lib/auth.js';
 import { MEMBER_TYPES } from '../data/membership.js';
-import { esc } from '../render/util.js';
+import { esc, icon } from '../render/util.js';
 
 const $ = (id) => document.getElementById(id);
 const views = { loading: $('admin-loading'), login: $('admin-login'), panel: $('admin-panel') };
@@ -11,18 +11,22 @@ const loginMessage = $('admin-login-message');
 const loginSubmit = $('admin-login-submit');
 const list = $('admin-list');
 const message = $('admin-message');
+const side = $('admin-side');
+const backdrop = $('admin-backdrop');
+const menuButton = $('admin-menu');
 
-const STATUS_TABS = [
-  { key: 'pending', label: '승인 대기' },
-  { key: 'approved', label: '승인됨' },
-  { key: '', label: '전체' },
-];
+// 화면(탭)별 문구
+const TABS = {
+  pending: { title: '가입 대기', icon: 'clock', card: '가입 대기 처리', text: '회원가입이 끝난 계정을 확인하고 이용 권한을 부여합니다.', empty: '가입 대기 중인 계정이 없습니다.' },
+  approved: { title: '승인된 회원', icon: 'userCheck', card: '승인된 회원', text: '이용 권한이 부여된 계정입니다. 필요하면 승인을 취소할 수 있습니다.', empty: '승인된 회원이 없습니다.' },
+  all: { title: '전체 회원', icon: 'users', card: '전체 회원', text: '가입한 모든 계정을 한곳에서 확인합니다.', empty: '아직 가입한 회원이 없습니다.' },
+};
 
-const state = { members: [], status: 'pending', camp: '', type: '', query: '', busy: new Set() };
+const requestedTab = new URLSearchParams(location.search).get('tab');
+const state = { members: [], tab: TABS[requestedTab] ? requestedTab : 'pending', camp: '', cohort: '', type: '', query: '', busy: new Set() };
 
 function show(name) {
   Object.entries(views).forEach(([key, element]) => { element.hidden = key !== name; });
-  $('admin-session').hidden = name !== 'panel';
 }
 
 function loginError(text, field) {
@@ -44,75 +48,127 @@ const formatDate = (value) => (typeof value === 'number'
 function filtered() {
   const keyword = state.query.trim().toLowerCase();
   return state.members.filter((member) => {
-    if (state.status && statusOf(member) !== state.status) return false;
+    if (state.tab !== 'all' && statusOf(member) !== state.tab) return false;
     if (state.camp && member.camp !== state.camp) return false;
+    if (state.cohort && String(member.cohort) !== state.cohort) return false;
     if (state.type && member.memberType !== state.type) return false;
-    return !keyword || `${member.name} ${member.email}`.toLowerCase().includes(keyword);
+    return !keyword || `${member.name} ${member.email} ${member.camp}`.toLowerCase().includes(keyword);
   });
 }
 
-function memberCard(member) {
+function memberRow(member) {
   const status = statusOf(member);
   const busy = state.busy.has(member.uid);
   const action = status === 'approved'
-    ? `<button type="button" class="btn" data-uid="${esc(member.uid)}" data-next="pending"${busy ? ' disabled' : ''}>승인 취소</button>`
-    : `<button type="button" class="btn btn--accent" data-uid="${esc(member.uid)}" data-next="approved"${busy ? ' disabled' : ''}>승인</button>`;
-  return `<li>
-    <article class="member-card">
-      <div class="member-main">
-        <div class="member-top">
-          <span class="tag tag--${status === 'approved' ? 'second' : 'accent'}">${status === 'approved' ? '승인됨' : '승인 대기'}</span>
-          <h3>${esc(member.name || '(이름 없음)')}</h3>
-        </div>
-        <p class="member-email">${esc(member.email || '')}</p>
-      </div>
-      <dl class="member-facts">
-        <div><dt>가입 유형</dt><dd>${esc(member.memberType || '–')}</dd></div>
-        <div><dt>캠프</dt><dd>${esc(member.camp || '–')}</dd></div>
-        <div><dt>기수</dt><dd>${member.cohort ? `${esc(member.cohort)}기` : '–'}</dd></div>
-        <div><dt>가입일</dt><dd>${esc(formatDate(member.createdAt))}</dd></div>
-      </dl>
-      <div class="member-action">${action}</div>
-    </article>
-  </li>`;
+    ? `<button type="button" class="adm-btn" data-uid="${esc(member.uid)}" data-next="pending"${busy ? ' disabled' : ''}>승인 취소</button>`
+    : `<button type="button" class="adm-btn adm-btn--primary" data-uid="${esc(member.uid)}" data-next="approved"${busy ? ' disabled' : ''}>승인</button>`;
+  return `<tr>
+    <td data-label="회원"><div class="adm-person"><strong>${esc(member.name || '(이름 없음)')}</strong><span>${esc(member.email || '')}</span></div></td>
+    <td data-label="가입 유형">${esc(member.memberType || '–')}</td>
+    <td data-label="캠프 / 기수"><div class="adm-person"><strong>${esc(member.camp || '–')}</strong><span>${member.cohort ? `${esc(member.cohort)}기` : ''}</span></div></td>
+    <td data-label="가입일">${esc(formatDate(member.createdAt))}</td>
+    <td data-label="상태"><span class="adm-pill adm-pill--${status}">${status === 'approved' ? '승인됨' : '승인 대기'}</span></td>
+    <td class="adm-cell-action">${action}</td>
+  </tr>`;
+}
+
+function options(select, allLabel, values, selected, format = (value) => value) {
+  select.innerHTML = [`<option value="">${allLabel}</option>`, ...values.map((value) => `<option value="${esc(value)}"${String(value) === selected ? ' selected' : ''}>${esc(format(value))}</option>`)].join('');
 }
 
 function render() {
+  const tab = TABS[state.tab];
   const counts = { pending: 0, approved: 0 };
-  state.members.forEach((member) => { counts[statusOf(member)] += 1; });
+  const types = Object.fromEntries(MEMBER_TYPES.map((name) => [name, 0]));
+  state.members.forEach((member) => {
+    counts[statusOf(member)] += 1;
+    if (member.memberType in types) types[member.memberType] += 1;
+  });
 
-  $('admin-pending').textContent = String(counts.pending);
-  $('admin-status').innerHTML = STATUS_TABS
-    .map((tab) => `<button type="button" class="chip" data-status="${tab.key}" aria-pressed="${tab.key === state.status}">${tab.label} <span>${tab.key ? counts[tab.key] : state.members.length}</span></button>`)
-    .join('');
+  // 제목 · 메뉴 · 주소
+  $('admin-title').textContent = tab.title;
+  $('admin-heading').textContent = tab.title;
+  $('admin-heading-icon').innerHTML = icon(tab.icon, 18);
+  $('admin-card-title').textContent = tab.card;
+  $('admin-card-text').textContent = tab.text;
+  document.querySelectorAll('.adm-nav-item[data-tab]').forEach((item) => {
+    if (item.dataset.tab === state.tab) item.setAttribute('aria-current', 'page');
+    else item.removeAttribute('aria-current');
+  });
+  const badge = $('admin-nav-pending');
+  badge.textContent = String(counts.pending);
+  badge.hidden = counts.pending === 0;
+  const url = new URL(location.href);
+  url.searchParams.set('tab', state.tab);
+  history.replaceState(null, '', url);
 
+  // 현황 띠
+  const stats = [
+    { tab: 'pending', value: counts.pending, label: '가입 대기' },
+    { tab: 'approved', value: counts.approved, label: '승인됨' },
+    { tab: 'all', value: state.members.length, label: '전체' },
+    ...MEMBER_TYPES.map((name) => ({ value: types[name], label: name })),
+  ];
+  $('admin-stats').innerHTML = stats.map((stat) => (stat.tab
+    ? `<button type="button" class="adm-stat" data-tab="${stat.tab}" aria-pressed="${stat.tab === state.tab}"><strong>${stat.value}</strong><span>${stat.label}</span></button>`
+    : `<span class="adm-stat"><strong>${stat.value}</strong><span>${esc(stat.label)}</span></span>`)).join('');
+
+  // 필터
   const camps = [...new Set(state.members.map((member) => member.camp).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ko'));
+  const cohorts = [...new Set(state.members.map((member) => member.cohort).filter(Boolean))].sort((a, b) => a - b);
   if (state.camp && !camps.includes(state.camp)) state.camp = '';
-  $('admin-camp').innerHTML = ['<option value="">전체 캠프</option>', ...camps.map((name) => `<option value="${esc(name)}"${name === state.camp ? ' selected' : ''}>${esc(name)}</option>`)].join('');
-  $('admin-type').innerHTML = ['<option value="">전체 유형</option>', ...MEMBER_TYPES.map((name) => `<option value="${esc(name)}"${name === state.type ? ' selected' : ''}>${esc(name)}</option>`)].join('');
+  if (state.cohort && !cohorts.map(String).includes(state.cohort)) state.cohort = '';
+  options($('admin-camp'), '전체 캠프', camps, state.camp);
+  options($('admin-cohort'), '전체 기수', cohorts, state.cohort, (value) => `${value}기`);
+  options($('admin-type'), '전체 유형', MEMBER_TYPES, state.type);
 
+  // 목록
   const result = filtered();
-  list.innerHTML = result.map(memberCard).join('');
-  list.hidden = result.length === 0;
-  $('admin-empty').hidden = result.length !== 0;
-  if (!result.length) {
-    const none = state.members.length === 0;
-    $('admin-empty-title').textContent = none ? '아직 가입한 회원이 없어요' : state.status === 'pending' && !state.query && !state.camp && !state.type ? '승인을 기다리는 회원이 없어요' : '조건에 맞는 회원이 없어요';
-    $('admin-empty-text').textContent = none ? '가입 신청이 들어오면 이곳에 표시됩니다.' : '상태 탭이나 필터를 바꿔 다른 회원을 확인해 보세요.';
-  }
-  $('admin-summary').textContent = `회원 ${state.members.length}명 중 ${result.length}명 표시`;
+  list.innerHTML = result.map(memberRow).join('');
+  $('admin-table-wrap').hidden = result.length === 0;
+  const empty = $('admin-empty');
+  empty.hidden = result.length !== 0;
+  const hasFilter = state.query || state.camp || state.cohort || state.type;
+  empty.textContent = hasFilter ? '조건에 맞는 회원이 없습니다.' : tab.empty;
+  $('admin-summary').textContent = `${result.length}명`;
 }
+
+function setTab(tab) {
+  if (!TABS[tab]) return;
+  state.tab = tab;
+  closeMenu();
+  render();
+}
+
+// ── 좁은 화면의 메뉴 서랍 ──
+function openMenu() {
+  side.classList.add('is-open');
+  backdrop.hidden = false;
+  menuButton.setAttribute('aria-expanded', 'true');
+}
+
+function closeMenu() {
+  side.classList.remove('is-open');
+  backdrop.hidden = true;
+  menuButton.setAttribute('aria-expanded', 'false');
+}
+
+menuButton.addEventListener('click', openMenu);
+$('admin-side-close').addEventListener('click', closeMenu);
+backdrop.addEventListener('click', closeMenu);
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(); });
 
 /** 회원 목록을 불러옵니다. 관리자 계정이 아니면 로그아웃시키고 로그인 화면으로 돌려보냅니다. */
 async function load() {
   say('');
+  const refresh = $('admin-refresh');
+  refresh.disabled = true;
   try {
     const members = await listMembers();
     // 승인 대기를 먼저, 그 안에서는 최근 가입 순
     state.members = members.sort((a, b) => (statusOf(a) === statusOf(b) ? (b.createdAt || 0) - (a.createdAt || 0) : statusOf(a) === 'pending' ? -1 : 1));
     show('panel');
     render();
-    return true;
   } catch (error) {
     if (error?.code === 'not-admin') {
       await adminSignOut().catch(() => {});
@@ -124,7 +180,8 @@ async function load() {
     } else {
       say(authMessage(error));
     }
-    return false;
+  } finally {
+    refresh.disabled = false;
   }
 }
 
@@ -151,6 +208,7 @@ loginForm.addEventListener('submit', async (event) => {
 });
 
 $('admin-logout').addEventListener('click', async () => {
+  closeMenu();
   await adminSignOut();
   state.members = [];
   list.innerHTML = '';
@@ -177,13 +235,16 @@ list.addEventListener('click', async (event) => {
   }
 });
 
-$('admin-status').addEventListener('click', (event) => {
-  const button = event.target.closest('[data-status]');
-  if (!button) return;
-  state.status = button.dataset.status;
-  render();
+document.querySelector('.adm-nav').addEventListener('click', (event) => {
+  const item = event.target.closest('[data-tab]');
+  if (item) setTab(item.dataset.tab);
+});
+$('admin-stats').addEventListener('click', (event) => {
+  const item = event.target.closest('[data-tab]');
+  if (item) setTab(item.dataset.tab);
 });
 $('admin-camp').addEventListener('change', (event) => { state.camp = event.target.value; render(); });
+$('admin-cohort').addEventListener('change', (event) => { state.cohort = event.target.value; render(); });
 $('admin-type').addEventListener('change', (event) => { state.type = event.target.value; render(); });
 $('admin-search').addEventListener('input', (event) => { state.query = event.target.value; render(); });
 $('admin-refresh').addEventListener('click', load);
@@ -194,6 +255,7 @@ watchAdmin((admin) => {
     return;
   }
   $('admin-who').textContent = admin.name;
+  $('admin-who-email').textContent = admin.email;
   load();
 }).catch(() => {
   show('login');

@@ -70,29 +70,6 @@ export function footer({ base }) {
   </footer>`;
 }
 
-// 관리자 페이지 전용 머리글 · 바닥글 (사이트 메뉴와 회원 로그인 영역이 없습니다)
-export function adminHeader({ base }) {
-  return `<a class="skip-link" href="#main">본문으로 건너뛰기</a>
-  <header class="site-header admin-header">
-    <div class="wrap site-header-inner">
-      <a class="brand" href="${base}admin/" aria-label="${SITE.name} 관리자">${compassMark(32)}<span>${SITE.name}</span><span class="tag tag--accent">관리자</span></a>
-      <div class="admin-session" id="admin-session" hidden>
-        <span class="admin-who" id="admin-who"></span>
-        <button type="button" class="btn admin-logout" id="admin-logout">로그아웃</button>
-      </div>
-    </div>
-  </header>`;
-}
-
-export function adminFooter({ base }) {
-  return `<footer class="admin-footer">
-    <div class="wrap">
-      <small>${SITE.name} 관리자 페이지</small>
-      <small><a href="${base}">사이트로 이동</a></small>
-    </div>
-  </footer>`;
-}
-
 // 정부지원사업 하위 메뉴
 const PROGRAM_TABS = [
   { id: 'roadmap', label: '로드맵', path: 'programs/' },

@@ -1,5 +1,5 @@
 // HTML 안의 <!--@이름 속성="값"--> 자리표시자를 채우는 렌더러 모음 (vite.config.js 에서 사용)
-import { head, header, footer, programsHero, adminHeader, adminFooter } from './layout.js';
+import { head, header, footer, programsHero } from './layout.js';
 import { roadmap } from './roadmap.js';
 import { commonDocs, applicantDocs, docsPreview } from './documents.js';
 import { referenceGridSeed, referenceTabsSeed, referenceCount, referencePreview } from './references.js';
@@ -9,7 +9,7 @@ import { ROADMAP_PROGRAM_COUNT } from '../data/roadmap.js';
 import { COMMON_DOCS } from '../data/documents.js';
 import { FORM_CATALOG } from '../data/forms.catalog.js';
 import { CAMPS, COHORTS } from '../data/membership.js';
-import { esc } from './util.js';
+import { esc, icon, compassMark } from './util.js';
 
 function stats() {
   const items = [
@@ -26,8 +26,8 @@ export const renderers = {
   header,
   footer,
   'programs-hero': programsHero,
-  'admin-header': adminHeader,
-  'admin-footer': adminFooter,
+  icon: ({ name, size }) => icon(name, Number(size) || 18),
+  'brand-mark': ({ size }) => compassMark(Number(size) || 32),
   roadmap,
   'common-docs': commonDocs,
   'applicant-docs': applicantDocs,
