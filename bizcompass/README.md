@@ -30,6 +30,7 @@ Vercel 프로젝트는 Root Directory 를 `bizcompass` 로 지정해 연결하�
 | `/programs/documents/` | 준비서류 | `src/data/documents.js` |
 | `/references/` | 레퍼런스 | **Firebase Realtime Database** |
 | `/forms/`, `/forms/view/?id=…` | 서식 | **Firebase Storage** |
+| `/signup/`, `/login/` | 회원가입 · 로그인(내 계정) | **Firebase Authentication** + Realtime Database |
 
 ## 디자인
 
@@ -65,6 +66,25 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 - `forms/투자/투자계약서.hwp` 처럼 하위 폴더에 넣으면 **폴더 이름이 분류**가 됩니다.
 - 제목·소개 문구는 `src/data/forms.catalog.js` 에 파일 이름(확장자 제외)과 같은 `id` 로 적습니다. 적지 않으면 파일 이름이 제목이 됩니다.
 
+### 회원가입 · 로그인 — Authentication
+
+이메일·비밀번호로 가입하고, 가입 정보(이름 · 가입 유형 · 캠프 · 기수)는 Realtime Database 의 `users/{uid}` 에 **승인 대기(`pending`)** 상태로 저장합니다.
+
+처음 한 번 해야 하는 설정:
+
+1. Firebase 콘솔 → Authentication → **시작하기** → 로그인 방법에서 **이메일/비밀번호** 사용 설정
+2. Realtime Database → 규칙에 `firebase/database.rules.example.json` 의 `users` 부분을 반영
+   - 맨 위에 `".read": true` 가 있으면 반드시 지우고, 공개할 경로(`sheetsData`)에만 읽기를 허용해야 합니다. 위쪽 규칙이 열려 있으면 회원 정보가 누구에게나 보입니다.
+   - `sheetsData` 에 쓰기 규칙이 있었다면 그대로 두세요. (구글 시트 동기화가 그 규칙으로 쓰고 있을 수 있습니다.)
+
+동작 방식:
+
+- 회원 정보 경로가 외부에서 읽히는 상태면 가입을 받지 않고 "회원 기능을 준비하고 있습니다" 안내를 띄웁니다. (이메일·이름 노출 방지)
+- 가입 직후 상태는 `pending` 입니다. **승인**: Realtime Database → `users` → 해당 회원 → `status` 값을 `approved` 로 바꿉니다.
+- 회원은 자기 정보를 읽을 수만 있고 고칠 수 없습니다. (스스로 승인 상태를 바꾸지 못하게 하기 위함)
+- 선택 항목(가입 유형 · 캠프 · 기수)은 `src/data/membership.js` 에서 바꿉니다. 캠프·기수 범위를 바꾸면 규칙의 검증 조건도 함께 맞춰 주세요.
+- 현재는 로그인 여부로 막는 페이지가 없습니다. 모든 페이지는 로그인 없이 볼 수 있습니다.
+
 ### 정부지원사업 공고 — 예정
 
 공공데이터포털의 두 API 를 서버에서 불러와 하나의 목록으로 합쳐 보여 줍니다.
@@ -86,13 +106,13 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 ```
 index.html, programs/, references/, forms/   페이지 (HTML)
 src/data/      로드맵 · 준비서류 · 서식 카탈로그 · 레퍼런스 기본 목록
-src/lib/       Firebase 연결 (Realtime Database, Storage), 공고 필터 계산
+src/lib/       Firebase 연결 (Realtime Database, Storage, 회원), 공고 필터 계산
 server/        공고 API 호출·정리 (서버 전용)
 api/           Vercel 함수 (/api/programs)
 src/render/    공통 머리글/바닥글과 카드 렌더링 (빌드 시 HTML 에 채워짐)
 src/pages/     페이지별 동작
 src/styles/    스타일
-firebase/      Storage 규칙, 업로드용 서식 파일
+firebase/      Storage 규칙, 데이터베이스 규칙 예시, 업로드용 서식 파일
 ```
 
 HTML 안의 `<!--@header-->` 같은 표시는 빌드할 때 `src/render/` 의 함수 결과로 바뀝니다. (`vite.config.js`)

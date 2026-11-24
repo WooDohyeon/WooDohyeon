@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!--@head title="로그인" description="비즈컴퍼스 로그인"-->
+  </head>
+  <body data-page="login">
+    <!--@header-->
+    <main id="main">
+      <section class="section section--flush auth-page">
+        <div class="wrap">
+          <div class="auth-card auth-card--narrow">
+            <!-- 로그인 폼 -->
+            <div id="login-view">
+              <div class="auth-head">
+                <p class="eyebrow">BizCompass</p>
+                <h1>로그인</h1>
+                <p>가입한 이메일과 비밀번호를 입력해 주세요.</p>
+              </div>
+
+              <form id="login-form" class="auth-form" novalidate>
+                <div class="field">
+                  <label for="login-email">이메일</label>
+                  <input class="input" type="email" id="login-email" name="email" autocomplete="email" inputmode="email" required />
+                </div>
+                <div class="field">
+                  <label for="login-password">비밀번호</label>
+                  <input class="input" type="password" id="login-password" name="password" autocomplete="current-password" required />
+                </div>
+
+                <p class="form-message" id="login-message" role="alert" hidden></p>
+
+                <button type="submit" class="btn btn--accent btn--block" id="login-submit">
+                  <span>로그인</span>
+                  <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+
+                <div class="auth-links">
+                  <p class="auth-switch">아직 계정이 없으신가요? <a href="{{base}}signup/">회원가입</a></p>
+                  <button type="button" class="text-button" id="login-reset">비밀번호 재설정</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- 로그인한 상태: 내 계정 -->
+            <div id="account-view" hidden>
+              <div class="auth-head">
+                <p class="eyebrow">내 계정</p>
+                <h1><span id="account-name"></span>님</h1>
+                <p id="account-note"></p>
+              </div>
+              <dl class="account-facts">
+                <div><dt>상태</dt><dd><span class="tag" id="account-status"></span></dd></div>
+                <div><dt>이메일</dt><dd id="account-email"></dd></div>
+                <div><dt>가입 유형</dt><dd id="account-type"></dd></div>
+                <div><dt>캠프</dt><dd id="account-camp"></dd></div>
+                <div><dt>기수</dt><dd id="account-cohort"></dd></div>
+              </dl>
+              <div class="auth-actions">
+                <a class="btn btn--accent" href="{{base}}">홈으로 가기</a>
+                <button type="button" class="btn" id="account-logout">로그아웃</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--@footer-->
+    <script type="module" src="/src/pages/login.js"></script>
+  </body>
+</html>

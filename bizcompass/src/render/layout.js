@@ -36,6 +36,10 @@ export function header({ active = '', base }) {
     <div class="wrap site-header-inner">
       <a class="brand" href="${base}" aria-label="${SITE.name} 홈">${compassMark(32)}<span>${SITE.name}</span></a>
       <nav class="site-nav" aria-label="주요 메뉴">${links}</nav>
+      <div class="site-auth" data-auth>
+        <a class="auth-link" href="${base}login/">${icon('user', 18)}<span>로그인</span></a>
+        <a class="auth-join" href="${base}signup/">회원가입</a>
+      </div>
     </div>
   </header>`;
 }

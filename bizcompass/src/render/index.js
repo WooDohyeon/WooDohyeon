@@ -8,6 +8,8 @@ import { REFERENCE_SEED, categoryCounts } from '../lib/references-model.js';
 import { ROADMAP_PROGRAM_COUNT } from '../data/roadmap.js';
 import { COMMON_DOCS } from '../data/documents.js';
 import { FORM_CATALOG } from '../data/forms.catalog.js';
+import { CAMPS, COHORTS } from '../data/membership.js';
+import { esc } from './util.js';
 
 function stats() {
   const items = [
@@ -36,5 +38,7 @@ export const renderers = {
   'form-grid': formGridSeed,
   'form-count': formCount,
   'roadmap-count': () => String(ROADMAP_PROGRAM_COUNT),
+  'camp-options': () => CAMPS.map((name) => `<option value="${esc(name)}">${esc(name)}</option>`).join(''),
+  'cohort-options': () => COHORTS.map((number) => `<option value="${number}">${number}기</option>`).join(''),
   stats,
 };

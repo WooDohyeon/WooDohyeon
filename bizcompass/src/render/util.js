@@ -15,6 +15,9 @@ const ICON_PATHS = {
   back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   spark: '<path d="M12 3v6M12 15v6M3 12h6M15 12h6"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>',
+  userPlus: '<circle cx="10" cy="8" r="4"/><path d="M2.5 20.5a7.5 7.5 0 0 1 15 0M19 8v6M16 11h6"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M16.5 6.5l3 3M14 9l2 2"/>',
 };
 
 export function icon(name, size = 18) {
