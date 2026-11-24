@@ -90,7 +90,7 @@ export const REFERENCE_SEED = [
       "창업/스타트업"
     ],
     "url": "https://eopla.net/",
-    "description": ""
+    "description": "창업가 인터뷰와 실무 아티클, 스타트업 행사와 커뮤니티를 한곳에서 만날 수 있는 EO의 스타트업 콘텐츠 플랫폼입니다."
   },
   {
     "name": "스타트업 얼라이언스",
@@ -98,7 +98,7 @@ export const REFERENCE_SEED = [
       "창업/스타트업"
     ],
     "url": "https://www.startupall.kr/",
-    "description": ""
+    "description": "스타트업 생태계 동향 리포트와 행사, 창업 지원 프로그램 소식을 전하는 비영리 스타트업 지원 기관입니다."
   },
   {
     "name": "벤처스퀘어",
@@ -106,7 +106,7 @@ export const REFERENCE_SEED = [
       "투자"
     ],
     "url": "https://www.venturesquare.net/",
-    "description": ""
+    "description": "스타트업 투자 유치 소식과 지원사업·행사 공고, 창업 생태계 뉴스를 전하는 스타트업 전문 미디어입니다."
   },
   {
     "name": "플래텀",
@@ -130,7 +130,7 @@ export const REFERENCE_SEED = [
       "창업/스타트업"
     ],
     "url": "https://www.nextunicorn.kr/",
-    "description": ""
+    "description": "스타트업이 기업 프로필을 등록하고 전문 투자자와 온라인으로 직접 연결될 수 있는 투자 네트워킹 플랫폼입니다."
   },
   {
     "name": "중소벤처24",
@@ -147,7 +147,7 @@ export const REFERENCE_SEED = [
       "트렌드"
     ],
     "url": "https://blog.featuring.co/",
-    "description": ""
+    "description": "인플루언서 데이터와 SNS 마케팅 트렌드, 캠페인 사례를 정리해 소개하는 인플루언서 마케팅 플랫폼 피처링의 블로그입니다."
   },
   {
     "name": "이벤터스",
@@ -165,7 +165,7 @@ export const REFERENCE_SEED = [
       "트렌드"
     ],
     "url": "https://www.careet.net/",
-    "description": ""
+    "description": "MZ세대의 유행과 소비 흐름, 마케팅 사례를 분석해 전하는 대학내일의 트렌드 미디어입니다."
   },
   {
     "name": "오픈애즈",
@@ -174,7 +174,7 @@ export const REFERENCE_SEED = [
       "트렌드"
     ],
     "url": "https://www.openads.co.kr/home",
-    "description": ""
+    "description": "마케팅 실무 콘텐츠와 트렌드 리포트, 광고 상품 정보를 모아 볼 수 있는 마케터를 위한 정보 플랫폼입니다."
   },
   {
     "name": "서핏",
@@ -182,7 +182,7 @@ export const REFERENCE_SEED = [
       "창업/스타트업"
     ],
     "url": "https://www.surfit.io/",
-    "description": ""
+    "description": "개발·디자인·기획·마케팅 실무자를 위한 업무 지식 콘텐츠를 큐레이션해 주는 커리어 플랫폼입니다."
   },
   {
     "name": "디스콰이엇",
@@ -190,7 +190,7 @@ export const REFERENCE_SEED = [
       "MVP"
     ],
     "url": "https://disquiet.io/",
-    "description": ""
+    "description": "메이커들이 자신이 만든 IT 프로덕트를 소개하고 피드백과 제작 과정을 나누는 프로덕트 커뮤니티입니다."
   },
   {
     "name": "Cozit",
@@ -222,7 +222,7 @@ export const REFERENCE_SEED = [
       "트렌드"
     ],
     "url": "https://www.bigkinds.or.kr/",
-    "description": ""
+    "description": "국내 언론사의 뉴스 기사를 키워드로 검색하고 연관어와 보도 추이를 분석할 수 있는 한국언론진흥재단의 뉴스 빅데이터 서비스입니다."
   },
   {
     "name": "노트폴리오",
@@ -230,7 +230,7 @@ export const REFERENCE_SEED = [
       "UX/UI"
     ],
     "url": "https://notefolio.net/",
-    "description": ""
+    "description": "디자이너와 크리에이터의 작업물을 분야별로 둘러보고 자신의 포트폴리오를 공유할 수 있는 창작자 네트워크입니다."
   },
   {
     "name": "디자이너스",
@@ -238,7 +238,7 @@ export const REFERENCE_SEED = [
       "UX/UI"
     ],
     "url": "https://ko.designus.design/",
-    "description": ""
+    "description": "국내 서비스의 UX/UI 화면을 디자인 패턴과 컴포넌트, 산업별로 찾아볼 수 있는 디자인 레퍼런스 사이트입니다."
   },
   {
     "name": "WWIT",
@@ -246,7 +246,7 @@ export const REFERENCE_SEED = [
       "UX/UI"
     ],
     "url": "https://wwit.design/",
-    "description": ""
+    "description": "국내 모바일 앱의 화면을 카테고리와 패턴별로 모아 볼 수 있는 앱 UI 레퍼런스 아카이브입니다."
   },
   {
     "name": "구글 트렌드",
@@ -262,7 +262,7 @@ export const REFERENCE_SEED = [
       "트렌드"
     ],
     "url": "https://business.google.com/kr/think/",
-    "description": ""
+    "description": "구글 데이터를 바탕으로 한 소비자 인사이트와 마케팅 전략, 캠페인 사례를 소개하는 구글의 마케팅 인사이트 사이트입니다."
   },
   {
     "name": "트렌드 모니터",
@@ -278,7 +278,7 @@ export const REFERENCE_SEED = [
       "마케팅"
     ],
     "url": "https://somako.co.kr/",
-    "description": ""
+    "description": "SNS 마케팅 사례와 광고·미디어 트렌드 리포트를 꾸준히 발행하는 마케팅 콘텐츠 사이트입니다."
   },
   {
     "name": "고구마팜",
@@ -286,7 +286,7 @@ export const REFERENCE_SEED = [
       "마케팅"
     ],
     "url": "https://gogumafarm.kr/",
-    "description": ""
+    "description": "최신 밈과 소셜미디어 트렌드, 마케팅 사례와 전략을 소개하는 더에스엠씨의 마케팅 콘텐츠 미디어입니다."
   },
   {
     "name": "아이작 트렌드",
@@ -311,7 +311,7 @@ export const REFERENCE_SEED = [
       "정부지원사업"
     ],
     "url": "https://touraz.kr/announcementList",
-    "description": ""
+    "description": "관광 분야 지원사업 공고와 공모, 입찰 정보를 확인할 수 있는 한국관광공사의 한국관광산업포털입니다."
   },
   {
     "name": "경기스타트업플랫폼",
@@ -320,7 +320,7 @@ export const REFERENCE_SEED = [
       "정부지원사업"
     ],
     "url": "https://www.gsp.or.kr/supportProject/UVSL0001.do",
-    "description": ""
+    "description": "경기도 스타트업과 예비창업자를 위한 지원사업 공고와 교육·투자 연계 정보를 제공하는 경기도의 창업지원 플랫폼입니다."
   },
   {
     "name": "한경 컨센서스",
@@ -328,7 +328,7 @@ export const REFERENCE_SEED = [
       "시장/고객"
     ],
     "url": "https://markets.hankyung.com/consensus",
-    "description": ""
+    "description": "증권사가 발행한 기업·산업·시장 분석 리포트를 모아 볼 수 있는 한국경제의 리포트 서비스입니다."
   },
   {
     "name": "NICE BizLINE",
@@ -336,7 +336,7 @@ export const REFERENCE_SEED = [
       "시장/고객"
     ],
     "url": "https://www.nicebizline.com/workspace/HO000",
-    "description": ""
+    "description": "기업의 일반·재무·신용 정보를 검색하고 산업 동향과 거래처를 분석할 수 있는 NICE평가정보의 기업정보 포털입니다."
   },
   {
     "name": "SEC EDGAR",
@@ -352,7 +352,7 @@ export const REFERENCE_SEED = [
       "시장/고객"
     ],
     "url": "https://kosis.kr/index/index.do",
-    "description": ""
+    "description": "인구·경제·산업 등 국내외 주요 통계를 주제별로 조회하고 내려받을 수 있는 통계청의 통계 포털(KOSIS)입니다."
   },
   {
     "name": "네이버 데이터랩",
