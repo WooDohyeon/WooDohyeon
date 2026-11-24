@@ -13,13 +13,14 @@ export const NAV = [
   { id: 'forms', label: '서식', path: 'forms/' },
 ];
 
-export function head({ title = '', description = SITE.description, base }) {
+export function head({ title = '', description = SITE.description, robots = '', base }) {
   const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | ${SITE.tagline}`;
   return `<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${esc(fullTitle)}</title>
     <meta name="description" content="${esc(description)}" />
-    <meta name="theme-color" content="#ECEBE6" />
+    <meta name="theme-color" content="#ECEBE6" />${robots ? `
+    <meta name="robots" content="${esc(robots)}" />` : ''}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${esc(SITE.name)}" />
     <meta property="og:title" content="${esc(fullTitle)}" />

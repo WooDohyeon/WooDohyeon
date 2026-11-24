@@ -31,6 +31,7 @@ Vercel 프로젝트는 Root Directory 를 `bizcompass` 로 지정해 연결하�
 | `/references/` | 레퍼런스 | **Firebase Realtime Database** |
 | `/forms/`, `/forms/view/?id=…` | 서식 | **Firebase Storage** |
 | `/signup/`, `/login/` | 회원가입 · 로그인(내 계정) | **Firebase Authentication** + Realtime Database |
+| `/admin/` | 회원 승인 관리 (운영진 전용) | Realtime Database `users`, `admins` |
 
 ## 디자인
 
@@ -80,8 +81,10 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 동작 방식:
 
 - 회원 정보 경로가 외부에서 읽히는 상태면 가입을 받지 않고 "회원 기능을 준비하고 있습니다" 안내를 띄웁니다. (이메일·이름 노출 방지)
-- 가입 직후 상태는 `pending` 입니다. **승인**: Realtime Database → `users` → 해당 회원 → `status` 값을 `approved` 로 바꿉니다.
+- 가입 직후 상태는 `pending` 입니다. **승인**은 운영진이 `/admin/` 페이지에서 합니다. (콘솔에서 `users` → 해당 회원 → `status` 를 `approved` 로 바꿔도 됩니다.)
 - 회원은 자기 정보를 읽을 수만 있고 고칠 수 없습니다. (스스로 승인 상태를 바꾸지 못하게 하기 위함)
+- **운영진 지정**: Firebase 콘솔 → Authentication 에서 운영진 계정의 사용자 UID 를 복사한 뒤, Realtime Database 에 `admins/{UID}` 값을 `true` 로 추가합니다. 운영진 목록은 콘솔에서만 바꿀 수 있습니다.
+- **회원 관리 페이지(`/admin/`)**: 운영진으로 로그인하면 전체 회원 목록을 보고 승인 · 승인 취소를 할 수 있습니다. 운영진이 아닌 계정에는 목록이 내려가지 않습니다. (접근 제한은 화면이 아니라 데이터베이스 규칙이 합니다.)
 - 선택 항목(가입 유형 · 캠프 · 기수)은 `src/data/membership.js` 에서 바꿉니다. 캠프·기수 범위를 바꾸면 규칙의 검증 조건도 함께 맞춰 주세요.
 - 현재는 로그인 여부로 막는 페이지가 없습니다. 모든 페이지는 로그인 없이 볼 수 있습니다.
 

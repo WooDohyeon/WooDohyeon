@@ -2348,6 +2348,71 @@ a:hover > .dest-more .icon {
   overflow-wrap: anywhere;
 }
 
+/* ── 회원 관리 (운영진) ───────────────────────────────────── */
+.member-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.member-card {
+  display: grid;
+  gap: 14px;
+  align-items: center;
+  padding: clamp(16px, 2vw, 22px);
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.member-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.member-top h3 {
+  font-size: 1.1875rem;
+  letter-spacing: -0.02em;
+}
+
+.member-email {
+  margin-top: 2px;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.member-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+}
+
+.member-facts dt {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+
+.member-facts dd {
+  font-weight: 600;
+}
+
+.member-action .btn {
+  width: 100%;
+  min-height: 46px;
+}
+
+.toolbar > .btn {
+  min-height: 54px;
+}
+
+.auth-admin {
+  padding-inline: 8px;
+}
+
 /* ── 서식 보기 ────────────────────────────────────────────── */
 .back-link {
   display: inline-flex;
@@ -2622,6 +2687,7 @@ a.download-btn:hover {
 
   .auth-join,
   .auth-name,
+  .auth-admin,
   .auth-logout {
     display: none;
   }
@@ -2745,6 +2811,20 @@ a.download-btn:hover {
 }
 
 @media (min-width: 900px) {
+  .member-card {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr) auto;
+    gap: 24px;
+  }
+
+  .member-facts {
+    grid-template-columns: 0.8fr 1.3fr 0.6fr 1.5fr;
+  }
+
+  .member-action .btn {
+    width: auto;
+    min-width: 112px;
+  }
+
   .notice-facts {
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);

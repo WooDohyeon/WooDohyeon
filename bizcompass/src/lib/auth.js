@@ -3,6 +3,7 @@ import { firebaseConfig } from './firebase-config.js';
 
 const HINT_KEY = 'bizcompass.auth';
 const USERS_URL = `${firebaseConfig.databaseURL}/users`;
+const ADMINS_URL = `${firebaseConfig.databaseURL}/admins`;
 
 // ── 로그인 상태 힌트 ────────────────────────────────────────────
 // 로그인한 적이 없는 방문자에게는 인증 SDK 를 내려받지 않도록, 로그인 여부만 브라우저에 적어 둡니다.
@@ -16,7 +17,7 @@ export function readHint() {
 
 function writeHint(session) {
   try {
-    if (session) localStorage.setItem(HINT_KEY, JSON.stringify({ name: session.name, status: session.status }));
+    if (session) localStorage.setItem(HINT_KEY, JSON.stringify({ name: session.name, status: session.status, isAdmin: Boolean(session.isAdmin) }));
     else localStorage.removeItem(HINT_KEY);
   } catch { /* 저장소를 쓸 수 없는 환경에서는 힌트 없이 동작합니다. */ }
 }
@@ -67,8 +68,20 @@ async function loadProfile(user) {
   }
 }
 
-function toSession(user, profile) {
+/** 운영진 여부: admins/{uid} 가 true 인 계정 (Firebase 콘솔에서만 지정할 수 있습니다) */
+async function loadIsAdmin(user) {
+  try {
+    const token = await user.getIdToken();
+    const response = await fetch(`${ADMINS_URL}/${user.uid}.json?auth=${encodeURIComponent(token)}`);
+    return response.ok && (await response.json()) === true;
+  } catch {
+    return false;
+  }
+}
+
+function toSession(user, profile, isAdmin = false) {
   return {
+    isAdmin,
     uid: user.uid,
     email: user.email,
     name: profile?.name || user.displayName || user.email,
@@ -102,7 +115,8 @@ export async function signUp({ email, password, name, memberType, camp, cohort }
 export async function signIn(email, password) {
   const firebase = await sdk();
   const { user } = await firebase.signInWithEmailAndPassword(firebase.auth, email, password);
-  const session = toSession(user, await loadProfile(user));
+  const [profile, isAdmin] = await Promise.all([loadProfile(user), loadIsAdmin(user)]);
+  const session = toSession(user, profile, isAdmin);
   writeHint(session);
   return session;
 }
@@ -126,7 +140,7 @@ export async function watchSession(callback) {
   try {
     const firebase = await sdk();
     return firebase.onAuthStateChanged(firebase.auth, async (user) => {
-      const session = user ? toSession(user, await loadProfile(user)) : null;
+      const session = user ? toSession(user, ...(await Promise.all([loadProfile(user), loadIsAdmin(user)]))) : null;
       writeHint(session);
       callback(session);
     });
@@ -134,6 +148,34 @@ export async function watchSession(callback) {
     callback(null);
     return () => {};
   }
+}
+
+// ── 운영진 전용 ────────────────────────────────────────────────
+async function currentToken() {
+  const firebase = await sdk();
+  await firebase.auth.authStateReady();
+  if (!firebase.auth.currentUser) throw new AuthError('not-signed-in');
+  return firebase.auth.currentUser.getIdToken();
+}
+
+/** 전체 회원 목록 (운영진만 읽을 수 있습니다) */
+export async function listMembers() {
+  const token = await currentToken();
+  const response = await fetch(`${USERS_URL}.json?auth=${encodeURIComponent(token)}`);
+  if (!response.ok) throw new AuthError(response.status === 401 || response.status === 403 ? 'not-admin' : 'members-load-failed');
+  const data = (await response.json()) || {};
+  return Object.entries(data).map(([uid, profile]) => ({ uid, ...profile }));
+}
+
+/** 회원 상태 변경: 'approved'(승인) 또는 'pending'(승인 대기) */
+export async function setMemberStatus(uid, status) {
+  const token = await currentToken();
+  const response = await fetch(`${USERS_URL}/${encodeURIComponent(uid)}/status.json?auth=${encodeURIComponent(token)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(status),
+  });
+  if (!response.ok) throw new AuthError(response.status === 401 || response.status === 403 ? 'not-admin' : 'status-save-failed');
 }
 
 const SETUP_MESSAGE = '회원 기능을 준비하고 있습니다. 잠시 후 다시 이용해 주세요.';
@@ -153,6 +195,10 @@ const MESSAGES = {
   'auth/configuration-not-found': SETUP_MESSAGE,
   'setup-required': SETUP_MESSAGE,
   'profile-write-failed': '가입 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.',
+  'not-signed-in': '로그인이 필요합니다.',
+  'not-admin': '운영진 권한이 없는 계정입니다.',
+  'members-load-failed': '회원 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.',
+  'status-save-failed': '상태를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.',
 };
 
 /** 오류를 화면에 보여 줄 문구로 바꿉니다. */
