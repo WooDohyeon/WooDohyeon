@@ -49,6 +49,12 @@ form.addEventListener('submit', async (event) => {
   try {
     const session = await signIn(email, password);
     showSession(session);
+    // 다른 페이지에서 로그인하러 온 경우 원래 보던 페이지로 돌아갑니다. (같은 사이트 안의 주소만)
+    const next = new URLSearchParams(location.search).get('next') || '';
+    if (next.startsWith('/') && !next.startsWith('//')) {
+      location.href = next;
+      return undefined;
+    }
     showAccount(session);
   } catch (error) {
     say(authMessage(error));

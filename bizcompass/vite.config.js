@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from 'vite';
 import { readdirSync, statSync } from 'node:fs';
 import { resolve, join, relative } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { renderers } from './src/render/index.js';
 
 const root = import.meta.dirname;
@@ -36,23 +37,25 @@ function bizHtml(base) {
   };
 }
 
-// 로컬 개발·미리보기 서버에서 /api/programs 를 Vercel 함수와 같은 코드로 응답합니다.
-// 인증키는 .env.local 의 DATA_GO_KR_SERVICE_KEY 에서 읽습니다.
+// 로컬 개발·미리보기 서버에서 /api/* 를 Vercel 함수와 같은 코드(api/*.js)로 응답합니다.
+// 공고 인증키는 .env.local 의 DATA_GO_KR_SERVICE_KEY 에서 읽습니다.
 function localApi(serviceKey) {
-  let cached = null;
+  const routes = { programs: 'api/programs.js', 'form-preview': 'api/form-preview.js' };
   const handler = async (request, response, next) => {
-    if (!/^\/api\/programs\/?(\?.*)?$/.test(request.url || '')) return next();
-    response.setHeader('Content-Type', 'application/json; charset=utf-8');
+    const match = /^\/api\/([\w-]+)\/?(\?.*)?$/.exec(request.url || '');
+    if (!match || !routes[match[1]]) return next();
     try {
-      if (!cached || Date.now() - cached.at > 10 * 60 * 1000) {
-        const { loadPrograms } = await import('./server/programs.js');
-        cached = { at: Date.now(), body: JSON.stringify(await loadPrograms(serviceKey)) };
-      }
-      response.end(cached.body);
+      if (serviceKey) process.env.DATA_GO_KR_SERVICE_KEY ??= serviceKey;
+      const { GET } = await import(pathToFileURL(resolve(root, routes[match[1]])).href);
+      const headers = new Headers(Object.entries(request.headers).filter(([, value]) => typeof value === 'string'));
+      const result = await GET(new Request(`http://localhost${request.url}`, { headers }));
+      response.statusCode = result.status;
+      result.headers.forEach((value, key) => response.setHeader(key, value));
+      response.end(Buffer.from(await result.arrayBuffer()));
     } catch (error) {
-      console.error('[programs]', error.message);
-      response.statusCode = 502;
-      response.end(JSON.stringify({ error: '공고를 불러오지 못했습니다.' }));
+      console.error(`[api/${match[1]}]`, error.message);
+      response.statusCode = 500;
+      response.end('error');
     }
     return undefined;
   };

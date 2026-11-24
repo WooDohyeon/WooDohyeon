@@ -44,7 +44,19 @@ export function referenceCount() {
   return String(REFERENCE_SEED.length);
 }
 
+/** 비회원에게 보여 주는 개수 */
+export const GUEST_REFERENCE_LIMIT = 4;
+
+export function referenceGridGuest() {
+  return referenceCards(REFERENCE_SEED.slice(0, GUEST_REFERENCE_LIMIT));
+}
+
+/** 가려진 자리에 놓는 빈 카드 (실제 정보는 들어 있지 않습니다) */
+export function referencePlaceholders(count = 8) {
+  return Array.from({ length: count }, () => `<div class="ref-card ref-card--blank" aria-hidden="true"><span></span><span></span><span></span><span></span></div>`).join('');
+}
+
 export function referencePreview({ base }) {
   return `<div class="chips" data-ref-categories>${categoryLinks(REFERENCE_SEED, base)}</div>
-    <div class="ref-grid ref-grid--preview" data-ref-preview>${referenceCards(REFERENCE_SEED.slice(0, 8))}</div>`;
+    <div class="ref-grid ref-grid--preview" data-ref-preview>${referenceCards(REFERENCE_SEED.slice(0, GUEST_REFERENCE_LIMIT))}</div>`;
 }

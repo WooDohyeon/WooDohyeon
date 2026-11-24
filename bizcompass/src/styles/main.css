@@ -2348,6 +2348,188 @@ a:hover > .dest-more .icon {
   overflow-wrap: anywhere;
 }
 
+/* ── 회원 전용 안내 · 가림 처리 ───────────────────────────── */
+.gate-box {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  width: min(100%, 520px);
+  padding: clamp(22px, 3vw, 32px);
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 6px 6px 0 var(--second);
+  text-align: center;
+}
+
+.gate-box h3 {
+  margin-top: 4px;
+  font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+}
+
+.gate-box p {
+  color: var(--ink-soft);
+}
+
+.gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 목록 대신 놓는 안내 (지원사업 공고) */
+.gate-panel {
+  display: grid;
+  place-items: center;
+  padding: clamp(32px, 7vw, 80px) 16px;
+  border: 1.5px dashed var(--ink);
+  border-radius: var(--radius-lg);
+}
+
+/* 아래로 갈수록 흐려지는 가림 영역 */
+.gate-fade {
+  position: relative;
+  margin-top: 14px;
+  max-height: 520px;
+  overflow: hidden;
+}
+
+.gate-fade-content {
+  margin-top: 0;
+  filter: blur(7px);
+  opacity: 0.75;
+  pointer-events: none;
+  user-select: none;
+  mask-image: linear-gradient(#000 0%, #000 35%, transparent 92%);
+  -webkit-mask-image: linear-gradient(#000 0%, #000 35%, transparent 92%);
+}
+
+.gate-fade-cta {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.ref-card--blank {
+  min-height: 220px;
+  gap: 12px;
+}
+
+.ref-card--blank span {
+  display: block;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--line);
+}
+
+.ref-card--blank span:nth-child(1) { width: 52px; height: 52px; border-radius: 16px; margin-bottom: 8px; }
+.ref-card--blank span:nth-child(2) { width: 55%; height: 20px; background: rgba(21, 23, 28, 0.32); }
+.ref-card--blank span:nth-child(3) { width: 90%; }
+.ref-card--blank span:nth-child(4) { width: 70%; }
+
+.ref-card--blank:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* 서식 미리보기 아래의 가려진 페이지 */
+.gate-fade--page {
+  margin-top: 0;
+  max-height: 460px;
+  border-top: var(--border);
+  background: var(--main);
+}
+
+.page-blank {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  width: min(88%, 760px);
+  min-height: 520px;
+  margin: 20px auto 0;
+  padding: clamp(28px, 6vw, 64px);
+  background: #fff;
+}
+
+.page-blank span {
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(21, 23, 28, 0.2);
+}
+
+.page-blank span:first-child { width: 45%; height: 18px; background: rgba(21, 23, 28, 0.45); }
+.page-blank span:nth-child(3n) { width: 82%; }
+.page-blank span:nth-child(5) { width: 64%; }
+
+button.download-btn {
+  cursor: pointer;
+  text-align: left;
+}
+
+button.download-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow);
+}
+
+/* 로그인 안내 모달 */
+.modal {
+  width: min(calc(100% - 32px), 460px);
+  padding: 0;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 8px 8px 0 var(--second);
+}
+
+.modal::backdrop {
+  background: rgba(21, 23, 28, 0.55);
+}
+
+.modal-body {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: clamp(24px, 4vw, 36px);
+}
+
+.modal-body h2 {
+  margin-top: 4px;
+  font-size: 1.5rem;
+}
+
+.modal-body p {
+  color: var(--ink-soft);
+}
+
+.modal-body .gate-actions {
+  justify-content: flex-start;
+  margin-top: 14px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: var(--main);
+}
+
 /* ── 서식 보기 ────────────────────────────────────────────── */
 .back-link {
   display: inline-flex;
@@ -2662,10 +2844,6 @@ a.download-btn:hover {
   .compass-point--s { bottom: 4%; right: 4%; left: auto; translate: none; }
   .compass-point--w { top: auto; bottom: 4%; left: 4%; translate: none; }
 
-  /* 메인 미리보기는 4곳만 */
-  .ref-grid--preview .ref-card:nth-child(n + 5) {
-    display: none;
-  }
 }
 
 @media (min-width: 600px) {
