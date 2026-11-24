@@ -153,6 +153,9 @@ const MESSAGES = {
   'auth/configuration-not-found': SETUP_MESSAGE,
   'setup-required': SETUP_MESSAGE,
   'profile-write-failed': '가입 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.',
+  'not-admin': '관리자 계정이 아닙니다. 관리자 계정으로 로그인해 주세요.',
+  'members-load-failed': '회원 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.',
+  'status-save-failed': '상태를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.',
 };
 
 /** 오류를 화면에 보여 줄 문구로 바꿉니다. */

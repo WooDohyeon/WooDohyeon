@@ -2348,6 +2348,118 @@ a:hover > .dest-more .icon {
   overflow-wrap: anywhere;
 }
 
+/* ── 회원 관리 (운영진) ───────────────────────────────────── */
+.member-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.member-card {
+  display: grid;
+  gap: 14px;
+  align-items: center;
+  padding: clamp(16px, 2vw, 22px);
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.member-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.member-top h3 {
+  font-size: 1.1875rem;
+  letter-spacing: -0.02em;
+}
+
+.member-email {
+  margin-top: 2px;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.member-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+}
+
+.member-facts dt {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+
+.member-facts dd {
+  font-weight: 600;
+}
+
+.member-action .btn {
+  width: 100%;
+  min-height: 46px;
+}
+
+.toolbar > .btn {
+  min-height: 54px;
+}
+
+/* 관리자 페이지 전용 머리글 · 바닥글 */
+.admin-header .brand .tag {
+  display: inline-flex;
+  margin-left: 2px;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+
+.admin-session {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.admin-who {
+  max-width: 14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.admin-logout {
+  min-height: 42px;
+  padding: 8px 18px;
+}
+
+.admin-body main {
+  min-height: calc(100vh - 170px);
+}
+
+.admin-footer {
+  padding-block: 20px;
+  border-top: var(--border);
+  color: var(--ink-faint);
+}
+
+.admin-footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 20px;
+}
+
+.admin-footer a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ── 서식 보기 ────────────────────────────────────────────── */
 .back-link {
   display: inline-flex;
@@ -2614,6 +2726,14 @@ a.download-btn:hover {
 }
 
 @media (max-width: 599px) {
+  .admin-header .brand > span:not(.tag) {
+    display: inline;
+  }
+
+  .admin-who {
+    display: none;
+  }
+
   /* 좁은 화면의 상단 메뉴: 로그인은 아이콘으로, 회원가입 버튼과 이름·로그아웃은 숨깁니다. */
   .site-auth {
     padding-left: 4px;
@@ -2745,6 +2865,20 @@ a.download-btn:hover {
 }
 
 @media (min-width: 900px) {
+  .member-card {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr) auto;
+    gap: 24px;
+  }
+
+  .member-facts {
+    grid-template-columns: 0.8fr 1.3fr 0.6fr 1.5fr;
+  }
+
+  .member-action .btn {
+    width: auto;
+    min-width: 112px;
+  }
+
   .notice-facts {
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);

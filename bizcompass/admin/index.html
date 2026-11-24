@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!--@head title="관리자" description="비즈컴퍼스 관리자 페이지" robots="noindex, nofollow"-->
+  </head>
+  <body data-page="admin" class="admin-body">
+    <!--@admin-header-->
+    <main id="main">
+      <!-- 확인 중 -->
+      <section class="section section--flush" id="admin-loading">
+        <div class="wrap">
+          <div class="viewer-state">
+            <span class="spinner" aria-hidden="true"></span>
+            <p>로그인 상태를 확인하고 있어요</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 관리자 로그인 -->
+      <section class="section section--flush auth-page" id="admin-login" hidden>
+        <div class="wrap">
+          <div class="auth-card auth-card--narrow">
+            <div class="auth-head">
+              <p class="eyebrow">관리자 전용</p>
+              <h1>관리자 로그인</h1>
+              <p>관리자 계정으로 로그인해 주세요.</p>
+            </div>
+            <form id="admin-login-form" class="auth-form" novalidate>
+              <div class="field">
+                <label for="admin-email">이메일</label>
+                <input class="input" type="email" id="admin-email" name="email" autocomplete="username" inputmode="email" required />
+              </div>
+              <div class="field">
+                <label for="admin-password">비밀번호</label>
+                <input class="input" type="password" id="admin-password" name="password" autocomplete="current-password" required />
+              </div>
+              <p class="form-message" id="admin-login-message" role="alert" hidden></p>
+              <button type="submit" class="btn btn--accent btn--block" id="admin-login-submit">
+                <span>로그인</span>
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- 회원 승인 관리 -->
+      <div id="admin-panel" hidden>
+        <section class="page-hero">
+          <div class="wrap page-hero-split">
+            <div>
+              <p class="eyebrow">회원 관리</p>
+              <h1>회원 <span class="hl">승인</span> 관리</h1>
+              <p class="page-hero-lead">가입 신청을 확인하고 이용 권한을 부여합니다.</p>
+            </div>
+            <div class="count-badge" aria-live="polite">
+              <strong id="admin-pending">0</strong>
+              <span>명 승인 대기</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section section--flush">
+          <div class="wrap">
+            <div class="toolbar">
+              <label class="search">
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+                <span class="sr-only">회원 검색</span>
+                <input type="search" id="admin-search" placeholder="이름, 이메일로 검색" autocomplete="off" />
+              </label>
+              <div class="selects">
+                <label class="select"><span class="sr-only">캠프</span><select id="admin-camp"><option value="">전체 캠프</option></select></label>
+                <label class="select"><span class="sr-only">가입 유형</span><select id="admin-type"><option value="">전체 유형</option></select></label>
+              </div>
+              <button type="button" class="btn" id="admin-refresh">새로고침</button>
+            </div>
+            <div class="chips" id="admin-status" role="group" aria-label="승인 상태"></div>
+            <p class="form-message" id="admin-message" role="alert" hidden></p>
+
+            <div class="notice-summary">
+              <p id="admin-summary" aria-live="polite"></p>
+            </div>
+
+            <ol class="member-list" id="admin-list" aria-label="회원 목록"></ol>
+            <div class="empty" id="admin-empty" hidden>
+              <h3 id="admin-empty-title">조건에 맞는 회원이 없어요</h3>
+              <p id="admin-empty-text">검색어나 필터를 바꿔 다시 찾아보세요.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--@admin-footer-->
+    <script type="module" src="/src/pages/admin.js"></script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 // HTML 안의 <!--@이름 속성="값"--> 자리표시자를 채우는 렌더러 모음 (vite.config.js 에서 사용)
-import { head, header, footer, programsHero } from './layout.js';
+import { head, header, footer, programsHero, adminHeader, adminFooter } from './layout.js';
 import { roadmap } from './roadmap.js';
 import { commonDocs, applicantDocs, docsPreview } from './documents.js';
 import { referenceGridSeed, referenceTabsSeed, referenceCount, referencePreview } from './references.js';
@@ -26,6 +26,8 @@ export const renderers = {
   header,
   footer,
   'programs-hero': programsHero,
+  'admin-header': adminHeader,
+  'admin-footer': adminFooter,
   roadmap,
   'common-docs': commonDocs,
   'applicant-docs': applicantDocs,

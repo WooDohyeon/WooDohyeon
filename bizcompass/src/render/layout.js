@@ -13,13 +13,14 @@ export const NAV = [
   { id: 'forms', label: '서식', path: 'forms/' },
 ];
 
-export function head({ title = '', description = SITE.description, base }) {
+export function head({ title = '', description = SITE.description, robots = '', base }) {
   const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | ${SITE.tagline}`;
   return `<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>${esc(fullTitle)}</title>
     <meta name="description" content="${esc(description)}" />
-    <meta name="theme-color" content="#ECEBE6" />
+    <meta name="theme-color" content="#ECEBE6" />${robots ? `
+    <meta name="robots" content="${esc(robots)}" />` : ''}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${esc(SITE.name)}" />
     <meta property="og:title" content="${esc(fullTitle)}" />
@@ -65,6 +66,29 @@ export function footer({ base }) {
           <a href="https://www.k-startup.go.kr" target="_blank" rel="noopener noreferrer">K-Startup</a>
         </small>
       </div>
+    </div>
+  </footer>`;
+}
+
+// 관리자 페이지 전용 머리글 · 바닥글 (사이트 메뉴와 회원 로그인 영역이 없습니다)
+export function adminHeader({ base }) {
+  return `<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <header class="site-header admin-header">
+    <div class="wrap site-header-inner">
+      <a class="brand" href="${base}admin/" aria-label="${SITE.name} 관리자">${compassMark(32)}<span>${SITE.name}</span><span class="tag tag--accent">관리자</span></a>
+      <div class="admin-session" id="admin-session" hidden>
+        <span class="admin-who" id="admin-who"></span>
+        <button type="button" class="btn admin-logout" id="admin-logout">로그아웃</button>
+      </div>
+    </div>
+  </header>`;
+}
+
+export function adminFooter({ base }) {
+  return `<footer class="admin-footer">
+    <div class="wrap">
+      <small>${SITE.name} 관리자 페이지</small>
+      <small><a href="${base}">사이트로 이동</a></small>
     </div>
   </footer>`;
 }
