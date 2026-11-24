@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// 서식 파일(forms/ 폴더)은 누구나 읽을 수 있고, 올리기·지우기는 Firebase 콘솔에서만 합니다.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /forms/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

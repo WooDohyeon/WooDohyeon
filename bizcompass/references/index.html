@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!--@head title="레퍼런스" description="창업과 업무에 필요한 사이트를 분야별로 둘러보세요."-->
+  </head>
+  <body data-page="references">
+    <!--@header active="references"-->
+    <main id="main">
+      <section class="page-hero">
+        <div class="wrap page-hero-split">
+          <div>
+            <p class="eyebrow">레퍼런스 라이브러리</p>
+            <h1>업무에 필요한 사이트를<br /><span class="hl">카테고리별</span>로 찾아보세요</h1>
+          </div>
+          <div class="count-badge" aria-live="polite">
+            <strong id="ref-shown"><!--@reference-count--></strong>
+            <span>/ <b id="ref-total"><!--@reference-count--></b> 곳</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--flush">
+        <div class="wrap">
+          <div class="toolbar">
+            <label class="search">
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+              <span class="sr-only">레퍼런스 검색</span>
+              <input type="search" id="ref-search" placeholder="사이트 이름 또는 키워드 검색" autocomplete="off" />
+            </label>
+            <p class="data-status" id="ref-status" hidden></p>
+          </div>
+          <div class="chips" id="ref-tabs" role="group" aria-label="레퍼런스 카테고리"><!--@reference-tabs--></div>
+          <div class="ref-grid" id="ref-grid"><!--@reference-grid--></div>
+          <div class="empty" id="ref-empty" hidden>
+            <h3>조건에 맞는 레퍼런스가 없어요</h3>
+            <p>검색어나 카테고리를 바꿔 다시 찾아보세요.</p>
+            <button type="button" class="btn" id="ref-reset">전체 보기</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--@footer-->
+    <script type="module" src="/src/pages/references.js"></script>
+  </body>
+</html>

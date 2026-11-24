@@ -1,0 +1,40 @@
+// HTML 안의 <!--@이름 속성="값"--> 자리표시자를 채우는 렌더러 모음 (vite.config.js 에서 사용)
+import { head, header, footer, programsHero } from './layout.js';
+import { roadmap } from './roadmap.js';
+import { commonDocs, applicantDocs, docsPreview } from './documents.js';
+import { referenceGridSeed, referenceTabsSeed, referenceCount, referencePreview } from './references.js';
+import { formGridSeed, formCount } from './forms.js';
+import { REFERENCE_SEED, categoryCounts } from '../lib/references-model.js';
+import { ROADMAP_PROGRAM_COUNT } from '../data/roadmap.js';
+import { COMMON_DOCS } from '../data/documents.js';
+import { FORM_CATALOG } from '../data/forms.catalog.js';
+
+function stats() {
+  const items = [
+    { value: ROADMAP_PROGRAM_COUNT, unit: '개', label: '단계별 지원사업' },
+    { value: `<span data-ref-count>${REFERENCE_SEED.length}</span>`, unit: '곳', label: '실무 레퍼런스' },
+    { value: COMMON_DOCS.length, unit: '종', label: '공통 준비서류' },
+    { value: FORM_CATALOG.length, unit: '종', label: '계약 서식' },
+  ];
+  return `<dl class="stats">${items.map((item) => `<div><dt>${item.label}</dt><dd>${item.value}<small>${item.unit}</small></dd></div>`).join('')}</dl>`;
+}
+
+export const renderers = {
+  head,
+  header,
+  footer,
+  'programs-hero': programsHero,
+  roadmap,
+  'common-docs': commonDocs,
+  'applicant-docs': applicantDocs,
+  'docs-preview': docsPreview,
+  'reference-grid': referenceGridSeed,
+  'reference-tabs': referenceTabsSeed,
+  'reference-count': referenceCount,
+  'reference-category-count': () => String(categoryCounts(REFERENCE_SEED).length),
+  'reference-preview': referencePreview,
+  'form-grid': formGridSeed,
+  'form-count': formCount,
+  'roadmap-count': () => String(ROADMAP_PROGRAM_COUNT),
+  stats,
+};

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!--@head title="지원사업 공고" description="기업마당과 K-Startup 공고를 한곳에서 살펴보세요."-->
+  </head>
+  <body data-page="notices">
+    <!--@header active="programs"-->
+    <main id="main">
+      <!--@programs-hero active="notices"-->
+
+      <section class="section section--flush" aria-labelledby="notices-title">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">지원사업 공고</p>
+              <h2 id="notices-title">기업마당과 K-Startup 공고를<br />한곳에서 살펴보세요</h2>
+            </div>
+          </div>
+
+          <!-- 공고 목록 자리: 공공데이터포털 API 연동 후 src/pages/notices.js 에서 채웁니다. -->
+          <div class="notice-panel" id="program-list" data-state="pending">
+            <span class="tag tag--accent">연동 준비 중</span>
+            <h3>공고 모아보기 기능을 준비하고 있어요</h3>
+            <p>공공데이터포털의 기업마당 · K-Startup 공고 데이터를 연결하면 상태·카테고리·지역별로 공고를 찾아볼 수 있습니다. 그동안은 아래 공식 사이트에서 최신 공고를 확인해 주세요.</p>
+            <div class="source-grid">
+              <a class="source-card" href="https://www.bizinfo.go.kr" target="_blank" rel="noopener noreferrer">
+                <strong>기업마당</strong>
+                <span>중소벤처기업부</span>
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </a>
+              <a class="source-card" href="https://www.k-startup.go.kr" target="_blank" rel="noopener noreferrer">
+                <strong>K-Startup</strong>
+                <span>창업진흥원</span>
+                <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </a>
+            </div>
+            <p class="notice-note">신청 자격과 일정은 공고 원문을 확인해 주세요.</p>
+          </div>
+
+          <div class="next-grid">
+            <a class="next-card" href="{{base}}programs/">
+              <p class="eyebrow">로드맵</p>
+              <h3>내 창업 단계에 맞는 사업 먼저 찾기</h3>
+              <p>창업 준비부터 확장·고도화까지 단계별 대표 지원사업을 정리했습니다.</p>
+              <span class="dest-more">로드맵 보기 <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+            <a class="next-card" href="{{base}}programs/documents/">
+              <p class="eyebrow">준비서류</p>
+              <h3>공고가 뜨기 전에 서류부터 준비하기</h3>
+              <p>공통 필수 서류 10종과 신청자 유형별 기본 서류를 확인하세요.</p>
+              <span class="dest-more">준비서류 보기 <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--@footer-->
+    <script type="module" src="/src/pages/common.js"></script>
+  </body>
+</html>
