@@ -113,6 +113,13 @@ export async function signOutUser() {
   await firebase.signOut(firebase.auth);
 }
 
+/** 서버(회원 전용 API)에 보낼 로그인 토큰. 로그인하지 않았으면 null */
+export async function getIdToken() {
+  const firebase = await sdk();
+  await firebase.auth.authStateReady();
+  return firebase.auth.currentUser ? firebase.auth.currentUser.getIdToken() : null;
+}
+
 export async function sendPasswordReset(email) {
   const firebase = await sdk();
   await firebase.sendPasswordResetEmail(firebase.auth, email);

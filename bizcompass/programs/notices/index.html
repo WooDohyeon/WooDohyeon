@@ -21,6 +21,9 @@
             </div>
           </div>
 
+          <!-- 비회원에게는 공고 목록 대신 로그인 안내를 보여 줍니다. -->
+          <div class="gate-panel" id="notice-gate" hidden></div>
+
           <div id="notice-controls" hidden>
             <div class="toolbar">
               <label class="search">
@@ -39,7 +42,7 @@
             <p class="data-status" id="notice-warning" hidden></p>
           </div>
 
-          <div class="notice-summary">
+          <div class="notice-summary" id="notice-summary-row">
             <p id="notice-summary" aria-live="polite">지원사업 공고를 불러오고 있어요</p>
             <p id="notice-synced"></p>
           </div>

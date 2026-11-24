@@ -1,7 +1,7 @@
 import { BASE, watchLogos } from './common.js';
 import { subscribeReferences } from '../lib/references.js';
 import { categoryCounts } from '../lib/references-model.js';
-import { referenceCards, categoryLinks } from '../render/references.js';
+import { referenceCards, categoryLinks, GUEST_REFERENCE_LIMIT } from '../render/references.js';
 
 // 레퍼런스 미리보기를 Realtime Database 의 최신 목록으로 갱신합니다.
 subscribeReferences((list) => {
@@ -13,7 +13,7 @@ subscribeReferences((list) => {
 
   const preview = document.querySelector('[data-ref-preview]');
   if (preview) {
-    preview.innerHTML = referenceCards(list.slice(0, 8));
+    preview.innerHTML = referenceCards(list.slice(0, GUEST_REFERENCE_LIMIT));
     watchLogos(preview);
   }
 });

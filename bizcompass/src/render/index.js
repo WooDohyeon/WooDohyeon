@@ -2,7 +2,7 @@
 import { head, header, footer, programsHero } from './layout.js';
 import { roadmap } from './roadmap.js';
 import { commonDocs, applicantDocs, docsPreview } from './documents.js';
-import { referenceGridSeed, referenceTabsSeed, referenceCount, referencePreview } from './references.js';
+import { referenceGridSeed, referenceTabsSeed, referenceCount, referencePreview, referenceGridGuest, referencePlaceholders, GUEST_REFERENCE_LIMIT } from './references.js';
 import { formGridSeed, formCount } from './forms.js';
 import { REFERENCE_SEED, categoryCounts } from '../lib/references-model.js';
 import { ROADMAP_PROGRAM_COUNT } from '../data/roadmap.js';
@@ -33,6 +33,9 @@ export const renderers = {
   'applicant-docs': applicantDocs,
   'docs-preview': docsPreview,
   'reference-grid': referenceGridSeed,
+  'reference-grid-guest': referenceGridGuest,
+  'reference-placeholders': () => referencePlaceholders(8),
+  'reference-guest-limit': () => String(GUEST_REFERENCE_LIMIT),
   'reference-tabs': referenceTabsSeed,
   'reference-count': referenceCount,
   'reference-category-count': () => String(categoryCounts(REFERENCE_SEED).length),

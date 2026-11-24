@@ -1,4 +1,5 @@
-import { BASE } from './common.js';
+import { BASE, watchAccess, gateBox } from './common.js';
+import { getIdToken } from '../lib/auth.js';
 import { fetchPrograms, filterPrograms, facetCounts, todayKey } from '../lib/programs.js';
 import { programCards, programSkeleton, pagination, optionList } from '../render/programs.js';
 import { esc } from '../render/util.js';
@@ -114,7 +115,7 @@ async function load() {
   summary.textContent = '지원사업 공고를 불러오고 있어요';
 
   try {
-    const data = await fetchPrograms(BASE);
+    const data = await fetchPrograms(BASE, await getIdToken());
     state.items = data.items;
     state.today = todayKey();
     total.textContent = data.items.length.toLocaleString('ko-KR');
@@ -141,4 +142,35 @@ async function load() {
 }
 
 $('notice-retry').addEventListener('click', load);
-load();
+
+const gate = $('notice-gate');
+const summaryRow = $('notice-summary-row');
+
+// 공고 목록은 승인된 회원에게만 보여 줍니다. 비회원은 목록을 불러오지도 않습니다.
+let loaded = false;
+watchAccess(({ level }) => {
+  if (level === 'member') {
+    gate.hidden = true;
+    summaryRow.hidden = false;
+    if (!loaded) {
+      loaded = true;
+      load();
+    }
+    return;
+  }
+  loaded = false;
+  state.items = [];
+  list.innerHTML = '';
+  list.hidden = true;
+  pager.hidden = true;
+  controls.hidden = true;
+  empty.hidden = true;
+  failed.hidden = true;
+  summaryRow.hidden = true;
+  total.textContent = '–';
+  gate.hidden = false;
+  gate.innerHTML = gateBox(level, {
+    title: '공고 목록은 로그인 후 볼 수 있어요',
+    text: '로그인하면 기업마당과 K-Startup 공고를 상태 · 분야 · 지역별로 찾아볼 수 있습니다.',
+  });
+});

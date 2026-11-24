@@ -111,10 +111,10 @@ export async function loadForms() {
 }
 
 /** 서식 한 건과 각 파일의 다운로드 주소를 가져옵니다. */
-export async function loadForm(id) {
+export async function loadForm(id, { withUrls = true } = {}) {
   const { forms, source, error } = await loadForms();
   const form = forms.find((item) => item.id === id) || null;
-  if (!form) return { form: null, source, error };
+  if (!form || !withUrls) return { form, source, error };
 
   const api = await storageApi().catch(() => null);
   if (api) {
