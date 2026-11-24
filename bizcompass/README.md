@@ -33,7 +33,7 @@ Vercel 에 올릴 때는 Root Directory 를 `bizcompass` 로 지정합니다.
 
 ## 디자인
 
-- 색상 (60 · 30 · 10): 메인 `#ECEBE6`, 세컨드 `#2AED34`, 어센트 `#EF5BFF` — `src/styles/main.css` 맨 위 `:root` 에서 바꿉니다.
+- 색상 (60 · 30 · 10): 메인 `#ECEBE6`, 세컨드 `#2AED34`, 어센트 `#2F5BFF` — `src/styles/main.css` 맨 위 `:root` 에서 바꿉니다.
 - 폰트: Pretendard (npm 패키지로 함께 빌드)
 
 ## Firebase

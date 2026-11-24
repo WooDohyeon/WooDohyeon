@@ -5,12 +5,13 @@
    색상 비율 60 · 30 · 10
    - main   #ECEBE6 : 페이지 바탕 (60%)
    - second #2AED34 : 큰 면·강조 영역 (30%)
-   - accent #EF5BFF : 버튼·표시·포인트 (10%)
+   - accent #2F5BFF : 버튼·표시·포인트 (10%)
    ──────────────────────────────────────────────────────────── */
 :root {
   --main: #ecebe6;
   --second: #2aed34;
-  --accent: #ef5bff;
+  --accent: #2f5bff;
+  --on-accent: #ffffff; /* 어센트 위에 올라가는 글자·아이콘 */
 
   --ink: #11130f;
   --ink-soft: #454840;
@@ -80,7 +81,7 @@ img, svg {
 
 ::selection {
   background: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
 }
 
 :focus-visible {
@@ -192,7 +193,7 @@ h1, h2, h3 {
   box-shadow: none;
 }
 
-.btn--accent { background: var(--accent); }
+.btn--accent { background: var(--accent); color: var(--on-accent); }
 .btn--green { background: var(--second); }
 .btn--main { background: var(--main); }
 .btn--ink { background: var(--ink); color: var(--main); }
@@ -212,7 +213,7 @@ h1, h2, h3 {
 }
 
 .tag--green { background: var(--second); }
-.tag--accent { background: var(--accent); }
+.tag--accent { background: var(--accent); color: var(--on-accent); }
 .tag--plain { border-color: var(--line); color: var(--ink-soft); }
 
 .chips {
@@ -532,6 +533,7 @@ h1, h2, h3 {
 
 .compass-point:hover {
   background: var(--accent);
+  color: var(--on-accent);
   transform: translate(-2px, -2px);
 }
 
@@ -615,6 +617,7 @@ h1, h2, h3 {
 
 .dest-card:hover .dest-index {
   background: var(--accent);
+  color: var(--on-accent);
 }
 
 .dest-card h3 {
@@ -709,6 +712,7 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: 50%;
   background: var(--accent);
+  color: var(--on-accent);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -756,8 +760,10 @@ a:hover > .dest-more .icon {
   transition: background-color 0.16s ease;
 }
 
-.program.is-linked:hover {
+.program.is-linked:hover,
+.program.is-linked:hover span {
   background: var(--accent);
+  color: var(--on-accent);
 }
 
 .program.is-linked .icon {
@@ -1008,6 +1014,7 @@ a:hover > .dest-more .icon {
 .doc-list details[open] summary::after {
   content: '−';
   background: var(--accent);
+  color: var(--on-accent);
 }
 
 .doc-card details p {
@@ -1193,6 +1200,7 @@ a:hover > .dest-more .icon {
 
 .ref-card:hover .ref-arrow {
   background: var(--accent);
+  color: var(--on-accent);
   rotate: 45deg;
 }
 
@@ -1310,6 +1318,7 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: 999px;
   background: var(--accent);
+  color: var(--on-accent);
   font-size: 0.75rem;
   font-weight: 800;
 }
@@ -1376,6 +1385,7 @@ a:hover > .dest-more .icon {
 
 .form-card.is-pending .form-file {
   background: var(--main);
+  color: var(--ink);
 }
 
 /* ── 하위 페이지 머리 ─────────────────────────────────────── */
@@ -1684,11 +1694,13 @@ a:hover > .dest-more .icon {
   border: var(--border);
   border-radius: var(--radius-sm);
   background: var(--accent);
+  color: var(--on-accent);
   transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
 
 .download-btn + .download-btn {
   background: var(--second);
+  color: var(--ink);
 }
 
 .download-btn span {
