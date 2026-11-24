@@ -2,7 +2,7 @@
 
 /** 서버 함수(/api/programs)에서 공고 목록을 받아 옵니다. */
 export async function fetchPrograms(base = '/') {
-  const response = await fetch(`${base}api/programs`, { headers: { accept: 'application/json' } });
+  const response = await fetch(`${base}api/programs/`, { headers: { accept: 'application/json' } });
   if (!response.ok) throw new Error(`공고를 불러오지 못했습니다. (${response.status})`);
   const data = await response.json();
   if (!Array.isArray(data?.items)) throw new Error('공고 응답 형식이 올바르지 않습니다.');

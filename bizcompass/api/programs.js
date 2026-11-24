@@ -1,4 +1,5 @@
-// GET /api/programs — 기업마당 · K-Startup 공고 목록 (Vercel 함수)
+// GET /api/programs/ — 기업마당 · K-Startup 공고 목록 (Vercel 함수)
+// 공공데이터포털은 해외 리전에서 연결이 되지 않아, vercel.json 에서 서울 리전(icn1)으로 지정합니다.
 // 인증키는 Vercel 환경변수 DATA_GO_KR_SERVICE_KEY 에서 읽습니다.
 import { loadPrograms } from '../server/programs.js';
 

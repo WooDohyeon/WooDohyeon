@@ -58,7 +58,7 @@ function uniq(list) {
   return [...new Set(list.filter(Boolean))];
 }
 
-async function fetchJson(url, { retries = 2, timeoutMs = 45000 } = {}) {
+async function fetchJson(url, { retries = 2, timeoutMs = 30000 } = {}) {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     try {
@@ -73,7 +73,9 @@ async function fetchJson(url, { retries = 2, timeoutMs = 45000 } = {}) {
         throw new Error(reason || 'JSON 이 아닌 응답');
       }
     } catch (error) {
-      lastError = error;
+      // 'fetch failed' 만으로는 원인을 알 수 없어 연결 오류 코드를 함께 남깁니다.
+      const cause = error?.cause?.code || error?.cause?.message;
+      lastError = cause ? new Error(`${error.message} (${cause})`) : error;
       if (attempt < retries) await new Promise((resolve) => { setTimeout(resolve, 600 * (attempt + 1)); });
     }
   }
