@@ -1,0 +1,18 @@
+{
+  "name": "bizcompass",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^13.4.0",
+    "pretendard": "^1.3.9"
+  },
+  "devDependencies": {
+    "vite": "^8.3.8"
+  }
+}

@@ -1,0 +1,87 @@
+import { BASE } from './common.js';
+import { loadForm } from '../lib/forms.js';
+import { FORM_CATALOG, FORMAT_INFO } from '../data/forms.catalog.js';
+import { esc, icon } from '../render/util.js';
+
+const id = new URLSearchParams(location.search).get('id') || '';
+const title = document.getElementById('form-title');
+const meta = document.getElementById('form-meta');
+const desc = document.getElementById('form-desc');
+const downloads = document.getElementById('form-downloads');
+const viewer = document.getElementById('form-viewer');
+
+const formatLabel = (ext) => FORMAT_INFO[ext]?.label || ext.toUpperCase();
+const formatHint = (ext) => FORMAT_INFO[ext]?.hint || '원본 파일';
+
+function showInfo(form) {
+  title.textContent = form.title;
+  desc.textContent = form.description || '';
+  meta.textContent = [form.category, form.updated && `업데이트 ${form.updated}`, form.pages && `${form.pages}페이지`].filter(Boolean).join(' · ');
+  document.title = `${form.title} | 비즈컴퍼스`;
+}
+
+function showState(heading, text) {
+  viewer.setAttribute('aria-busy', 'false');
+  viewer.innerHTML = `<div class="viewer-state">
+    <h2>${esc(heading)}</h2>
+    <p>${esc(text)}</p>
+    <a class="btn" href="${BASE}forms/">${icon('back', 18)} 서식 목록으로</a>
+  </div>`;
+}
+
+function showDownloads(form) {
+  downloads.innerHTML = form.formats.map((ext) => {
+    const file = form.files[ext];
+    const body = `${icon('download', 18)}<span><b>${esc(formatLabel(ext))}</b><small>${esc(formatHint(ext))}</small></span>`;
+    return file.url
+      ? `<a class="download-btn" href="${esc(file.url)}" target="_blank" rel="noopener noreferrer" download>${body}</a>`
+      : `<span class="download-btn is-disabled" aria-disabled="true">${body}</span>`;
+  }).join('');
+}
+
+function showViewer(form) {
+  viewer.setAttribute('aria-busy', 'false');
+  const pdf = form.files.pdf?.url;
+  if (!pdf) {
+    const first = form.formats.map((ext) => form.files[ext]).find((file) => file.url);
+    viewer.innerHTML = `<div class="viewer-state">
+      <h2>미리보기는 PDF 파일만 지원해요</h2>
+      <p>${first ? '위의 다운로드 버튼으로 원본 파일을 내려받아 확인해 주세요.' : '파일 주소를 받아오지 못했습니다. 잠시 후 다시 시도해 주세요.'}</p>
+    </div>`;
+    return;
+  }
+  viewer.innerHTML = `<div class="viewer-bar">
+      <span>${icon('file', 18)} ${esc(form.title)} · PDF${form.pages ? ` · ${form.pages}페이지` : ''}</span>
+      <a href="${esc(pdf)}" target="_blank" rel="noopener noreferrer">새 탭에서 크게 보기 ${icon('external', 16)}</a>
+    </div>
+    <iframe class="viewer-frame" src="${esc(pdf)}#view=FitH" title="${esc(form.title)} 미리보기" loading="lazy"></iframe>`;
+}
+
+async function init() {
+  // 카탈로그에 있는 서식은 Storage 응답을 기다리지 않고 제목부터 보여 줍니다.
+  const known = FORM_CATALOG.find((form) => form.id === id);
+  if (known) showInfo(known);
+
+  if (!id) {
+    title.textContent = '서식을 찾을 수 없어요';
+    showState('주소를 다시 확인해 주세요', '서식 목록에서 원하는 문서를 선택해 주세요.');
+    return;
+  }
+
+  const { form } = await loadForm(id);
+  if (!form) {
+    title.textContent = '서식을 찾을 수 없어요';
+    showState('등록되지 않은 서식이에요', '삭제되었거나 주소가 바뀌었을 수 있습니다.');
+    return;
+  }
+
+  showInfo(form);
+  if (!form.available) {
+    showState('서식 파일을 준비하고 있어요', '파일이 등록되면 이곳에서 미리 보고 내려받을 수 있습니다.');
+    return;
+  }
+  showDownloads(form);
+  showViewer(form);
+}
+
+init();
