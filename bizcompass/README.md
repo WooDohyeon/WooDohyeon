@@ -77,6 +77,7 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 - 인증키는 **브라우저에 전달되지 않습니다.** Vercel 함수 `api/programs.js` 가 환경변수 `DATA_GO_KR_SERVICE_KEY` 로 호출하고, 정리된 목록만 `/api/programs` 로 내려 줍니다.
 - 인증키 설정: Vercel 프로젝트 → Settings → Environment Variables 에 `DATA_GO_KR_SERVICE_KEY` (Production · Preview). 바꾼 뒤에는 다시 배포해야 반영됩니다.
 - 로컬에서 볼 때는 `.env.local` 에 `DATA_GO_KR_SERVICE_KEY=…` 를 넣고 `npm run dev` 를 실행합니다.
+- 함수는 서울 리전(`icn1`)에서 실행합니다. 공공데이터포털이 해외 리전(기본값 `iad1`)에서의 연결을 받지 않기 때문입니다. (`vercel.json` 의 `regions`)
 - 응답은 CDN 이 30분 동안 보관합니다. 한쪽 API 가 실패하면 나머지 공고만 보여 주고 안내 문구를 띄웁니다.
 - 같은 공고가 두 곳에 모두 있으면 하나로 묶어 출처를 함께 표시합니다. 상태(접수중 · 마감임박 · 접수예정 · 상시·수시)는 신청 기간을 기준으로 브라우저에서 계산합니다.
 
