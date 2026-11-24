@@ -17,7 +17,7 @@ npm run build
 ```
 
 빌드 결과는 `dist/` 폴더에 만들어지며, 정적 호스팅(Vercel, Firebase Hosting 등) 어디에나 올릴 수 있습니다.
-Vercel 에 올릴 때는 Root Directory 를 `bizcompass` 로 지정합니다.
+Vercel 프로젝트는 Root Directory 를 `bizcompass` 로 지정해 연결하며, 빌드 설정은 `vercel.json` 에 있습니다.
 도메인 루트가 아닌 하위 경로에 올릴 때는 `BASE_PATH=/경로/ npm run build` 로 빌드합니다.
 
 ## 페이지
