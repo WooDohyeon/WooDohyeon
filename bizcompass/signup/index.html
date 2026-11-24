@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!--@head title="회원가입" description="비즈컴퍼스 회원가입"-->
+  </head>
+  <body data-page="signup">
+    <!--@header-->
+    <main id="main">
+      <section class="section section--flush auth-page">
+        <div class="wrap">
+          <div class="auth-card">
+            <div class="auth-head">
+              <p class="eyebrow">BizCompass</p>
+              <h1>회원가입</h1>
+              <p>가입 정보를 입력해 주세요.</p>
+            </div>
+
+            <form id="signup-form" class="auth-form" novalidate>
+              <fieldset class="form-section">
+                <legend>계정 정보 입력</legend>
+                <div class="field-row">
+                  <div class="field">
+                    <label for="signup-email">이메일</label>
+                    <input class="input" type="email" id="signup-email" name="email" autocomplete="email" inputmode="email" required />
+                  </div>
+                  <div class="field">
+                    <label for="signup-password">비밀번호</label>
+                    <input class="input" type="password" id="signup-password" name="password" autocomplete="new-password" minlength="6" required aria-describedby="signup-password-hint" />
+                    <p class="field-hint" id="signup-password-hint">6자 이상</p>
+                  </div>
+                </div>
+              </fieldset>
+
+              <hr class="form-divider" />
+
+              <fieldset class="form-section">
+                <legend>가입 정보</legend>
+                <div class="field">
+                  <span class="field-label" id="signup-type-label">가입 유형</span>
+                  <div class="segmented" role="radiogroup" aria-labelledby="signup-type-label">
+                    <label><input type="radio" name="memberType" value="수강생" checked /><span>수강생</span></label>
+                    <label><input type="radio" name="memberType" value="수료생" /><span>수료생</span></label>
+                  </div>
+                </div>
+                <div class="field-row">
+                  <div class="field">
+                    <label for="signup-camp">캠프</label>
+                    <div class="select select--field">
+                      <select id="signup-camp" name="camp" required>
+                        <option value="">캠프 선택</option>
+                        <!--@camp-options-->
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="signup-cohort">기수</label>
+                    <div class="select select--field">
+                      <select id="signup-cohort" name="cohort" required>
+                        <option value="">기수 선택</option>
+                        <!--@cohort-options-->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="signup-name">이름</label>
+                  <input class="input" type="text" id="signup-name" name="name" autocomplete="name" maxlength="40" required />
+                </div>
+              </fieldset>
+
+              <ul class="notice-box">
+                <li>
+                  <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+                  운영진이 권한을 부여한 뒤 이용할 수 있습니다.
+                </li>
+                <li>
+                  <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M16.5 6.5l3 3M14 9l2 2"/></svg>
+                  가입 정보는 계정 확인과 권한 배정에 사용됩니다.
+                </li>
+              </ul>
+
+              <p class="form-message" id="signup-message" role="alert" hidden></p>
+
+              <button type="submit" class="btn btn--accent btn--block" id="signup-submit">
+                <span>회원가입</span>
+                <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M2.5 20.5a7.5 7.5 0 0 1 15 0M19 8v6M16 11h6"/></svg>
+              </button>
+
+              <p class="auth-switch">이미 계정이 있으신가요? <a href="{{base}}login/">로그인</a></p>
+            </form>
+
+            <div class="auth-done" id="signup-done" hidden tabindex="-1">
+              <span class="tag tag--accent">승인 대기</span>
+              <h2>가입 신청이 완료되었습니다</h2>
+              <p><strong id="signup-done-name"></strong>님, 운영진이 권한을 부여한 뒤 이용할 수 있습니다.</p>
+              <div class="auth-actions">
+                <a class="btn btn--accent" href="{{base}}">홈으로 가기</a>
+                <a class="btn" href="{{base}}login/">내 계정 보기</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!--@footer-->
+    <script type="module" src="/src/pages/signup.js"></script>
+  </body>
+</html>

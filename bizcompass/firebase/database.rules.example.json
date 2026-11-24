@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "sheetsData": {
+      ".read": true
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid && !data.exists()",
+        ".validate": "newData.hasChildren(['email', 'name', 'memberType', 'camp', 'cohort', 'status', 'createdAt'])",
+        "email": { ".validate": "newData.isString() && newData.val() === auth.token.email" },
+        "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40" },
+        "memberType": { ".validate": "newData.val() === '수강생' || newData.val() === '수료생'" },
+        "camp": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40" },
+        "cohort": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 20" },
+        "status": { ".validate": "newData.val() === 'pending'" },
+        "createdAt": { ".validate": "newData.val() === now" },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}
