@@ -67,6 +67,30 @@ async function loadProfile(user) {
   }
 }
 
+/**
+ * 관리자 계정인지 확인합니다. 회원 전체 목록은 데이터베이스 규칙상 관리자만 읽을 수 있으므로,
+ * 그 목록(이름 없이 키만)을 읽을 수 있으면 관리자입니다.
+ */
+async function isAdmin(user) {
+  try {
+    const token = await user.getIdToken();
+    const response = await fetch(`${USERS_URL}.json?shallow=true&auth=${encodeURIComponent(token)}`);
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/** 로그인한 사람의 회원 정보로 세션을 만듭니다. 관리자는 승인된 회원과 같은 권한을 가집니다. */
+async function loadSession(user) {
+  const profile = await loadProfile(user);
+  const session = toSession(user, profile);
+  if (session.status !== 'approved' && (await isAdmin(user))) {
+    return { ...session, name: profile?.name || '관리자', status: 'approved', isAdmin: true };
+  }
+  return session;
+}
+
 function toSession(user, profile) {
   return {
     uid: user.uid,
@@ -77,6 +101,7 @@ function toSession(user, profile) {
     cohort: profile?.cohort || null,
     status: profile?.status || 'pending',
     hasProfile: Boolean(profile),
+    isAdmin: false,
   };
 }
 
@@ -102,7 +127,7 @@ export async function signUp({ email, password, name, memberType, camp, cohort }
 export async function signIn(email, password) {
   const firebase = await sdk();
   const { user } = await firebase.signInWithEmailAndPassword(firebase.auth, email, password);
-  const session = toSession(user, await loadProfile(user));
+  const session = await loadSession(user);
   writeHint(session);
   return session;
 }
@@ -133,7 +158,7 @@ export async function watchSession(callback) {
   try {
     const firebase = await sdk();
     return firebase.onAuthStateChanged(firebase.auth, async (user) => {
-      const session = user ? toSession(user, await loadProfile(user)) : null;
+      const session = user ? await loadSession(user) : null;
       writeHint(session);
       callback(session);
     });
