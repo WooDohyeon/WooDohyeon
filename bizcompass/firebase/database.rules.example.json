@@ -1,14 +1,14 @@
 {
   "rules": {
     "sheetsData": {
-      ".read": "auth != null && (auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2' || root.child('users').child(auth.uid).child('status').val() === 'approved')",
+      ".read": "auth != null && (auth.uid === 'z6QmgmZyZ7bpGPEtaXoEt7udEYG3' || root.child('users').child(auth.uid).child('status').val() === 'approved')",
       ".write": true
     },
     "users": {
-      ".read": "auth != null && auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2'",
+      ".read": "auth != null && auth.uid === 'z6QmgmZyZ7bpGPEtaXoEt7udEYG3'",
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && ((auth.uid === $uid && !data.exists()) || auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2')",
+        ".write": "auth != null && ((auth.uid === $uid && !data.exists()) || auth.uid === 'z6QmgmZyZ7bpGPEtaXoEt7udEYG3')",
         ".validate": "newData.hasChildren(['email', 'name', 'memberType', 'camp', 'cohort', 'status', 'createdAt'])",
         "email": {
           ".validate": "newData.isString() && (newData.val() === data.val() || newData.val() === auth.token.email)"
@@ -26,7 +26,7 @@
           ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 20"
         },
         "status": {
-          ".validate": "newData.val() === 'pending' || (newData.val() === 'approved' && auth.uid === 'HiT6ttJPwcOFyH6pyS54I83agdI2')"
+          ".validate": "newData.val() === 'pending' || (newData.val() === 'approved' && auth.uid === 'z6QmgmZyZ7bpGPEtaXoEt7udEYG3')"
         },
         "createdAt": {
           ".validate": "newData.val() === data.val() || newData.val() === now"

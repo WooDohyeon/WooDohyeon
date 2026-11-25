@@ -23,9 +23,12 @@ function showAccount(session) {
   text('account-type', session.memberType);
   text('account-camp', session.camp);
   text('account-cohort', session.cohort ? `${session.cohort}기` : '');
-  text('account-note', session.hasProfile === false ? '가입 정보를 찾을 수 없습니다. 운영진에게 문의해 주세요.' : status.note);
+  text('account-note', session.isAdmin
+    ? '관리자 계정입니다. 사이트의 모든 메뉴를 이용할 수 있습니다.'
+    : session.hasProfile === false ? '가입 정보를 찾을 수 없습니다. 운영진에게 문의해 주세요.' : status.note);
   const tag = document.getElementById('account-status');
-  tag.textContent = status.label;
+  tag.textContent = session.isAdmin ? '관리자' : status.label;
+  document.getElementById('account-admin').hidden = !session.isAdmin;
   tag.className = `tag ${session.status === 'approved' ? 'tag--second' : 'tag--accent'}`;
   loginView.hidden = true;
   accountView.hidden = false;
