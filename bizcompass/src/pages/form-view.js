@@ -8,6 +8,7 @@ const id = new URLSearchParams(location.search).get('id') || '';
 const title = document.getElementById('form-title');
 const meta = document.getElementById('form-meta');
 const desc = document.getElementById('form-desc');
+const facts = document.getElementById('form-facts');
 const downloads = document.getElementById('form-downloads');
 const viewer = document.getElementById('form-viewer');
 
@@ -17,7 +18,15 @@ const formatHint = (ext) => FORMAT_INFO[ext]?.hint || '원본 파일';
 function showInfo(form) {
   title.textContent = form.title;
   desc.textContent = form.description || '';
-  meta.textContent = [form.category, form.updated && `업데이트 ${form.updated}`, form.pages && `${form.pages}페이지`].filter(Boolean).join(' · ');
+  meta.textContent = form.category || '서식';
+  const rows = [
+    ['분류', form.category],
+    ['업데이트', form.updated],
+    ['분량', form.pages && `${form.pages}페이지`],
+    ['형식', form.formats?.length ? form.formats.map(formatLabel).join(' · ') : ''],
+  ].filter(([, value]) => value);
+  facts.innerHTML = rows.map(([label, value]) => `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('');
+  facts.hidden = rows.length === 0;
   document.title = `${form.title} | OZ BizLab`;
 }
 
