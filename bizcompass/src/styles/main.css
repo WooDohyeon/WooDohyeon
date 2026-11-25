@@ -2562,13 +2562,21 @@ button.download-btn:hover {
   text-underline-offset: 4px;
 }
 
-.form-view-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
+/* 서식 상세: 정보 · 다운로드 / PDF 뷰어 2분할 */
+.form-split {
+  display: grid;
   gap: 24px;
-  margin-block: 20px 28px;
+  margin-top: 20px;
+}
+
+.form-info {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: clamp(20px, 3vw, 28px);
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
 }
 
 .form-view-meta {
@@ -2577,10 +2585,74 @@ button.download-btn:hover {
   color: var(--ink-soft);
 }
 
-.form-view-head h1 {
-  margin-top: 6px;
-  font-size: clamp(2rem, 5.4vw, 3.5rem);
-  letter-spacing: -0.045em;
+.form-info h1 {
+  font-size: clamp(1.75rem, 4.6vw, 2.25rem);
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+
+.form-info-desc {
+  color: var(--ink-soft);
+}
+
+.form-info-desc:empty {
+  display: none;
+}
+
+.form-facts {
+  display: grid;
+  border-top: var(--border);
+}
+
+.form-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.form-facts dt {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.form-facts dd {
+  font-weight: 700;
+  text-align: right;
+}
+
+.form-info-download {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.form-info-download h2 {
+  font-size: 1rem;
+}
+
+.form-info-download:has(.download:empty) {
+  display: none;
+}
+
+.form-info .download-btn {
+  flex: 1 1 200px;
+}
+
+@media (min-width: 1000px) {
+  .form-split {
+    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+    align-items: start;
+    gap: 28px;
+  }
+
+  /* 뷰어를 내려 읽는 동안에도 정보와 다운로드가 화면에 남습니다. */
+  .form-info {
+    position: sticky;
+    top: 96px;
+  }
 }
 
 .download {

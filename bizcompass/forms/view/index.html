@@ -13,19 +13,24 @@
             서식으로 돌아가기
           </a>
 
-          <div class="form-view-head">
-            <div>
+          <!-- 2분할: 왼쪽은 서식 정보 · 다운로드, 오른쪽은 PDF 뷰어 (좁은 화면에서는 위아래로 쌓입니다) -->
+          <div class="form-split">
+            <aside class="form-info" aria-labelledby="form-title">
               <p class="form-view-meta" id="form-meta">서식</p>
               <h1 id="form-title">서식을 불러오는 중입니다</h1>
-              <p class="page-hero-lead" id="form-desc"></p>
-            </div>
-            <div class="download" id="form-downloads" aria-label="다운로드"></div>
-          </div>
+              <p class="form-info-desc" id="form-desc"></p>
+              <dl class="form-facts" id="form-facts" hidden></dl>
+              <div class="form-info-download">
+                <h2>다운로드</h2>
+                <div class="download" id="form-downloads"></div>
+              </div>
+            </aside>
 
-          <div class="viewer" id="form-viewer" aria-busy="true">
-            <div class="viewer-state">
-              <span class="spinner" aria-hidden="true"></span>
-              <p>문서를 불러오고 있어요</p>
+            <div class="viewer" id="form-viewer" aria-busy="true">
+              <div class="viewer-state">
+                <span class="spinner" aria-hidden="true"></span>
+                <p>문서를 불러오고 있어요</p>
+              </div>
             </div>
           </div>
         </div>
