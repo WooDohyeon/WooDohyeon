@@ -9,7 +9,7 @@ import { ROADMAP_PROGRAM_COUNT } from '../data/roadmap.js';
 import { COMMON_DOCS } from '../data/documents.js';
 import { FORM_CATALOG } from '../data/forms.catalog.js';
 import { CAMPS, COHORTS } from '../data/membership.js';
-import { esc, icon, compassMark } from './util.js';
+import { esc, icon, brandMark } from './util.js';
 
 function stats() {
   const items = [
@@ -27,7 +27,7 @@ export const renderers = {
   footer,
   'programs-hero': programsHero,
   icon: ({ name, size }) => icon(name, Number(size) || 18),
-  'brand-mark': ({ size }) => compassMark(Number(size) || 32),
+  'brand-mark': ({ size }) => brandMark(Number(size) || 32),
   roadmap,
   'common-docs': commonDocs,
   'applicant-docs': applicantDocs,
