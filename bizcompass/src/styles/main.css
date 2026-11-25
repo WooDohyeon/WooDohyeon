@@ -2658,8 +2658,9 @@ a.download-btn:hover {
   height: auto;
   min-height: 0;
   aspect-ratio: 1 / 1.4142;
-  /* 뷰어 안에서 따로 스크롤되지 않고 페이지와 함께 움직이게 합니다. */
+  /* 뷰어 안에서 따로 스크롤되지 않고 페이지와 함께 움직이게 합니다. 글자 드래그 · 우클릭도 함께 막힙니다. */
   pointer-events: none;
+  user-select: none;
 }
 
 .viewer-next {

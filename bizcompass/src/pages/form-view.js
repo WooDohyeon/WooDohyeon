@@ -129,12 +129,13 @@ async function showViewer(form, run) {
   updateLock();
 }
 
-/** 첫 쪽의 끝이 화면 가운데를 지나 올라가면 뷰어를 가립니다. 다시 위로 올라오면 첫 쪽이 보입니다. */
+/** 첫 쪽의 끝이 화면 가운데를 지나 올라가면 뷰어를 가립니다. 한 번 가려지면 다시 올라가도 그대로 둡니다. */
+let locked = false;
 function updateLock() {
   const end = viewer.querySelector('[data-lock-end]');
   const cover = viewer.querySelector('[data-lock-cover]');
   if (!end || !cover) return;
-  const locked = end.getBoundingClientRect().top < innerHeight * 0.5;
+  if (!locked && end.getBoundingClientRect().top < innerHeight * 0.5) locked = true;
   if (cover.hidden === !locked) return;
   cover.hidden = !locked;
   viewer.querySelector('[data-lock]').classList.toggle('is-locked', locked);
