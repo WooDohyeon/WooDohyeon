@@ -1,9 +1,9 @@
-// GET /api/form-preview/?path=forms/nda.pdf — 서식 PDF 의 앞 2쪽만 잘라서 내려 줍니다. (비회원 미리보기용)
+// GET /api/form-preview/?path=forms/nda.pdf — 서식 PDF 의 첫 쪽만 잘라서 내려 줍니다. (비회원 미리보기용)
 import { PDFDocument } from 'pdf-lib';
 import { isFormPath } from '../server/forms.js';
 import { fetchFile } from '../server/firebase-service.js';
 
-const PREVIEW_PAGES = 2;
+const PREVIEW_PAGES = 1;
 
 export async function GET(request) {
   const path = new URL(request.url).searchParams.get('path') || '';
