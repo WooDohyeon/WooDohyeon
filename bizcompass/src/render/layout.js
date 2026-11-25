@@ -1,10 +1,10 @@
-import { esc, compassMark, icon } from './util.js';
+import { esc, brandMark, icon } from './util.js';
 
 export const SITE = {
   name: 'OZ BizLab',
-  tagline: '창업의 방향을 찾다',
+  tagline: '아이디어를 사업으로',
   description: '정부지원사업, 창업 절차, 지역별 기관 정보를 한곳에서 확인하는 창업 정보 플랫폼',
-  footer: '창업의 방향을 찾는 가장 쉬운 방법',
+  footer: '아이디어를 사업으로 만드는 창업 실험실',
 };
 
 export const NAV = [
@@ -35,7 +35,7 @@ export function header({ active = '', base }) {
   return `<a class="skip-link" href="#main">본문으로 건너뛰기</a>
   <header class="site-header">
     <div class="wrap site-header-inner">
-      <a class="brand" href="${base}" aria-label="${SITE.name} 홈">${compassMark(32)}<span>${SITE.name}</span></a>
+      <a class="brand" href="${base}" aria-label="${SITE.name} 홈">${brandMark(32)}<span>${SITE.name}</span></a>
       <nav class="site-nav" aria-label="주요 메뉴">${links}</nav>
       <div class="site-auth" data-auth>
         <a class="auth-link" href="${base}login/">${icon('user', 18)}<span>로그인</span></a>
@@ -51,7 +51,7 @@ export function footer({ base }) {
     <div class="wrap">
       <div class="footer-top">
         <div class="footer-brand">
-          <a class="brand" href="${base}" aria-label="${SITE.name} 홈">${compassMark(36)}<span>${SITE.name}</span></a>
+          <a class="brand" href="${base}" aria-label="${SITE.name} 홈">${brandMark(36)}<span>${SITE.name}</span></a>
           <p>${SITE.footer}</p>
         </div>
         <nav class="footer-nav" aria-label="바닥글 메뉴">

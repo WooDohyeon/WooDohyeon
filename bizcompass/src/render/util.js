@@ -31,12 +31,12 @@ export function icon(name, size = 18) {
   return `<svg class="icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_PATHS[name] || ''}</svg>`;
 }
 
-// 브랜드 마크 · 히어로에 쓰는 나침반
-export function compassMark(size = 30) {
+// 브랜드 마크: 실험실(Lab)을 뜻하는 삼각 플라스크
+export function brandMark(size = 30) {
   return `<svg class="brand-mark" width="${size}" height="${size}" viewBox="0 0 40 40" aria-hidden="true">
     <circle cx="20" cy="20" r="18.25" fill="var(--second)" stroke="var(--ink)" stroke-width="2.5"/>
-    <path d="M26.5 13.5 22.6 22.6 13.5 26.5 17.4 17.4z" fill="var(--main)"/>
-    <path d="M26.5 13.5 22.6 22.6 17.4 17.4z" fill="var(--accent-soft)"/>
-    <circle cx="20" cy="20" r="1.6" fill="var(--second)"/>
+    <path d="M16.6 9.6h6.8M17.6 9.6v7.2L11.6 27a2.2 2.2 0 0 0 1.9 3.3h13a2.2 2.2 0 0 0 1.9-3.3l-6-10.2V9.6" fill="none" stroke="var(--main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M14.9 23.2h10.2l2.2 3.8a1.3 1.3 0 0 1-1.1 2H13.8a1.3 1.3 0 0 1-1.1-2z" fill="var(--accent-soft)"/>
+    <circle cx="21.6" cy="19.6" r="1.2" fill="var(--accent-soft)"/>
   </svg>`;
 }

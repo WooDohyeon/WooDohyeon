@@ -297,7 +297,7 @@ h1, h2, h3 {
 }
 
 .brand:hover .brand-mark {
-  transform: rotate(90deg);
+  transform: rotate(-14deg);
 }
 
 .site-nav {
@@ -572,32 +572,50 @@ h1, h2, h3 {
   box-shadow: 8px 8px 0 var(--accent);
 }
 
-.compass {
+.lab {
   position: absolute;
-  inset: 13%;
+  inset: 15% 15% 13%;
 }
 
-.compass-dial {
+.lab-flask {
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-.compass-needle {
-  transform-origin: 200px 200px;
-  animation: needle 7s cubic-bezier(0.45, 0, 0.3, 1) infinite;
+/* 용액 표면이 천천히 일렁이고, 기포가 올라옵니다. */
+.lab-wave {
+  animation: lab-wave 5s linear infinite;
 }
 
-@keyframes needle {
-  0%, 100% { transform: rotate(34deg); }
-  18% { transform: rotate(-22deg); }
-  36% { transform: rotate(48deg); }
-  52% { transform: rotate(24deg); }
-  70% { transform: rotate(40deg); }
-  84% { transform: rotate(30deg); }
+.lab-bubble,
+.lab-rise {
+  animation: lab-bubble 4.2s ease-in infinite;
 }
 
-.compass-point {
+.lab-bubble--2 { animation-delay: -1.3s; animation-duration: 3.4s; }
+.lab-bubble--3 { animation-delay: -2.4s; animation-duration: 5s; }
+.lab-bubble--4 { animation-delay: -3.1s; animation-duration: 3s; }
+.lab-rise { animation-name: lab-rise; animation-duration: 3.6s; }
+.lab-rise--2 { animation-delay: -1.7s; }
+
+@keyframes lab-wave {
+  to { transform: translateX(80px); }
+}
+
+@keyframes lab-bubble {
+  0% { transform: translateY(24px); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translateY(-78px); opacity: 0; }
+}
+
+@keyframes lab-rise {
+  0% { transform: translateY(14px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-22px); opacity: 0; }
+}
+
+.lab-point {
   position: absolute;
   display: inline-flex;
   align-items: center;
@@ -614,7 +632,7 @@ h1, h2, h3 {
   transition: transform 0.16s ease, background-color 0.16s ease;
 }
 
-.compass-point b {
+.lab-point b {
   display: grid;
   place-items: center;
   min-width: 28px;
@@ -627,16 +645,16 @@ h1, h2, h3 {
   font-variant-numeric: tabular-nums;
 }
 
-.compass-point:hover {
+.lab-point:hover {
   background: var(--accent);
   color: var(--on-accent);
   transform: translate(-2px, -2px);
 }
 
-.compass-point--n { top: 4%; left: 50%; translate: -50% 0; }
-.compass-point--e { top: 50%; right: -3%; translate: 0 -50%; }
-.compass-point--s { bottom: 4%; left: 50%; translate: -50% 0; }
-.compass-point--w { top: 50%; left: -3%; translate: 0 -50%; }
+.lab-point--n { top: 4%; left: 50%; translate: -50% 0; }
+.lab-point--e { top: 50%; right: -3%; translate: 0 -50%; }
+.lab-point--s { bottom: 4%; left: 50%; translate: -50% 0; }
+.lab-point--w { top: 50%; left: -3%; translate: 0 -50%; }
 
 /* ── 흐르는 띠 ────────────────────────────────────────────── */
 .marquee {
@@ -2834,15 +2852,15 @@ a.download-btn:hover {
     height: 40px;
   }
 
-  /* 좁은 화면: 나침반 글자를 가리지 않도록 바로가기를 네 모서리에 둡니다. */
-  .compass {
-    inset: 17%;
+  /* 좁은 화면: 플라스크를 가리지 않도록 바로가기를 네 모서리에 둡니다. */
+  .lab {
+    inset: 19% 19% 17%;
   }
 
-  .compass-point--n { top: 4%; left: 4%; translate: none; }
-  .compass-point--e { top: 4%; right: 4%; translate: none; }
-  .compass-point--s { bottom: 4%; right: 4%; left: auto; translate: none; }
-  .compass-point--w { top: auto; bottom: 4%; left: 4%; translate: none; }
+  .lab-point--n { top: 4%; left: 4%; translate: none; }
+  .lab-point--e { top: 4%; right: 4%; translate: none; }
+  .lab-point--s { bottom: 4%; right: 4%; left: auto; translate: none; }
+  .lab-point--w { top: auto; bottom: 4%; left: 4%; translate: none; }
 
 }
 
@@ -3036,7 +3054,8 @@ a.download-btn:hover {
     transition-duration: 0.01ms !important;
   }
 
-  .compass-needle {
-    transform: rotate(34deg);
+  .lab-bubble,
+  .lab-rise {
+    opacity: 0.9;
   }
 }
