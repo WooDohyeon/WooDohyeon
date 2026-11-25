@@ -30,7 +30,7 @@ function showState(heading, text) {
   </div>`;
 }
 
-const PREVIEW_PAGES = 2;
+const PREVIEW_PAGES = 1;
 let level = 'guest';
 
 let current = null; // 지금 보고 있는 서식
@@ -112,17 +112,36 @@ async function showViewer(form, run) {
     return;
   }
   viewer.setAttribute('aria-busy', 'false');
-  // 비회원: 서버에서 앞 2쪽만 잘라 온 미리보기 + 가려진 나머지
+  // 비회원 · 승인 대기: 서버에서 첫 쪽만 잘라 온 미리보기.
+  // 첫 쪽을 지나 더 내려가면 뷰어 전체를 가리고 로그인 안내를 띄웁니다.
   const rest = form.pages ? Math.max(0, form.pages - PREVIEW_PAGES) : null;
-  viewer.innerHTML = `${frame(`${BASE}api/form-preview/?path=${encodeURIComponent(pdf.path)}`, form.title)}
-    <div class="gate-fade gate-fade--page">
-      <div class="gate-fade-content" aria-hidden="true"><div class="page-blank"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
-      <div class="gate-fade-cta">${gateBox(level, {
-        title: rest ? `나머지 ${rest}페이지는 로그인 후 볼 수 있어요` : `${PREVIEW_PAGES}페이지 이후는 로그인 후 볼 수 있어요`,
-        text: '로그인하면 전체 내용을 보고 PDF · DOCX 파일을 내려받을 수 있습니다.',
-      })}</div>
+  viewer.innerHTML = `<div class="viewer-lock" data-lock>
+      ${frame(`${BASE}api/form-preview/?path=${encodeURIComponent(pdf.path)}`, form.title).replace('class="viewer-frame"', 'class="viewer-frame viewer-frame--page" tabindex="-1"')}
+      <div data-lock-end></div>
+      <div class="viewer-next" aria-hidden="true"><div class="page-blank"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+      <div class="viewer-cover" data-lock-cover hidden>
+        <div class="viewer-cover-box">${gateBox(level, {
+          title: rest ? `나머지 ${rest}페이지는 로그인 후 볼 수 있어요` : `${PREVIEW_PAGES}페이지 이후는 로그인 후 볼 수 있어요`,
+          text: '로그인하면 전체 내용을 보고 PDF · DOCX 파일을 내려받을 수 있습니다.',
+        })}</div>
+      </div>
     </div>`;
+  updateLock();
 }
+
+/** 첫 쪽의 끝이 화면 가운데를 지나 올라가면 뷰어를 가립니다. 다시 위로 올라오면 첫 쪽이 보입니다. */
+function updateLock() {
+  const end = viewer.querySelector('[data-lock-end]');
+  const cover = viewer.querySelector('[data-lock-cover]');
+  if (!end || !cover) return;
+  const locked = end.getBoundingClientRect().top < innerHeight * 0.5;
+  if (cover.hidden === !locked) return;
+  cover.hidden = !locked;
+  viewer.querySelector('[data-lock]').classList.toggle('is-locked', locked);
+}
+
+addEventListener('scroll', updateLock, { passive: true });
+addEventListener('resize', updateLock);
 
 let rendered = 0;
 async function init() {

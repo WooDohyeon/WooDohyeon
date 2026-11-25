@@ -2636,7 +2636,8 @@ a.download-btn:hover {
   border: var(--border);
   border-radius: var(--radius);
   background: var(--surface);
-  overflow: hidden;
+  /* clip: 모서리는 잘라 내되, 안쪽 로그인 안내가 화면을 따라 움직일 수 있게 합니다. */
+  overflow: clip;
 }
 
 .viewer-frame {
@@ -2646,6 +2647,56 @@ a.download-btn:hover {
   min-height: 480px;
   border: 0;
   background: #fff;
+}
+
+/* 비회원 미리보기: 첫 쪽 한 장을 통째로 보여 주고, 그 아래로 내려가면 뷰어 전체를 가립니다. */
+.viewer-lock {
+  position: relative;
+}
+
+.viewer-frame--page {
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1 / 1.4142;
+  /* 뷰어 안에서 따로 스크롤되지 않고 페이지와 함께 움직이게 합니다. */
+  pointer-events: none;
+}
+
+.viewer-next {
+  max-height: 460px;
+  overflow: hidden;
+  border-top: var(--border);
+  background: var(--main);
+  filter: blur(7px);
+  opacity: 0.75;
+  user-select: none;
+}
+
+.viewer-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(236, 235, 230, 0.86);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  animation: cover-in 0.25s ease;
+}
+
+.viewer-cover-box {
+  position: sticky;
+  top: max(96px, calc(50vh - 150px));
+  display: grid;
+  justify-items: center;
+  padding: 24px 16px;
+}
+
+.viewer-lock.is-locked .viewer-frame,
+.viewer-lock.is-locked .viewer-next {
+  visibility: hidden;
+}
+
+@keyframes cover-in {
+  from { opacity: 0; }
 }
 
 .viewer-state {
