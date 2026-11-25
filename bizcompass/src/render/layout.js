@@ -1,7 +1,7 @@
 import { esc, compassMark, icon } from './util.js';
 
 export const SITE = {
-  name: '비즈컴퍼스',
+  name: 'OZ BizLab',
   tagline: '창업의 방향을 찾다',
   description: '정부지원사업, 창업 절차, 지역별 기관 정보를 한곳에서 확인하는 창업 정보 플랫폼',
   footer: '창업의 방향을 찾는 가장 쉬운 방법',
@@ -60,7 +60,7 @@ export function footer({ base }) {
         </nav>
       </div>
       <div class="footer-bottom">
-        <small>© 2026 BizCompass.</small>
+        <small>© 2026 OZ BizLab.</small>
         <small>지원사업 정보 출처:
           <a href="https://www.bizinfo.go.kr" target="_blank" rel="noopener noreferrer">기업마당</a> ·
           <a href="https://www.k-startup.go.kr" target="_blank" rel="noopener noreferrer">K-Startup</a>
