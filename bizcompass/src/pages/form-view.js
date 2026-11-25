@@ -18,7 +18,7 @@ function showInfo(form) {
   title.textContent = form.title;
   desc.textContent = form.description || '';
   meta.textContent = [form.category, form.updated && `업데이트 ${form.updated}`, form.pages && `${form.pages}페이지`].filter(Boolean).join(' · ');
-  document.title = `${form.title} | 비즈컴퍼스`;
+  document.title = `${form.title} | OZ BizLab`;
 }
 
 function showState(heading, text) {
