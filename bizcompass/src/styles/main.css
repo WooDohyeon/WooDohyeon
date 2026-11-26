@@ -385,7 +385,8 @@ h1, h2, h3 {
   text-overflow: ellipsis;
 }
 
-.site-nav a {
+.site-nav a,
+.site-nav .nav-soon {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -397,6 +398,24 @@ h1, h2, h3 {
   transition: background-color 0.16s ease, border-color 0.16s ease;
 }
 
+.site-nav .nav-soon {
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.footer-nav .nav-soon {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.site-nav .nav-soon:hover,
 .site-nav a:hover {
   border-color: var(--ink);
 }
@@ -2646,6 +2665,195 @@ button.download-btn:hover {
   }
 }
 
+/* ── 인사이트 (카드뉴스) ───────────────────────────────────── */
+#insight-tabs {
+  margin-bottom: 20px;
+}
+
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: 20px;
+}
+
+.insight-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.insight-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--accent);
+}
+
+.insight-cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-bottom: var(--border);
+  background: var(--second);
+}
+
+.insight-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.insight-pages {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.insight-body {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px 20px;
+}
+
+.insight-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.insight-meta small {
+  color: var(--ink-soft);
+}
+
+.insight-body strong {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.insight-summary {
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+.insight-viewer {
+  width: min(calc(100% - 24px), 560px);
+  max-height: calc(100dvh - 24px);
+}
+
+.insight-viewer[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-viewer-head {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 60px 14px 20px;
+}
+
+.insight-viewer-head h2 {
+  margin-top: 8px;
+  font-size: 1.25rem;
+  line-height: 1.35;
+}
+
+.insight-stage {
+  position: relative;
+  min-height: 0;
+  border-block: var(--border);
+  background: var(--second);
+}
+
+.insight-track {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.insight-track::-webkit-scrollbar {
+  display: none;
+}
+
+.insight-slide {
+  flex: 0 0 100%;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.insight-slide img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100dvh - 210px);
+  object-fit: contain;
+}
+
+.insight-nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  translate: 0 -50%;
+  cursor: pointer;
+}
+
+.insight-nav--prev { left: 10px; }
+.insight-nav--next { right: 10px; }
+
+.insight-nav:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.insight-nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.insight-counter {
+  padding: 12px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.insight-counter b {
+  color: var(--ink);
+}
+
 /* ── 서식 보기 ────────────────────────────────────────────── */
 .back-link {
   display: inline-flex;
@@ -3021,17 +3229,37 @@ a.download-btn:hover {
     height: 28px;
   }
 
+}
+
+/* 메뉴가 다섯 개라, 화면이 좁으면 메뉴를 둘째 줄로 내리고 옆으로 밀어 볼 수 있게 합니다. */
+@media (max-width: 1023px) {
+  .site-header-inner {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .site-auth {
+    margin-left: auto;
+  }
+
   .site-nav {
-    gap: 0;
+    order: 3;
+    width: calc(100% + var(--gutter) * 2);
+    margin: 0 calc(var(--gutter) * -1);
+    padding: 0 calc(var(--gutter) - 8px) 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 
-  .site-nav a {
-    padding-inline: 9px;
-    font-size: 0.875rem;
-  }
-
-  .site-header .brand span {
+  .site-nav::-webkit-scrollbar {
     display: none;
+  }
+
+  .site-nav a,
+  .site-nav .nav-soon {
+    min-height: 40px;
+    padding: 6px 14px;
+    font-size: 0.9375rem;
   }
 }
 

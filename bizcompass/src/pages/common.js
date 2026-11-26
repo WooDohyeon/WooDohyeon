@@ -125,6 +125,34 @@ export function openLoginModal(level, text = '이 기능은 회원만 이용할 
   dialog.showModal();
 }
 
+// ── 아직 열지 않은 메뉴 (예: OZ BizCare) ───────────────────────
+function openSoonModal(name) {
+  let dialog = document.getElementById('soon-modal');
+  if (!dialog) {
+    dialog = document.createElement('dialog');
+    dialog.id = 'soon-modal';
+    dialog.className = 'modal';
+    dialog.setAttribute('aria-labelledby', 'soon-modal-title');
+    document.body.append(dialog);
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog || event.target.closest('[data-modal-close]')) dialog.close();
+    });
+  }
+  dialog.innerHTML = `<div class="modal-body">
+    <button type="button" class="modal-close" data-modal-close aria-label="닫기">×</button>
+    <span class="tag tag--accent">오픈 예정</span>
+    <h2 id="soon-modal-title">${escapeHtml(name)}</h2>
+    <p>추후 오픈 예정입니다.</p>
+    <div class="gate-actions"><button type="button" class="btn btn--accent" data-modal-close>확인</button></div>
+  </div>`;
+  dialog.showModal();
+}
+
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-soon]');
+  if (button) openSoonModal(button.dataset.soon);
+});
+
 authBox?.addEventListener('click', async (event) => {
   if (!event.target.closest('[data-auth-logout]')) return;
   await signOutUser();

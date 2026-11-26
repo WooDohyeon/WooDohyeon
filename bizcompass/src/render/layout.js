@@ -11,7 +11,15 @@ export const NAV = [
   { id: 'programs', label: '정부지원사업', path: 'programs/' },
   { id: 'references', label: '레퍼런스', path: 'references/' },
   { id: 'forms', label: '서식', path: 'forms/' },
+  { id: 'insights', label: '인사이트', path: 'insights/' },
+  // soon: 아직 열지 않은 메뉴. 누르면 '추후 오픈 예정' 안내가 뜹니다. 연결할 때는 soon 을 지우고 path 를 넣으면 됩니다.
+  { id: 'bizcare', label: 'OZ BizCare', note: '수료생 공간', soon: true },
 ];
+
+function navItem(item, base, active) {
+  if (item.soon) return `<button type="button" class="nav-soon" data-soon="${esc(item.label)}" aria-haspopup="dialog">${esc(item.label)}</button>`;
+  return `<a href="${base}${item.path}"${item.id === active ? ' aria-current="page"' : ''}>${esc(item.label)}</a>`;
+}
 
 export function head({ title = '', description = SITE.description, robots = '', base }) {
   const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} | ${SITE.tagline}`;
@@ -31,7 +39,7 @@ export function head({ title = '', description = SITE.description, robots = '', 
 }
 
 export function header({ active = '', base }) {
-  const links = NAV.map((item) => `<a href="${base}${item.path}"${item.id === active ? ' aria-current="page"' : ''}>${esc(item.label)}</a>`).join('');
+  const links = NAV.map((item) => navItem(item, base, active)).join('');
   return `<a class="skip-link" href="#main">본문으로 건너뛰기</a>
   <header class="site-header">
     <div class="wrap site-header-inner">
@@ -46,7 +54,7 @@ export function header({ active = '', base }) {
 }
 
 export function footer({ base }) {
-  const links = NAV.map((item) => `<a href="${base}${item.path}">${esc(item.label)}</a>`).join('');
+  const links = NAV.map((item) => navItem(item, base, '')).join('');
   return `<footer class="site-footer">
     <div class="wrap">
       <div class="footer-top">
