@@ -28,7 +28,9 @@ function open(program) {
     });
   }
   const { detail } = program;
-  const url = safeUrl(detail.sourceUrl);
+  // 원문 링크가 여러 개면 버튼을 각각 만듭니다. 첫 번째 버튼만 강조합니다.
+  const links = (detail.links || []).map((link) => ({ label: link.label || '원문 보기', url: safeUrl(link.url) })).filter((link) => link.url);
+  const buttons = links.map((link, index) => `<a class="btn${index === 0 ? ' btn--accent' : ''}" href="${esc(link.url)}" target="_blank" rel="noopener noreferrer">${esc(link.label)} ${icon('external', 18)}</a>`).join('');
   dialog.innerHTML = `<div class="modal-body">
     <button type="button" class="modal-close" data-modal-close aria-label="닫기">×</button>
     <span class="tag tag--second">${esc(program.stage)}</span>
@@ -41,7 +43,7 @@ function open(program) {
     </dl>
     <p class="program-note">일정과 지원 내용은 회차마다 달라질 수 있습니다. 신청 전 원문 공고를 꼭 확인해 주세요.</p>
     <div class="gate-actions">
-      ${url ? `<a class="btn btn--accent" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(detail.sourceLabel || '원문 보기')} ${icon('external', 18)}</a>` : ''}
+      ${buttons}
       <button type="button" class="btn" data-modal-close>닫기</button>
     </div>
   </div>`;

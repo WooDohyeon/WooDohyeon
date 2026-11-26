@@ -877,7 +877,7 @@ button.program.is-detail {
   width: 100%;
   padding-right: 44px;
   font: inherit;
-  color: inherit;
+  color: var(--ink);
   text-align: left;
   cursor: pointer;
   transition: background-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
