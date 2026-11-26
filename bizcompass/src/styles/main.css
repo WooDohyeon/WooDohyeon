@@ -872,6 +872,35 @@ a:hover > .dest-more .icon {
   color: var(--ink-soft);
 }
 
+/* 상세 모달을 여는 사업 카드 */
+button.program.is-detail {
+  width: 100%;
+  padding-right: 44px;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+button.program.is-detail .icon {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  translate: 0 -50%;
+}
+
+button.program.is-detail:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+button.program.is-detail:hover span {
+  color: var(--on-accent);
+}
+
 .program.is-linked {
   padding-right: 44px;
   transition: background-color 0.16s ease;
@@ -2546,6 +2575,75 @@ button.download-btn:hover {
 
 .modal-close:hover {
   background: var(--main);
+}
+
+/* 지원사업 상세 모달 */
+.modal--program {
+  width: min(calc(100% - 32px), 620px);
+  max-height: min(calc(100dvh - 32px), 820px);
+}
+
+.modal--program h2 {
+  font-size: clamp(1.625rem, 4vw, 2rem);
+  letter-spacing: -0.03em;
+}
+
+.program-summary {
+  line-height: 1.65;
+}
+
+.program-facts {
+  display: grid;
+  width: 100%;
+  margin-top: 8px;
+  border-top: var(--border);
+}
+
+.program-facts > div {
+  display: grid;
+  gap: 6px 20px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.program-facts dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+}
+
+.program-facts ul {
+  display: grid;
+  gap: 6px;
+}
+
+.program-facts li {
+  position: relative;
+  padding-left: 14px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.program-facts li::before {
+  content: '';
+  position: absolute;
+  top: 0.68em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.program-note {
+  font-size: 0.875rem;
+}
+
+@media (min-width: 600px) {
+  .program-facts > div {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
 }
 
 /* ── 서식 보기 ────────────────────────────────────────────── */

@@ -16,6 +16,10 @@ function safeHref(value) {
 function programCard(program) {
   const link = safeHref(program.href);
   const body = `<strong>${esc(program.title)}</strong><span>${esc(program.eligibility)}</span>`;
+  // 상세 정보가 있는 사업은 눌러서 모달을 여는 버튼으로 그립니다.
+  if (program.detail) {
+    return `<button type="button" class="program is-detail" data-program="${esc(program.id)}" aria-haspopup="dialog" aria-label="${esc(program.title)} 상세 보기">${body}${icon('arrow', 16)}</button>`;
+  }
   if (!link) return `<div class="program">${body}</div>`;
   const attrs = link.external ? ' target="_blank" rel="noopener noreferrer"' : '';
   return `<a class="program is-linked" href="${esc(link.href)}"${attrs} aria-label="${esc(program.title)} 사업 알아보기${link.external ? ' (새 탭)' : ''}">${body}${icon('external', 16)}</a>`;

@@ -1,1 +1,2 @@
-import './common.js';
+// 메인 페이지에도 로드맵이 있어, 사업 카드를 누르면 같은 상세 모달이 열립니다.
+import './roadmap.js';
