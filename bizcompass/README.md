@@ -93,6 +93,13 @@ Storage 의 `forms/` 폴더에 파일을 올리면 서식 페이지에 자동으
 2. 인사이트 데이터베이스를 만들고 `···` → 연결에서 그 통합을 추가합니다.
 3. 데이터베이스 주소의 32자리 ID 를 Vercel 환경변수 `NOTION_DATABASE_ID` 에 넣고 다시 배포합니다.
 
+워크스페이스에서 내부 연결(API 토큰)을 만들 권한이 없으면 OAuth 연결로 토큰을 받을 수 있습니다.
+
+1. 노션에서 OAuth 연결을 만들고 리디렉션 URI 에 `https://<사이트 주소>/api/notion-callback/` 을 넣습니다.
+2. 연결의 클라이언트 ID · 시크릿을 Vercel 환경변수 `NOTION_OAUTH_CLIENT_ID`, `NOTION_OAUTH_CLIENT_SECRET` 에 넣고 다시 배포합니다.
+3. `https://<사이트 주소>/api/notion-connect/` 를 열어 노션에서 허용하고, 공유할 페이지로 인사이트 데이터베이스를 고릅니다.
+4. 화면에 한 번 표시되는 토큰을 `NOTION_TOKEN` 에 넣습니다. (사이트에는 저장되지 않습니다)
+
 데이터베이스 속성 (이름이 같아야 합니다):
 
 | 속성 | 종류 | 내용 |

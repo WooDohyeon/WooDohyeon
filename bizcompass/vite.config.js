@@ -39,9 +39,9 @@ function bizHtml(base) {
 
 // 로컬 개발·미리보기 서버에서 /api/* 를 Vercel 함수와 같은 코드(api/*.js)로 응답합니다.
 // 공고 인증키 · 서버 전용 계정 정보는 .env.local 에서 읽습니다.
-const SERVER_ENV = ['DATA_GO_KR_SERVICE_KEY', 'FIREBASE_SERVICE_EMAIL', 'FIREBASE_SERVICE_PASSWORD', 'NOTION_TOKEN', 'NOTION_DATABASE_ID'];
+const SERVER_ENV = ['DATA_GO_KR_SERVICE_KEY', 'FIREBASE_SERVICE_EMAIL', 'FIREBASE_SERVICE_PASSWORD', 'NOTION_TOKEN', 'NOTION_DATABASE_ID', 'NOTION_OAUTH_CLIENT_ID', 'NOTION_OAUTH_CLIENT_SECRET'];
 function localApi(env) {
-  const routes = Object.fromEntries(['programs', 'references', 'forms', 'form-file', 'form-preview', 'insights', 'insight', 'insight-image'].map((name) => [name, `api/${name}.js`]));
+  const routes = Object.fromEntries(['programs', 'references', 'forms', 'form-file', 'form-preview', 'insights', 'insight', 'insight-image', 'notion-connect', 'notion-callback'].map((name) => [name, `api/${name}.js`]));
   const handler = async (request, response, next) => {
     const match = /^\/api\/([\w-]+)\/?(\?.*)?$/.exec(request.url || '');
     if (!match || !routes[match[1]]) return next();
