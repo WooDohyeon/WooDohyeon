@@ -1,6 +1,7 @@
-// 인사이트 — 카드뉴스 목록과 넘겨 보는 뷰어
+// 인사이트 — 카드뉴스(목록 · 넘겨 보는 뷰어)와 아티클 목록
 import { BASE } from './common.js';
-import { INSIGHTS } from '../data/insights.js';
+import { INSIGHTS, ARTICLES } from '../data/insights.js';
+import { readMinutes } from '../lib/articles.js';
 import { esc, icon } from '../render/util.js';
 
 const grid = document.getElementById('insight-grid');
@@ -62,7 +63,7 @@ function openViewer(post) {
       if (event.key === 'ArrowRight') move(1);
       if (event.key === 'ArrowLeft') move(-1);
     });
-    dialog.addEventListener('close', () => history.replaceState(null, '', location.pathname));
+    dialog.addEventListener('close', () => history.replaceState(null, '', location.pathname + location.hash));
   }
   const total = post.slides.length;
   dialog.innerHTML = `<div class="insight-viewer-head">
@@ -101,6 +102,46 @@ grid.addEventListener('click', (event) => {
 });
 
 render();
+
+// ── 아티클 목록 ─────────────────────────────────────────────
+const articleList = document.getElementById('article-list');
+const articleTabs = document.getElementById('article-tabs');
+const articleEmpty = document.getElementById('article-empty');
+const articleState = { category: '' };
+
+function articleItem(post) {
+  const cover = post.cover ? `<span class="article-thumb"><img src="${esc(src(post, post.cover))}" alt="" loading="lazy" decoding="async" /></span>` : '';
+  return `<li><a class="article-item${cover ? ' has-thumb' : ''}" href="${BASE}insights/post/?id=${encodeURIComponent(post.id)}">
+    <span class="article-item-body">
+      <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}<small>${esc([post.date, `읽는 시간 ${readMinutes(post.body)}분`].filter(Boolean).join(' · '))}</small></span>
+      <strong>${esc(post.title)}</strong>
+      ${post.summary ? `<span class="insight-summary">${esc(post.summary)}</span>` : ''}
+      <span class="article-read">읽어 보기 ${icon('arrow', 16)}</span>
+    </span>
+    ${cover}
+  </a></li>`;
+}
+
+function renderArticles() {
+  const categories = [...new Set(ARTICLES.map((post) => post.category).filter(Boolean))];
+  const shown = ARTICLES.filter((post) => !articleState.category || post.category === articleState.category);
+  document.getElementById('article-count').textContent = String(ARTICLES.length);
+  articleTabs.hidden = categories.length < 2;
+  articleTabs.innerHTML = [['', '전체'], ...categories.map((name) => [name, name])]
+    .map(([value, label]) => `<button type="button" class="chip" data-category="${esc(value)}" aria-pressed="${value === articleState.category}">${esc(label)}</button>`).join('');
+  articleList.innerHTML = shown.map(articleItem).join('');
+  articleList.hidden = shown.length === 0;
+  articleEmpty.hidden = shown.length !== 0;
+}
+
+articleTabs.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-category]');
+  if (!button) return;
+  articleState.category = button.dataset.category;
+  renderArticles();
+});
+
+renderArticles();
 
 // 주소에 ?id= 가 있으면 그 카드뉴스를 바로 엽니다. (공유 링크)
 const linked = INSIGHTS.find((post) => post.id === new URLSearchParams(location.search).get('id'));
