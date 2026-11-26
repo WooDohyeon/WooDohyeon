@@ -1,6 +1,6 @@
 // 인사이트 — 카드뉴스(목록 · 넘겨 보는 뷰어)와 아티클 목록
 import { BASE } from './common.js';
-import { INSIGHTS, ARTICLES } from '../data/insights.js';
+import { loadInsights, fileSrc } from '../lib/insights.js';
 import { readMinutes } from '../lib/articles.js';
 import { esc, icon } from '../render/util.js';
 
@@ -9,8 +9,11 @@ const tabs = document.getElementById('insight-tabs');
 const empty = document.getElementById('insight-empty');
 const count = document.getElementById('insight-count');
 
-const src = (post, file) => (/^https?:\/\//.test(file) ? file : `${BASE}insights/${encodeURIComponent(post.id)}/${encodeURIComponent(file)}`);
+const src = (post, file) => fileSrc(post, file, BASE);
 const state = { category: '' };
+// 노션에 올린 내용을 받아 오기 전까지는 빈 목록입니다.
+let INSIGHTS = [];
+let ARTICLES = [];
 
 function card(post) {
   return `<button type="button" class="insight-card" data-insight="${esc(post.id)}" aria-haspopup="dialog" aria-label="${esc(post.title)} 카드뉴스 보기 (${post.slides.length}장)">
@@ -101,8 +104,6 @@ grid.addEventListener('click', (event) => {
   if (post) openViewer(post);
 });
 
-render();
-
 // ── 아티클 목록 ─────────────────────────────────────────────
 const articleList = document.getElementById('article-list');
 const articleTabs = document.getElementById('article-tabs');
@@ -113,7 +114,7 @@ function articleItem(post) {
   const cover = post.cover ? `<span class="article-thumb"><img src="${esc(src(post, post.cover))}" alt="" loading="lazy" decoding="async" /></span>` : '';
   return `<li><a class="article-item${cover ? ' has-thumb' : ''}" href="${BASE}insights/post/?id=${encodeURIComponent(post.id)}">
     <span class="article-item-body">
-      <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}<small>${esc([post.date, `읽는 시간 ${readMinutes(post.body)}분`].filter(Boolean).join(' · '))}</small></span>
+      <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}<small>${esc([post.date, post.body ? `읽는 시간 ${readMinutes(post.body)}분` : ''].filter(Boolean).join(' · '))}</small></span>
       <strong>${esc(post.title)}</strong>
       ${post.summary ? `<span class="insight-summary">${esc(post.summary)}</span>` : ''}
       <span class="article-read">읽어 보기 ${icon('arrow', 16)}</span>
@@ -141,8 +142,20 @@ articleTabs.addEventListener('click', (event) => {
   renderArticles();
 });
 
-renderArticles();
+// 목록을 받아 오는 동안에는 '준비 중' 안내 대신 불러오는 중임을 보여 줍니다.
+grid.setAttribute('aria-busy', 'true');
+articleList.setAttribute('aria-busy', 'true');
+grid.innerHTML = '<p class="insight-loading">카드뉴스를 불러오고 있어요</p>';
+articleList.innerHTML = '<li class="insight-loading">아티클을 불러오고 있어요</li>';
 
-// 주소에 ?id= 가 있으면 그 카드뉴스를 바로 엽니다. (공유 링크)
-const linked = INSIGHTS.find((post) => post.id === new URLSearchParams(location.search).get('id'));
-if (linked?.slides?.length) openViewer(linked);
+loadInsights(BASE).then((data) => {
+  INSIGHTS = data.cardnews;
+  ARTICLES = data.articles;
+  grid.removeAttribute('aria-busy');
+  articleList.removeAttribute('aria-busy');
+  render();
+  renderArticles();
+  // 주소에 ?id= 가 있으면 그 카드뉴스를 바로 엽니다. (공유 링크)
+  const linked = INSIGHTS.find((post) => post.id === new URLSearchParams(location.search).get('id'));
+  if (linked) openViewer(linked);
+});

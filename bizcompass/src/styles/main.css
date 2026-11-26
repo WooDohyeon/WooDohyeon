@@ -2861,6 +2861,13 @@ button.download-btn:hover {
   color: var(--ink);
 }
 
+.insight-loading {
+  grid-column: 1 / -1;
+  padding: 48px 16px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
 /* 인사이트: 카드뉴스 · 아티클 바로가기 */
 .insight-jump {
   margin-top: 24px;
