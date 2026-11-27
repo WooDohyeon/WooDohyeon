@@ -2934,6 +2934,15 @@ button.download-btn:hover {
   scroll-margin-top: 110px;
 }
 
+/* 카드뉴스와 아티클은 한 페이지의 이어진 두 섹션이라, 사이 여백을 다른 섹션보다 좁게 둡니다. */
+#cardnews {
+  padding-bottom: clamp(24px, 4vw, 44px);
+}
+
+#articles {
+  padding-top: clamp(24px, 4vw, 44px);
+}
+
 #article-tabs {
   margin-bottom: 20px;
 }

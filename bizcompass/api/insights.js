@@ -4,8 +4,8 @@ import { listInsights } from '../server/notion.js';
 export async function GET() {
   try {
     return Response.json(await listInsights(), {
-      // 노션에서 고친 내용은 1분 안팎으로 반영됩니다.
-      headers: { 'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=600' },
+      // 노션에서 고친 내용은 30초 안팎으로 반영됩니다.
+      headers: { 'Cache-Control': 'public, max-age=0, s-maxage=30, stale-while-revalidate=600' },
     });
   } catch (error) {
     console.error('[insights]', error);
