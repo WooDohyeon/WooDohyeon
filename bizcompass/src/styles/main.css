@@ -2685,6 +2685,15 @@ button.download-btn:hover {
   margin-bottom: 20px;
 }
 
+/* 메인 페이지의 카드뉴스 3편: 넘기지 않고 한 줄에 나란히 (좁은 화면에서는 옆으로 넘겨 봅니다) */
+.insight-grid--home + .article-list:not([hidden]) {
+  margin-top: 24px;
+}
+
+a.insight-card {
+  text-decoration: none;
+}
+
 .insight-row {
   position: relative;
 }
