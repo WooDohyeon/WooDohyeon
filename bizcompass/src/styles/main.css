@@ -2955,7 +2955,7 @@ button.download-btn:hover {
   margin-bottom: 20px;
 }
 
-/* 아티클 목록: 가로 카드. 왼쪽에 썸네일을 크게, 오른쪽에 글 정보를 둡니다. */
+/* 아티클 목록: 가로 카드. 왼쪽에 글 정보, 오른쪽에 썸네일을 둡니다. */
 .article-list {
   display: grid;
   gap: 20px;
@@ -2994,11 +2994,13 @@ button.download-btn:hover {
     align-items: stretch;
   }
 
+  /* 글 정보가 왼쪽, 썸네일이 오른쪽 */
   .article-thumb {
-    flex: 0 0 42%;
-    max-width: 520px;
+    order: 2;
+    flex: 0 0 34%;
+    max-width: 420px;
     border-bottom: 0;
-    border-right: var(--border);
+    border-left: var(--border);
   }
 
   .article-item .article-item-body {
