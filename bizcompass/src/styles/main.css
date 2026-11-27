@@ -481,6 +481,14 @@ h1, h2, h3 {
   color: var(--ink-soft);
 }
 
+/* 제목 옆 설명을 줄바꿈 없이 한 줄로 (자리가 넉넉한 넓은 화면에서만) */
+@media (min-width: 1000px) {
+  .section-head > p.section-head-line {
+    max-width: none;
+    white-space: nowrap;
+  }
+}
+
 .section--second .section-head > p {
   color: color-mix(in srgb, var(--on-second) 78%, transparent);
 }
