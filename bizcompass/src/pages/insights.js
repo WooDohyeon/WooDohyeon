@@ -1,7 +1,7 @@
 // 인사이트 — 카드뉴스(목록 · 넘겨 보는 뷰어)와 아티클 목록
 import { BASE } from './common.js';
 import { loadInsights, fileSrc } from '../lib/insights.js';
-import { readMinutes } from '../lib/articles.js';
+import { cardnewsButton, articleItem } from '../render/insights.js';
 import { esc, icon } from '../render/util.js';
 
 const grid = document.getElementById('insight-grid');
@@ -15,19 +15,6 @@ const state = { category: '' };
 let INSIGHTS = [];
 let ARTICLES = [];
 
-function card(post) {
-  return `<button type="button" class="insight-card" data-insight="${esc(post.id)}" aria-haspopup="dialog" aria-label="${esc(post.title)} 카드뉴스 보기 (${post.slides.length}장)">
-    <span class="insight-cover">
-      <img src="${esc(src(post, post.slides[0]))}" alt="" loading="lazy" decoding="async" />
-    </span>
-    <span class="insight-body">
-      <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}${post.date ? `<small>${esc(post.date)}</small>` : ''}</span>
-      <strong>${esc(post.title)}</strong>
-      ${post.summary ? `<span class="insight-summary">${esc(post.summary)}</span>` : ''}
-    </span>
-  </button>`;
-}
-
 function render() {
   const posts = INSIGHTS.filter((post) => post.slides?.length);
   const categories = [...new Set(posts.map((post) => post.category).filter(Boolean))];
@@ -36,7 +23,7 @@ function render() {
   tabs.hidden = categories.length < 2;
   tabs.innerHTML = [['', '전체'], ...categories.map((name) => [name, name])]
     .map(([value, label]) => `<button type="button" class="chip" data-category="${esc(value)}" aria-pressed="${value === state.category}">${esc(label)}</button>`).join('');
-  grid.innerHTML = shown.map(card).join('');
+  grid.innerHTML = shown.map((post) => cardnewsButton(post, BASE)).join('');
   grid.hidden = shown.length === 0;
   empty.hidden = shown.length !== 0;
   grid.scrollLeft = 0;
@@ -125,22 +112,6 @@ const articleTabs = document.getElementById('article-tabs');
 const articleEmpty = document.getElementById('article-empty');
 const articleState = { category: '' };
 
-function articleItem(post) {
-  // 썸네일은 글 정보 오른쪽에 따로 보여 줍니다. (좁은 화면에서는 위쪽) 대표 이미지가 없으면 분류 이름을 넣은 빈 표지를 둡니다.
-  const cover = post.cover
-    ? `<img src="${esc(src(post, post.cover))}" alt="" loading="lazy" decoding="async" />`
-    : `<span class="article-thumb-blank">${esc(post.category || 'OZ BizLab')}</span>`;
-  return `<li><a class="article-item" href="${BASE}insights/post/?id=${encodeURIComponent(post.id)}">
-    <span class="article-thumb">${cover}</span>
-    <span class="article-item-body">
-      <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}<small>${esc([post.date, post.body ? `읽는 시간 ${readMinutes(post.body)}분` : ''].filter(Boolean).join(' · '))}</small></span>
-      <strong>${esc(post.title)}</strong>
-      ${post.summary ? `<span class="insight-summary">${esc(post.summary)}</span>` : ''}
-      <span class="article-read">읽어 보기 ${icon('arrow', 16)}</span>
-    </span>
-  </a></li>`;
-}
-
 function renderArticles() {
   const categories = [...new Set(ARTICLES.map((post) => post.category).filter(Boolean))];
   const shown = ARTICLES.filter((post) => !articleState.category || post.category === articleState.category);
@@ -148,7 +119,7 @@ function renderArticles() {
   articleTabs.hidden = categories.length < 2;
   articleTabs.innerHTML = [['', '전체'], ...categories.map((name) => [name, name])]
     .map(([value, label]) => `<button type="button" class="chip" data-category="${esc(value)}" aria-pressed="${value === articleState.category}">${esc(label)}</button>`).join('');
-  articleList.innerHTML = shown.map(articleItem).join('');
+  articleList.innerHTML = shown.map((post) => articleItem(post, BASE)).join('');
   articleList.hidden = shown.length === 0;
   articleEmpty.hidden = shown.length !== 0;
 }
