@@ -126,15 +126,18 @@ const articleEmpty = document.getElementById('article-empty');
 const articleState = { category: '' };
 
 function articleItem(post) {
-  const cover = post.cover ? `<span class="article-thumb"><img src="${esc(src(post, post.cover))}" alt="" loading="lazy" decoding="async" /></span>` : '';
-  return `<li><a class="article-item${cover ? ' has-thumb' : ''}" href="${BASE}insights/post/?id=${encodeURIComponent(post.id)}">
+  // 썸네일을 글 정보와 분리해 위쪽에 크게 보여 줍니다. 대표 이미지가 없으면 분류 이름을 넣은 빈 표지를 둡니다.
+  const cover = post.cover
+    ? `<img src="${esc(src(post, post.cover))}" alt="" loading="lazy" decoding="async" />`
+    : `<span class="article-thumb-blank">${esc(post.category || 'OZ BizLab')}</span>`;
+  return `<li><a class="article-item" href="${BASE}insights/post/?id=${encodeURIComponent(post.id)}">
+    <span class="article-thumb">${cover}</span>
     <span class="article-item-body">
       <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}<small>${esc([post.date, post.body ? `읽는 시간 ${readMinutes(post.body)}분` : ''].filter(Boolean).join(' · '))}</small></span>
       <strong>${esc(post.title)}</strong>
       ${post.summary ? `<span class="insight-summary">${esc(post.summary)}</span>` : ''}
       <span class="article-read">읽어 보기 ${icon('arrow', 16)}</span>
     </span>
-    ${cover}
   </a></li>`;
 }
 

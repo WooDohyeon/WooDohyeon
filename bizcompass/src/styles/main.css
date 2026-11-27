@@ -2955,19 +2955,29 @@ button.download-btn:hover {
   margin-bottom: 20px;
 }
 
-/* 아티클 목록 */
+/* 아티클 목록: 썸네일을 위에 크게, 글 정보는 그 아래에 둡니다. */
 .article-list {
   display: grid;
-  gap: 16px;
+  gap: 24px;
+}
+
+@media (min-width: 760px) {
+  .article-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.article-list > li {
+  display: grid;
 }
 
 .article-item {
-  display: grid;
-  gap: 20px;
-  padding: clamp(20px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
   border: var(--border);
   border-radius: var(--radius);
   background: var(--surface);
+  overflow: hidden;
   transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
 
@@ -2976,10 +2986,39 @@ button.download-btn:hover {
   box-shadow: 6px 6px 0 var(--accent);
 }
 
+.article-thumb {
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-bottom: var(--border);
+  background: var(--second);
+  overflow: hidden;
+}
+
+.article-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-thumb-blank {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  color: var(--on-second);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
 .article-item-body {
   display: grid;
   align-content: start;
   gap: 10px;
+  padding: clamp(18px, 2.4vw, 24px);
 }
 
 .article-item .insight-meta {
@@ -2988,7 +3027,7 @@ button.download-btn:hover {
 }
 
 .article-item strong {
-  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+  font-size: clamp(1.1875rem, 2vw, 1.375rem);
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.35;
@@ -3000,28 +3039,6 @@ button.download-btn:hover {
   gap: 6px;
   margin-top: 4px;
   font-weight: 700;
-}
-
-.article-thumb {
-  display: block;
-  aspect-ratio: 16 / 10;
-  border: var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--second);
-  overflow: hidden;
-}
-
-.article-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-@media (min-width: 700px) {
-  .article-item.has-thumb {
-    grid-template-columns: minmax(0, 1fr) 240px;
-    align-items: center;
-  }
 }
 
 /* 아티클 한 편 */
