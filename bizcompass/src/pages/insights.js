@@ -19,7 +19,6 @@ function card(post) {
   return `<button type="button" class="insight-card" data-insight="${esc(post.id)}" aria-haspopup="dialog" aria-label="${esc(post.title)} 카드뉴스 보기 (${post.slides.length}장)">
     <span class="insight-cover">
       <img src="${esc(src(post, post.slides[0]))}" alt="" loading="lazy" decoding="async" />
-      <span class="insight-pages">${icon('file', 14)} ${post.slides.length}장</span>
     </span>
     <span class="insight-body">
       <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}${post.date ? `<small>${esc(post.date)}</small>` : ''}</span>
@@ -40,7 +39,23 @@ function render() {
   grid.innerHTML = shown.map(card).join('');
   grid.hidden = shown.length === 0;
   empty.hidden = shown.length !== 0;
+  grid.scrollLeft = 0;
+  updateRow();
 }
+
+// 카드뉴스 목록 좌우 넘기기: 더 넘길 곳이 있을 때만 버튼을 보여 줍니다.
+const prev = document.getElementById('insight-prev');
+const next = document.getElementById('insight-next');
+function updateRow() {
+  const max = grid.scrollWidth - grid.clientWidth;
+  prev.hidden = max <= 1 || grid.scrollLeft <= 1;
+  next.hidden = max <= 1 || grid.scrollLeft >= max - 1;
+}
+const stepRow = (direction) => grid.scrollBy({ left: direction * grid.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+prev.addEventListener('click', () => stepRow(-1));
+next.addEventListener('click', () => stepRow(1));
+grid.addEventListener('scroll', updateRow, { passive: true });
+addEventListener('resize', updateRow);
 
 tabs.addEventListener('click', (event) => {
   const button = event.target.closest('[data-category]');
