@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>정부지원사업 카드뉴스</title>
+<style>
+  @font-face {
+    font-family: 'Pretendard Variable';
+    src: url('PretendardVariable.woff2') format('woff2-variations');
+    font-weight: 45 920;
+  }
+  :root {
+    --main: #ecebe6;
+    --paper: #fbfaf8;
+    --accent: #2f5bff;
+    --accent-soft: #8fa6ff;
+    --ink: #15171c;
+    --ink-soft: #474a52;
+    --ink-faint: #6b6e76;
+    --line: #d9d7cf;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #888; font-family: 'Pretendard Variable', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .card {
+    width: 1080px; height: 1350px; position: relative; overflow: hidden;
+    background: var(--main); padding: 80px 88px 88px; display: flex; flex-direction: column;
+    margin-bottom: 40px; letter-spacing: -0.02em;
+  }
+
+  /* 공통 머리·꼬리 */
+  .top { display: flex; justify-content: space-between; align-items: center; font-size: 26px; font-weight: 600; color: var(--ink-faint); }
+  .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); font-weight: 800; letter-spacing: -0.01em; }
+  .brand i { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  .foot { margin-top: auto; padding-top: 32px; display: flex; justify-content: space-between; align-items: center; font-size: 24px; color: var(--ink-faint); font-weight: 500; }
+  .dots { display: flex; gap: 10px; }
+  .dots b { width: 12px; height: 12px; border-radius: 50%; background: var(--line); }
+  .dots b.on { background: var(--accent); width: 36px; border-radius: 6px; }
+
+  /* 1. 표지 */
+  .cover { background: var(--accent); color: var(--paper); }
+  .cover .top, .cover .foot { color: rgba(251,250,248,.72); }
+  .cover .brand { color: var(--paper); }
+  .cover .brand i { background: var(--paper); }
+  .cover .dots b { background: rgba(251,250,248,.35); }
+  .cover .dots b.on { background: var(--paper); }
+  .cover .tag { margin-top: 150px; display: inline-block; align-self: flex-start; padding: 14px 26px; border: 2px solid rgba(251,250,248,.6); border-radius: 999px; font-size: 30px; font-weight: 700; }
+  .cover h1 { margin-top: 44px; font-size: 128px; line-height: 1.08; font-weight: 850; letter-spacing: -0.045em; }
+  .cover h1 em { font-style: normal; color: var(--ink); background: var(--main); padding: 0 18px; border-radius: 18px; }
+  .cover p.lead { margin-top: 48px; font-size: 38px; line-height: 1.5; font-weight: 500; color: rgba(251,250,248,.88); }
+  .steps { margin-top: 72px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .steps div { border-top: 4px solid var(--paper); padding-top: 18px; font-size: 26px; font-weight: 700; }
+  .steps span { display: block; font-size: 22px; font-weight: 600; opacity: .7; margin-bottom: 6px; }
+
+  /* 2~4. 단계 카드 */
+  .stage { margin-top: 36px; display: flex; align-items: baseline; gap: 24px; }
+  .stage .no { font-size: 120px; font-weight: 850; color: var(--accent); line-height: 1; letter-spacing: -0.05em; }
+  .stage .lbl { font-size: 28px; font-weight: 700; color: var(--ink-soft); }
+  h2 { margin-top: 20px; font-size: 84px; font-weight: 850; line-height: 1.12; letter-spacing: -0.045em; }
+  .sub { margin-top: 20px; font-size: 32px; color: var(--ink-soft); font-weight: 500; line-height: 1.45; }
+  .list { margin-top: 48px; display: flex; flex-direction: column; gap: 22px; }
+  .item { background: var(--paper); border-radius: 28px; padding: 32px 40px; display: grid; grid-template-columns: 1fr auto; gap: 10px 24px; align-items: center; }
+  .item h3 { font-size: 44px; font-weight: 800; letter-spacing: -0.035em; }
+  .item .who { grid-column: 1; font-size: 27px; color: var(--ink-faint); font-weight: 600; }
+  .item .amt { grid-row: 1 / span 2; grid-column: 2; text-align: right; }
+  .item .amt small { display: block; font-size: 22px; color: var(--ink-faint); font-weight: 600; margin-bottom: 4px; }
+  .item .amt strong { font-size: 52px; font-weight: 850; color: var(--accent); letter-spacing: -0.04em; }
+  .item .amt strong.txt { font-size: 34px; color: var(--ink); }
+  .note { margin-top: 28px; font-size: 22px; color: var(--ink-faint); line-height: 1.5; font-weight: 500; }
+
+  /* 5. 체크리스트 */
+  .last { background: var(--ink); color: var(--paper); }
+  .last .top, .last .foot { color: rgba(251,250,248,.6); }
+  .last .brand { color: var(--paper); }
+  .last .brand i { background: var(--accent-soft); }
+  .last .dots b { background: rgba(251,250,248,.25); }
+  .last .dots b.on { background: var(--accent-soft); }
+  .last h2 { margin-top: 88px; }
+  .last h2 em { font-style: normal; color: var(--accent-soft); }
+  .checks { margin-top: 56px; display: flex; flex-direction: column; gap: 0; }
+  .check { display: grid; grid-template-columns: 64px 1fr; gap: 24px; padding: 30px 0; border-bottom: 1.5px solid rgba(251,250,248,.16); }
+  .check:first-child { border-top: 1.5px solid rgba(251,250,248,.16); }
+  .check .n { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 26px; font-weight: 800; }
+  .check h4 { font-size: 38px; font-weight: 750; letter-spacing: -0.03em; }
+  .check p { margin-top: 8px; font-size: 27px; color: rgba(251,250,248,.68); line-height: 1.45; font-weight: 500; }
+  .cta { margin-top: 48px; font-size: 30px; font-weight: 700; color: var(--paper); }
+  .cta span { color: var(--accent-soft); }
+</style>
+</head>
+<body>
+
+<!-- 1. 표지 -->
+<section class="card cover" id="c1">
+  <div class="top"><span class="brand"><i></i>OZ BizLab</span><span>2026 정부지원사업</span></div>
+  <span class="tag">창업 단계별 총정리</span>
+  <h1>내 회사에 맞는<br><em>지원사업</em>은<br>어디 있을까?</h1>
+  <p class="lead">예비창업부터 TIPS까지,<br>단계별 대표 사업과 지원 규모를 한 번에.</p>
+  <div class="steps">
+    <div><span>01</span>창업 준비</div>
+    <div><span>02</span>초기 · 재도전</div>
+    <div><span>03</span>성장 · 도약</div>
+    <div><span>04</span>확장 · 고도화</div>
+  </div>
+  <div class="foot"><span>옆으로 넘겨보세요 →</span><div class="dots"><b class="on"></b><b></b><b></b><b></b><b></b></div></div>
+</section>
+
+<!-- 2. 창업 준비 -->
+<section class="card" id="c2">
+  <div class="top"><span class="brand"><i></i>OZ BizLab</span><span>예비창업 단계</span></div>
+  <div class="stage"><span class="no">01</span><span class="lbl">STAGE</span></div>
+  <h2>사업자등록 전,<br>창업 준비</h2>
+  <p class="sub">아이디어만 있어도 도전할 수 있는 사업들</p>
+  <div class="list">
+    <div class="item"><h3>모두의 창업</h3><p class="who">예비창업 ~ 7년 이내 (이종창업)</p><div class="amt"><small>1라운드 활동자금</small><strong>200만 원</strong></div></div>
+    <div class="item"><h3>예비창업패키지</h3><p class="who">사업자등록이 없는 예비창업자</p><div class="amt"><small>사업화 자금 평균</small><strong>0.4억 원</strong></div></div>
+    <div class="item"><h3>창업중심대학</h3><p class="who">예비창업 ~ 7년 이내 · 지역기반/대학발</p><div class="amt"><small>지역기반 최대</small><strong>1억 원</strong></div></div>
+  </div>
+  <p class="note">* 2026년 공고 기준. 모두의 창업은 2라운드 진출 시 사업화 자금 추가 지원</p>
+  <div class="foot"><span>02 / 05</span><div class="dots"><b></b><b class="on"></b><b></b><b></b><b></b></div></div>
+</section>
+
+<!-- 3. 초기 · 재도전 -->
+<section class="card" id="c3">
+  <div class="top"><span class="brand"><i></i>OZ BizLab</span><span>창업 3년 이내</span></div>
+  <div class="stage"><span class="no">02</span><span class="lbl">STAGE</span></div>
+  <h2>막 시작한 회사의<br>초기 · 재도전</h2>
+  <p class="sub">사업을 안정시키고, 다시 일어서는 단계</p>
+  <div class="list">
+    <div class="item"><h3>초기창업패키지</h3><p class="who">창업 후 3년 이내</p><div class="amt"><small>일반형 최대</small><strong>1억 원</strong></div></div>
+    <div class="item"><h3>창업성공패키지</h3><p class="who">만 39세 이하 · 창업 3년 이내 (청창사)</p><div class="amt"><small>기본과정 최대</small><strong>1억 원</strong></div></div>
+    <div class="item"><h3>재도전성공패키지</h3><p class="who">예비재창업 ~ 재창업 7년 이내</p><div class="amt"><small>사업화 자금 +</small><strong class="txt">멘토링 · 투자연계</strong></div></div>
+  </div>
+  <p class="note">* 초기창업패키지 딥테크 특화형은 최대 1.5억 원</p>
+  <div class="foot"><span>03 / 05</span><div class="dots"><b></b><b></b><b class="on"></b><b></b><b></b></div></div>
+</section>
+
+<!-- 4. 성장 · 확장 -->
+<section class="card" id="c4">
+  <div class="top"><span class="brand"><i></i>OZ BizLab</span><span>창업 3 ~ 10년</span></div>
+  <div class="stage"><span class="no">03–04</span><span class="lbl">STAGE</span></div>
+  <h2>투자와 함께 크는<br>성장 · 확장</h2>
+  <p class="sub">민간투자 연계와 기술개발(R&amp;D)로 스케일업</p>
+  <div class="list">
+    <div class="item"><h3>창업도약패키지</h3><p class="who">창업 3년 초과 ~ 7년 이내</p><div class="amt"><small>사업화 자금 +</small><strong class="txt">창업 프로그램</strong></div></div>
+    <div class="item"><h3>DIPS 초격차</h3><p class="who">신산업 분야 · 창업 10년 이내</p><div class="amt"><small>사업화 자금 최대</small><strong>2억 원</strong></div></div>
+    <div class="item"><h3>TIPS</h3><p class="who">운영사 투자 · 추천 기업</p><div class="amt"><small>R&amp;D 최대</small><strong>8억 원</strong></div></div>
+  </div>
+  <p class="note">* 딥테크 팁스 R&amp;D 최대 15억 원 · 비수도권은 Pre-TIPS(최대 1억), 팁스 졸업 후 Post-TIPS(최대 7억)</p>
+  <div class="foot"><span>04 / 05</span><div class="dots"><b></b><b></b><b></b><b class="on"></b><b></b></div></div>
+</section>
+
+<!-- 5. 체크리스트 -->
+<section class="card last" id="c5">
+  <div class="top"><span class="brand"><i></i>OZ BizLab</span><span>신청 전 체크</span></div>
+  <h2>신청 전<br><em>이것만은</em> 꼭!</h2>
+  <div class="checks">
+    <div class="check"><span class="n">1</span><div><h4>업력부터 확인하기</h4><p>사업자등록일 · 법인 대표권 기준일에 따라<br>지원 가능한 사업이 달라져요</p></div></div>
+    <div class="check"><span class="n">2</span><div><h4>공고 일정 미리 챙기기</h4><p>주요 패키지는 1 ~ 3월에 몰려 있어요.<br>연초 전에 사업계획서를 준비하세요</p></div></div>
+    <div class="check"><span class="n">3</span><div><h4>공고문 원문 꼭 읽기</h4><p>자격 예외 · 중복 지원 제한은<br>K-Startup 공고문에서 최종 확인</p></div></div>
+  </div>
+  <p class="cta">단계별 로드맵과 준비서류는 <span>OZ BizLab</span>에서 →</p>
+  <div class="foot"><span>05 / 05</span><div class="dots"><b></b><b></b><b></b><b></b><b class="on"></b></div></div>
+</section>
+
+</body>
+</html>
