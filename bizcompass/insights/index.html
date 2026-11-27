@@ -26,10 +26,15 @@
               <p class="eyebrow">카드뉴스</p>
               <h2 id="cardnews-title">한 장씩 넘겨 보는 인사이트</h2>
             </div>
-            <p>핵심만 추려 이미지로 정리했습니다. 카드를 누르면 넘겨 볼 수 있어요.</p>
+            <p>핵심만 추려 이미지로 정리했습니다. 좌우로 넘겨 고르고, 카드를 누르면 한 장씩 볼 수 있어요.</p>
           </div>
           <div class="chips" id="insight-tabs" role="group" aria-label="카드뉴스 분류" hidden></div>
-          <div class="insight-grid" id="insight-grid"></div>
+          <!-- 카드뉴스는 한 줄로 놓고 좌우로 넘겨 봅니다. -->
+          <div class="insight-row">
+            <div class="insight-grid" id="insight-grid" tabindex="0" aria-label="카드뉴스 목록 (좌우로 넘겨 보기)"></div>
+            <button type="button" class="insight-nav insight-nav--prev" id="insight-prev" aria-label="이전 카드뉴스" hidden><!--@icon name="back" size="20"--></button>
+            <button type="button" class="insight-nav insight-nav--next" id="insight-next" aria-label="다음 카드뉴스" hidden><!--@icon name="arrow" size="20"--></button>
+          </div>
           <div class="empty" id="insight-empty" hidden>
             <h3>첫 카드뉴스를 준비하고 있어요</h3>
             <p>곧 찾아뵙겠습니다.</p>

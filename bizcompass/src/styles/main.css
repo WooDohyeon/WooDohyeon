@@ -2677,23 +2677,62 @@ button.download-btn:hover {
   margin-bottom: 20px;
 }
 
-.insight-grid {
-  display: grid;
-  /* 넓은 화면에서 한 줄에 3개. 표지를 크게 보여 줍니다. */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
+.insight-row {
+  position: relative;
 }
+
+/* 카드뉴스 목록: 한 줄로 놓고 좌우로 넘깁니다. 넓은 화면에서 한 번에 3개가 보입니다. */
+.insight-grid {
+  --gap: 24px;
+  --shown: 3;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - var(--gap) * (var(--shown) - 1)) / var(--shown));
+  gap: var(--gap);
+  /* 카드가 떠오를 때 그림자가 잘리지 않도록 여유를 둡니다. */
+  margin: -8px;
+  padding: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 8px;
+  scrollbar-width: none;
+}
+
+.insight-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.insight-grid > * {
+  scroll-snap-align: start;
+}
+
+.insight-row > .insight-nav {
+  top: calc(50% - 30px);
+  z-index: 1;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.insight-row > .insight-nav--prev { left: -22px; }
+.insight-row > .insight-nav--next { right: -22px; }
 
 @media (max-width: 899px) {
   .insight-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    --gap: 16px;
+    --shown: 2;
   }
 }
 
+/* 좁은 화면: 다음 카드가 살짝 보이게 해 옆으로 넘길 수 있음을 알려 줍니다. */
 @media (max-width: 519px) {
   .insight-grid {
-    grid-template-columns: minmax(0, 1fr);
+    --shown: 1.18;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+  }
+
+  .insight-row > .insight-nav {
+    display: none;
   }
 }
 
