@@ -19,7 +19,6 @@ function card(post) {
   return `<button type="button" class="insight-card" data-insight="${esc(post.id)}" aria-haspopup="dialog" aria-label="${esc(post.title)} 카드뉴스 보기 (${post.slides.length}장)">
     <span class="insight-cover">
       <img src="${esc(src(post, post.slides[0]))}" alt="" loading="lazy" decoding="async" />
-      <span class="insight-pages">${icon('file', 14)} ${post.slides.length}장</span>
     </span>
     <span class="insight-body">
       <span class="insight-meta">${post.category ? `<span class="tag tag--second">${esc(post.category)}</span>` : ''}${post.date ? `<small>${esc(post.date)}</small>` : ''}</span>

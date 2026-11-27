@@ -2679,8 +2679,22 @@ button.download-btn:hover {
 
 .insight-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
-  gap: 20px;
+  /* 넓은 화면에서 한 줄에 3개. 표지를 크게 보여 줍니다. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 899px) {
+  .insight-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 519px) {
+  .insight-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .insight-card {
@@ -2717,25 +2731,20 @@ button.download-btn:hover {
   object-fit: cover;
 }
 
-.insight-pages {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border: var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  font-size: 0.8125rem;
-  font-weight: 700;
-}
-
+/* 표지가 주인공이라 아래 정보는 작게 둡니다. */
 .insight-body {
   display: grid;
-  gap: 8px;
-  padding: 16px 18px 20px;
+  gap: 4px;
+  padding: 12px 16px 14px;
+}
+
+.insight-card .insight-meta .tag {
+  padding: 2px 8px;
+  font-size: 0.75rem;
+}
+
+.insight-card .insight-meta small {
+  font-size: 0.75rem;
 }
 
 .insight-meta {
@@ -2750,8 +2759,8 @@ button.download-btn:hover {
 }
 
 .insight-body strong {
-  font-size: 1.125rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.35;
 }
@@ -2759,6 +2768,14 @@ button.download-btn:hover {
 .insight-summary {
   font-size: 0.9375rem;
   color: var(--ink-soft);
+}
+
+/* 카드뉴스 카드의 소개 문구는 한 줄만 보여 줍니다. */
+.insight-card .insight-summary {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .insight-viewer {
