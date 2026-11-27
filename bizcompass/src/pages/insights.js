@@ -126,7 +126,7 @@ const articleEmpty = document.getElementById('article-empty');
 const articleState = { category: '' };
 
 function articleItem(post) {
-  // 썸네일을 글 정보와 분리해 위쪽에 크게 보여 줍니다. 대표 이미지가 없으면 분류 이름을 넣은 빈 표지를 둡니다.
+  // 썸네일을 글 정보와 분리해 왼쪽에 크게 보여 줍니다. (좁은 화면에서는 위쪽) 대표 이미지가 없으면 분류 이름을 넣은 빈 표지를 둡니다.
   const cover = post.cover
     ? `<img src="${esc(src(post, post.cover))}" alt="" loading="lazy" decoding="async" />`
     : `<span class="article-thumb-blank">${esc(post.category || 'OZ BizLab')}</span>`;
