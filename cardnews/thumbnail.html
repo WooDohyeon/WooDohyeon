@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>아티클 썸네일</title>
+<style>
+  @font-face { font-family: 'Pretendard Variable'; src: url('PretendardVariable.woff2') format('woff2-variations'); font-weight: 45 920; }
+  :root { --main:#ecebe6; --paper:#fbfaf8; --accent:#2f5bff; --accent-soft:#8fa6ff; --ink:#15171c; --ink-faint:#6b6e76; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Pretendard Variable', sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.02em; }
+  .thumb { width: 1600px; height: 1000px; background: var(--accent); color: var(--paper); position: relative; overflow: hidden;
+           display: grid; grid-template-columns: 1fr 600px; gap: 64px; padding: 96px 104px; }
+  .left { display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 30px; font-weight: 800; letter-spacing: -0.01em; }
+  .brand i { width: 24px; height: 24px; border-radius: 50%; background: var(--paper); }
+  .tag { margin-top: 96px; align-self: flex-start; padding: 12px 24px; border: 2px solid rgba(251,250,248,.6); border-radius: 999px; font-size: 28px; font-weight: 700; }
+  h1 { margin-top: 36px; font-size: 104px; line-height: 1.1; font-weight: 850; letter-spacing: -0.045em; }
+  h1 em { font-style: normal; color: var(--ink); background: var(--main); padding: 0 16px; border-radius: 16px; }
+  .lead { margin-top: auto; font-size: 32px; line-height: 1.5; font-weight: 500; color: rgba(251,250,248,.85); }
+
+  .right { display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+  .row { background: var(--paper); color: var(--ink); border-radius: 26px; padding: 28px 34px; display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 20px; }
+  .row .no { font-size: 36px; font-weight: 850; color: var(--accent); letter-spacing: -0.04em; }
+  .row h3 { font-size: 34px; font-weight: 800; letter-spacing: -0.035em; }
+  .row p { font-size: 22px; color: var(--ink-faint); font-weight: 600; margin-top: 4px; }
+  .row strong { font-size: 36px; font-weight: 850; color: var(--accent); letter-spacing: -0.04em; text-align: right; }
+  .row strong small { display: block; font-size: 18px; color: var(--ink-faint); font-weight: 600; letter-spacing: -0.01em; }
+  .row:nth-child(2) { margin-left: 32px; } .row:nth-child(3) { margin-left: 64px; } .row:nth-child(4) { margin-left: 96px; }
+  .row:nth-child(4) { background: var(--ink); color: var(--paper); }
+  .row:nth-child(4) .no, .row:nth-child(4) strong { color: var(--accent-soft); }
+  .row:nth-child(4) p, .row:nth-child(4) strong small { color: rgba(251,250,248,.6); }
+</style>
+</head>
+<body>
+<div class="thumb" id="thumb">
+  <div class="left">
+    <span class="brand"><i></i>OZ BizLab</span>
+    <span class="tag">2026 정부지원사업 총정리</span>
+    <h1>창업 단계별<br><em>지원사업</em><br>로드맵</h1>
+    <p class="lead">예비창업부터 TIPS까지,<br>내 업력에 맞는 사업 고르는 법</p>
+  </div>
+  <div class="right">
+    <div class="row"><span class="no">01</span><div><h3>창업 준비</h3><p>예비창업패키지 외</p></div><strong><small>평균</small>0.4억</strong></div>
+    <div class="row"><span class="no">02</span><div><h3>초기 · 재도전</h3><p>초기창업패키지 외</p></div><strong><small>최대</small>1.5억</strong></div>
+    <div class="row"><span class="no">03</span><div><h3>성장 · 도약</h3><p>LIPS 외</p></div><strong><small>정책자금 최대</small>5억</strong></div>
+    <div class="row"><span class="no">04</span><div><h3>확장 · 고도화</h3><p>TIPS 외</p></div><strong><small>R&amp;D 최대</small>15억</strong></div>
+  </div>
+</div>
+</body>
+</html>
